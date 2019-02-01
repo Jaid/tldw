@@ -1,0 +1,26 @@
+# dotenv
+.env
+
+# Node packages
+/node_modules/
+
+# Yarn
+/yarn.lock
+/yarn-error.log
+
+# npm
+/.npmrc
+/npm-debug.log
+/npm-debug.log.*
+
+# pnpm
+/pnpm-debug.log
+/shrinkwrap.yaml
+
+# Generated or temporary content
+/dist/
+/dist-jsdoc/
+
+# IDEs
+/.vscode/
+/.idea/

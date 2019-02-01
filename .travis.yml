@@ -1,0 +1,34 @@
+language: node_js
+node_js: [node, lts/*]
+os: [linux, osx] # Windows doesn't work currently, I should try again in May 2019 (If I didn't, remind me please!)
+cache:
+  npm: true
+jobs:
+  include:
+  - stage: Deploy
+    before_deploy:
+    - npm run build:prod
+    - export MY_PACKAGE_NAME=$(node -e "console.log(require('./dist/package').name)")
+    - export MY_PACKAGE_VERSION=$(node -e "console.log(require('./dist/package').version)")
+    - export ZIP_NAME=$MY_PACKAGE_NAME_v$MY_PACKAGE_VERSION.zip
+    - export MIN_ZIP_NAME=$MY_PACKAGE_NAME_v$MY_PACKAGE_VERSION_min.zip
+    - cd dist
+    - zip -9 --recurse-paths ../$ZIP_NAME **
+    - zip -9 --recurse-paths ../$MIN_ZIP_NAME ** --exclude \*.d.ts --exclude readme.*
+    - cd ..
+    deploy:
+    - provider: pages
+      local_dir: dist-jsdoc/$MY_PACKAGE_NAME/$MY_PACKAGE_VERSION
+      fqdn: $MY_PACKAGE_NAME.jaid.codes
+      skip_cleanup: true
+      github_token: $GITHUB_TOKEN # Permissions: public_repo, repo:status, repo_deployment
+    - provider: releases
+      file:
+      - dist/package.json
+      - dist/license.txt
+      - dist/index.d.ts
+      - $ZIP_NAME
+      - $MIN_ZIP_NAME
+      skip_cleanup: true
+      api_key: $GITHUB_TOKEN # Permissions: public_repo, repo:status, repo_deployment
+      on: { tags: true }
