@@ -13,6 +13,10 @@
   "jest": {
     "testEnvironment": "node"
   },
+  "dependencies": {
+    "prepend-if": "^0.2.1",
+    "tapable": "^2.0.0-beta.3"
+  },
   "devDependencies": {
     "babel-jest": "^24.0.0",
     "babel-preset-jaid": "2.8.0",
