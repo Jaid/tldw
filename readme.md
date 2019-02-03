@@ -1,3 +1,3 @@
 # tldw
-## Under construction
-Not much to see right now. Come back lator! :crocodile:
+
+Paused (and probably cancelled) in favor of [mdx](https://github.com/mdx-js/mdx).
