@@ -11,16 +11,19 @@
  * @property {pluginLoader[]} plugins
  */
 
-import {SyncHook} from "tapable"
+import {AsyncParallelHook, AsyncSeriesHook} from "tapable"
+
+import compile from "./compile"
 
 /**
  * Compiles a markdown text based on given plugins
  * @param {tldwOptions} options
  * @returns {object}
  */
-export default options => {
+export default async options => {
   options = {
     plugins: [],
+    packagePath: null,
     ...options,
   }
 
@@ -51,14 +54,14 @@ export default options => {
   const compiler = {
     options,
     hooks: {
-      pluginsLoaded: new SyncHook(["plugins"]),
-      compile: new SyncHook(["write"]),
-      compilationDone: new SyncHook(["blocks"]),
+      pluginsLoaded: new AsyncParallelHook(["plugins"]),
+      compile: new AsyncSeriesHook(["write"]),
+      compilationDone: new AsyncSeriesHook(["blocks"]),
     },
   }
 
   options.plugins.forEach(({module}, index) => {
-    const pluginResponse = module(compiler, options)
+    const pluginResponse = module(compiler, options, index)
     if (typeof pluginResponse === "string") {
       compiler.hooks.compile.tap(`autocompile-${index}`, writeResponse => {
         writeResponse(pluginResponse)
@@ -66,12 +69,10 @@ export default options => {
     }
   })
 
-  compiler.hooks.pluginsLoaded.call(options.plugins)
-  compiler.hooks.compile.call(write)
-
-  const text = textBlocks.join("\n")
-
-  compiler.hooks.compilationDone.call(text)
+  await compiler.hooks.pluginsLoaded.promise(options.plugins)
+  await compiler.hooks.compile.promise(write)
+  const text = compile(textBlocks)
+  await compiler.hooks.compilationDone.promise(text)
 
   return {
     text,

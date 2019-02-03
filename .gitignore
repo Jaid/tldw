@@ -20,6 +20,7 @@
 # Generated or temporary content
 /dist/
 /dist-jsdoc/
+/test/output/
 
 # IDEs
 /.vscode/
