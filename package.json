@@ -40,6 +40,6 @@
     "test": "jest && npm run build:prod && cross-env MAIN=dist jest",
     "test:dev": "npm run build:dev && jest",
     "test:debug": "node --inspect=9229 node_modules/jest/bin/jest.js --runInBand",
-    "release": "npm run build:prod && npm publish dist && cross-env git tag v$npm_package_version && git push --tags && cross-env opn https://github.com/$npm_package_author_name/$(basename $PWD)/releases/new?tag=v$npm_package_version"
+    "release": "npm test && npm publish dist && cross-env git tag v$npm_package_version && git push --tags && cross-env opn https://github.com/$npm_package_author_name/$(basename $PWD)/releases/new?tag=v$npm_package_version"
   }
 }
