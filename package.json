@@ -17,6 +17,7 @@
     "@absolunet/fss": "^1.4.0",
     "prepend-if": "^0.2.1",
     "publishimo": "^3.6.0",
+    "resolve-pkg-option": "^1.0.0",
     "tapable": "^2.0.0-beta.3"
   },
   "devDependencies": {

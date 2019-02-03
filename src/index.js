@@ -9,9 +9,11 @@
  * @typedef tldwOptions
  * @type {object}
  * @property {pluginLoader[]} plugins
+ * @property {object|string} [pkg={}] Path to package.json or pkg data
  */
 
 import {AsyncParallelHook, AsyncSeriesHook} from "tapable"
+import resolvePkgOption from "resolve-pkg-option"
 
 import compile from "./compile"
 
@@ -23,9 +25,12 @@ import compile from "./compile"
 export default async options => {
   options = {
     plugins: [],
-    packagePath: null,
+    pkg: {},
     ...options,
   }
+
+  const loadedPackage = await resolvePkgOption()
+
 
   options.plugins = options.plugins.map(plugin => {
     if (typeof plugin === "string" || typeof plugin === "function") {
