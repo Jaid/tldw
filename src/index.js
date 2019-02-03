@@ -29,9 +29,6 @@ export default async options => {
     ...options,
   }
 
-  const loadedPackage = await resolvePkgOption()
-
-
   options.plugins = options.plugins.map(plugin => {
     if (typeof plugin === "string" || typeof plugin === "function") {
       plugin = [plugin]
@@ -62,6 +59,7 @@ export default async options => {
       pluginsLoaded: new AsyncParallelHook(["plugins"]),
       compile: new AsyncSeriesHook(["write"]),
       compilationDone: new AsyncSeriesHook(["blocks"]),
+      pkgResolved: new AsyncParallelHook(["resolvedPkg"]),
     },
   }
 
@@ -75,6 +73,12 @@ export default async options => {
   })
 
   await compiler.hooks.pluginsLoaded.promise(options.plugins)
+
+  if (compiler.hooks.pkgResolved.isUsed()) {
+    const loadedPackage = await resolvePkgOption()
+    compiler.hooks.pkgResolved.promise(loadedPackage)
+  }
+
   await compiler.hooks.compile.promise(write)
   const text = compile(textBlocks)
   await compiler.hooks.compilationDone.promise(text)
