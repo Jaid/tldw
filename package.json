@@ -19,6 +19,8 @@
     "xml2js": "^0.4.19"
   },
   "devDependencies": {
+    "@absolunet/fsp": "^1.4.0",
+    "@absolunet/fss": "^1.4.0",
     "babel-jest": "^24.1.0",
     "babel-preset-jaid": "2.9.0",
     "cross-env": "^5.2.0",
