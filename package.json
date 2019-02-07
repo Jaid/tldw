@@ -16,7 +16,7 @@
   "dependencies": {
     "publishimo": "^4.1.0",
     "resolve-pkg-option": "^1.0.4",
-    "xml2js": "^0.4.19"
+    "xml-js": "^1.6.9"
   },
   "devDependencies": {
     "@absolunet/fsp": "^1.4.0",

@@ -16,6 +16,7 @@ for (const entry of fss.readdir(__dirname)) {
         xml,
       })
       await fsp.outputFile(path.join(testFolder, "dist", "readme.md"), result.text)
+      await fsp.outputYaml(path.join(testFolder, "dist", "dom.yml"), result.dom)
       const expectedFile = path.join(testFolder, "expected.md")
       const expectedFileExists = await fsp.pathExists(expectedFile)
       if (expectedFileExists) {
