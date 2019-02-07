@@ -14,11 +14,9 @@
     "testEnvironment": "node"
   },
   "dependencies": {
-    "@absolunet/fss": "^1.4.0",
-    "prepend-if": "^0.2.1",
     "publishimo": "^4.1.0",
     "resolve-pkg-option": "^1.0.4",
-    "tapable": "^2.0.0-beta.3"
+    "xml2js": "^0.4.19"
   },
   "devDependencies": {
     "babel-jest": "^24.1.0",
@@ -35,12 +33,12 @@
     "webpack-config-jaid": "1.25.2"
   },
   "scripts": {
-    "clean": "rimraf dist dist-jsdoc",
+    "clean": "rimraf dist dist-jsdoc test/*/dist",
     "build:prod": "cross-env NODE_ENV=production webpack",
     "build:dev": "webpack",
     "test": "jest && npm run build:prod && cross-env MAIN=dist jest",
     "test:dev": "npm run build:dev && jest",
     "test:debug": "node --inspect=9229 node_modules/jest/bin/jest.js --runInBand",
-    "release": "npm test && npm publish dist && cross-env git tag v$npm_package_version && git push --tags && cross-env opn https://github.com/$npm_package_author_name/$(basename $PWD)/releases/new?tag=v$npm_package_version"
+    "release": "npm test && cross-env git tag v$npm_package_version && git push --tags && cross-env opn https://github.com/$npm_package_author_name/$(basename $PWD)/releases/new?tag=v$npm_package_version"
   }
 }
