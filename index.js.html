@@ -1,0 +1,197 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    
+    <meta charset="utf-8">
+    <title>JSDoc: index.js</title>
+
+    <script src="scripts/prettify/prettify.js"></script>
+    <script src="scripts/prettify/lang-css.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link href="https://fonts.googleapis.com/css?family=Muli:100,400,700|Oswald:300|Inconsolata,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <link type="text/css" rel="stylesheet" href="https://jmblog.github.io/color-themes-for-google-code-prettify/themes/tomorrow-night.min.css">
+    <link type="text/css" rel="stylesheet" href="styles/app.min.css">
+</head>
+
+<body>
+    <div id="stickyNavbarOverlay"></div>
+    <div class="top-navbar">
+        <div class="container">
+            <nav class="navbar" role="navigation" aria-label="main navigation">
+                <div class="navbar-brand">
+                    
+                    
+                        <h1 class="navbar-item">Documentation</h1>
+                    
+                    <a id="hamburger" role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                        <span aria-hidden="true"></span>
+                    </a>
+                </div>
+                
+            </nav>
+        </div>
+    </div>
+    <div class="container">
+        <div class="columns">
+            <div class="column is-3" id="sidebarNav">
+                <div class="sidebar">
+                    <nav>
+                        <h2><a href="index.html">Home</a></h2><div class="category"><h3>Modules</h3><ul><li><a href="module-tldw.html">tldw</a></li></ul></div>
+                    </nav>
+                </div>
+            </div>
+            <div class="column is-9-desktop">
+                <div class="content" id="main-content-wrapper">
+                    <header class="page-title">
+                        <p>Source</p>
+                        <h1>index.js</h1>
+                    </header>
+                    
+                    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @module tldw */
+
+/**
+ * @typedef pluginLoader
+ * @type {Array&lt;string|function|object>|string|function}
+ */
+
+/**
+ * @typedef tldwOptions
+ * @type {object}
+ * @property {pluginLoader[]} plugins
+ * @property {object|string} [pkg={}] Path to package.json or pkg data
+ */
+
+import path from "path"
+
+import resolvePkgOption from "resolve-pkg-option"
+
+import xml2js from "xml2js"
+import compile from "./compile"
+
+export default async options => {
+  options = {
+    xml: "",
+    plugins: [],
+    pkg: {},
+    ...options,
+  }
+
+  const loadedPackage = await resolvePkgOption(options.pkg)
+
+  return {
+    text: options.xml,
+  }
+}
+
+// /**
+//  * Compiles a markdown text based on given plugins
+//  * @param {tldwOptions} options
+//  * @returns {object}
+//  */
+// export default async options => {
+//   options = {
+//     xml: null,
+//     plugins: [],
+//     pkg: {},
+//     ...options,
+//   }
+
+//   options.plugins = options.plugins.map(plugin => {
+//     if (typeof plugin === "string" || typeof plugin === "function") {
+//       plugin = [plugin]
+//     }
+//     const [module, pluginOptions = null] = plugin
+//     if (typeof module === "function") {
+//       return {
+//         module,
+//         options: pluginOptions,
+//       }
+//     }
+//     const requiredModule = require(prependIf(module, "tldw-plugin-"))
+//     return {
+//       name: module,
+//       module: requiredModule,
+//       options: pluginOptions,
+//     }
+//   })
+
+//   const textBlocks = []
+//   const write = block => {
+//     textBlocks.push(block)
+//   }
+
+//   const compiler = {
+//     options,
+//     hooks: {
+//       pluginsLoaded: new AsyncParallelHook(["plugins"]),
+//       compile: new AsyncSeriesHook(["write"]),
+//       compilationDone: new AsyncSeriesHook(["blocks"]),
+//       pkgResolved: new AsyncParallelHook(["resolvedPkg"]),
+//     },
+//   }
+
+//   options.plugins.forEach(({module}, index) => {
+//     const pluginResponse = module(compiler, options, index)
+//     if (typeof pluginResponse === "string") {
+//       compiler.hooks.compile.tap(`autocompile-${index}`, writeResponse => {
+//         writeResponse(pluginResponse)
+//       })
+//     }
+//   })
+
+//   await compiler.hooks.pluginsLoaded.promise(options.plugins)
+
+//   if (compiler.hooks.pkgResolved.isUsed()) {
+//     const loadedPackage = await resolvePkgOption()
+//     compiler.hooks.pkgResolved.promise(loadedPackage)
+//   }
+
+//   await compiler.hooks.compile.promise(write)
+//   const text = compile(textBlocks)
+//   await compiler.hooks.compilationDone.promise(text)
+
+//   return {
+//     text,
+//   }
+// }</code></pre>
+        </article>
+    </section>
+
+
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+<footer class="footer">
+    <div class="content has-text-centered">
+        <p>Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.5.5</a> on Thu Feb 07 2019 09:48:35 GMT+0000 (Coordinated Universal Time)</p>
+        <p class="sidebar-created-by">
+            <a href="https://github.com/SoftwareBrothers/better-docs" target="_blank">BetterDocs theme</a> provided with <i class="fas fa-heart"></i> by 
+            <a href="http://softwarebrothers.co" target="_blank">SoftwareBrothers</a>
+        </p>
+    </div>
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/app.min.js"></script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
