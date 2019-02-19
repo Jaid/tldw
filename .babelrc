@@ -1,0 +1,64 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": {
+          "node": 10
+        }
+      }
+    ]
+  ],
+  "plugins": [
+    "react-require",
+    "root-import",
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-do-expressions",
+    "@babel/plugin-proposal-optional-chaining",
+    [
+      "@babel/plugin-proposal-pipeline-operator",
+      {
+        "proposal": "smart"
+      }
+    ]
+  ],
+  "env": {
+    "development": {
+      "sourceMaps": "inline",
+      "presets": [
+        [
+          "@babel/preset-react",
+          {
+            "development": true
+          }
+        ]
+      ],
+      "plugins": [
+        "console-source",
+        "react-hot-loader/babel"
+      ]
+    },
+    "production": {
+      "comments": false,
+      "presets": [
+        "@babel/preset-react",
+        [
+          "minify",
+          {
+            "removeConsole": true,
+            "removeDebugger": true
+          }
+        ]
+      ],
+      "plugins": [
+        "lodash",
+        "tailcall-optimization",
+        "module:faster.js",
+        "transform-imports",
+        "transform-react-class-to-function",
+        "transform-react-remove-prop-types",
+        "@babel/plugin-transform-react-inline-elements"
+      ]
+    }
+  }
+}

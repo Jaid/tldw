@@ -1,6 +1,6 @@
 import resolvePkgOption from "resolve-pkg-option"
 
-import render from "./render"
+import ReactRenderer from "./ReactRenderer"
 
 export default async (component, options) => {
   options = {
@@ -10,7 +10,7 @@ export default async (component, options) => {
 
   const loadedPackage = await resolvePkgOption(options.pkg)
 
-  const text = render(component)
+  const text = ReactRenderer.render(component)
 
   return {
     text: options.xml,
