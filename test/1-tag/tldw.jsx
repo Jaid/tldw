@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 
-class A {
+class R {
 
   render(props) {
     return `X${props.children}`
@@ -15,7 +15,7 @@ export default class Readme extends React.Component {
   }
 
   render() {
-    return <A>test</A>
+    return <R>test</R>
   }
 
 }

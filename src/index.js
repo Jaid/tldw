@@ -1,18 +1,23 @@
 import resolvePkgOption from "resolve-pkg-option"
+import React from "react"
 
-import ReactRenderer from "./ReactRenderer"
+import render from "./render"
 
-export default async (component, options) => {
-  options = {
-    pkg: {},
-    ...options,
+class Readme extends React.Component {
+
+  render() {
+    return `A${this.props?.children}`
   }
 
-  const loadedPackage = await resolvePkgOption(options.pkg)
+}
 
-  const text = ReactRenderer.render(component)
+export default async component => {
+  // const loadedPackage = await resolvePkgOption(options.pkg)
+
+  const text = render(component)
+  console.log(text)
 
   return {
-    text: options.xml,
+    text,
   }
 }

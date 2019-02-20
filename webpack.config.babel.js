@@ -1,6 +1,6 @@
-import {configureNodeLib} from "webpack-config-jaid"
+const configure = require("webpack-config-jaid").configureNodeLib
 
-export default configureNodeLib({
+module.exports = configure({
   documentation: true,
   publishimo: {fetchGithub: true},
 })
