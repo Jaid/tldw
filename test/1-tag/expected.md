@@ -1,5 +1,1 @@
-ABC
-
-<tag/>
-
-DEF
+hello!

@@ -1,15 +1,10 @@
 import resolvePkgOption from "resolve-pkg-option"
+import Foundation from "components/Foundation"
 import React from "react"
 
-import render from "./render"
+import render from "./react/render"
 
-class Readme extends React.Component {
-
-  render() {
-    return `A${this.props?.children}`
-  }
-
-}
+const debug = require("debug")(_PKG_NAME)
 
 export default async component => {
   // const loadedPackage = await resolvePkgOption(options.pkg)
