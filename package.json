@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "author": "Jaid <jaid.jsx@gmail.com> (https://github.com/Jaid)",
   "dependencies": {
+    "ajv": "^6.9.2",
     "debug": "^4.1.1",
     "publishimo": "^5.0.0",
     "react": "^16.8.3",
@@ -14,7 +15,6 @@
     "@absolunet/fss": "^1.4.0",
     "babel-jest": "^24.1.0",
     "babel-preset-jaid": "^5.2.1",
-    "babel-preset-jaid-react": "^4.3.0",
     "cross-env": "^5.2.0",
     "eslint": "^5.14.1",
     "eslint-config-jaid-react": "^1.12.0",
