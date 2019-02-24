@@ -1,14 +1,16 @@
 import React from "react"
+import reconciler from "react-reconciler"
 
 import createElement from "./createElement"
-import renderer from "./tldwRenderer"
+import debugHostConfig from "./debugHostConfig"
 
-const debug = require("debug")(`${_PKG_NAME}:render`)
+const renderer = reconciler(debugHostConfig)
 
-export default children => {
-  debug("Render element %o", children)
-  const rootContainer = createElement("root")
-  const node = renderer.createContainer(rootContainer, false) // Creates root fiber node.
-  renderer.updateContainer(children, node, null)
-  return rootContainer.render()
+export default element => {
+  const root = createElement("root", {
+    children: element?.$$typeof ? element : <element/>,
+  })
+  const rootContainer = renderer.createContainer(root)
+  renderer.updateContainer(element, rootContainer, null)
+  return root.render()
 }

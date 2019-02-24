@@ -4,20 +4,19 @@ import PropTypes from "prop-types"
 
 const debug = require("debug")(_PKG_NAME)
 
-export default class Section extends Component {
+export default class Section extends React.Component {
 
-  propTypes = {
-    title: PropTypes.string.isRequired,
-    children: PropTypes.node,
+  static propTypes = {
+    title: PropTypes.string,
+    children: PropTypes.node.isRequired,
   }
 
-  defaultProps = {
+  static defaultProps = {
     title: "Section",
   }
 
   render() {
-    const content = this.props.children || ""
-    return `## ${this.props.title}\n\n${content}`
+    return <Container><header>{this.props.title}</header>{this.props.children}</Container>
   }
 
 }

@@ -20,6 +20,7 @@
     "eslint-config-jaid-react": "^1.12.0",
     "jest": "^24.1.0",
     "opn-cli": "^4.0.0",
+    "react-devtools": "^3.6.0",
     "rimraf": "^2.6.3",
     "webpack-config-jaid": "^3.2.1"
   },
