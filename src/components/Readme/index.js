@@ -6,19 +6,6 @@ import {isString, isArray} from "lodash"
 
 const debug = require("debug")(_PKG_NAME)
 
-const renderChild = child => {
-  if (isString(child)) {
-    return child
-  }
-  if (child instanceof Text) {
-    return child.text
-  }
-  if (child instanceof React.Component && child.props.children) {
-    return child.props.children
-  }
-  return "?"
-}
-
 export default class Readme extends Component {
 
   depth = 0
@@ -37,7 +24,18 @@ export default class Readme extends Component {
 
   render() {
     debug("Render Readme")
-    return this.renderedChildren.map(child => renderChild(child)).join("\n\n")
+    return this.renderedChildren.map(child => {
+      if (isString(child)) {
+        return child
+      }
+      if (child instanceof Text) {
+        return child.text
+      }
+      if (child instanceof React.Component && child.props.children) {
+        return child.props.children
+      }
+      return "?"
+    }).join("\n\n")
   }
 
 }

@@ -32,9 +32,7 @@ export const shouldSetTextContent = (type, props) => {
   return typeof props.children === "string"
 }
 
-export const createInstance = (type, props, rootContainer) => {
-  return createElement(type, props, rootContainer)
-}
+export const createInstance = createElement
 
 export const createTextInstance = text => {
   return createElement("text", {text}, 0)
