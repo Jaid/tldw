@@ -8,8 +8,8 @@ import tldw from "../src"
 
 const job = async name => {
   const testFolder = path.resolve(__dirname, name)
-  const Content = require(path.join(testFolder, "Content.jsx")).default
-  const result = await tldw(Content)
+  const ContentComponent = require(path.join(testFolder, "Component.js")).default
+  const result = await tldw(ContentComponent)
   await fsp.outputFile(path.join(testFolder, "dist", "readme.md"), result.text)
   const expectedFile = path.join(testFolder, "expected.md")
   const expectedFileExists = await fsp.pathExists(expectedFile)
