@@ -1,6 +1,5 @@
 import React from "react"
 
-
 const debug = require("debug")(_PKG_NAME).extend("component")
 
 export default class Component extends React.Component {

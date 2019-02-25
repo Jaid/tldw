@@ -7,15 +7,14 @@ import {isString, isArray} from "lodash"
 const debug = require("debug")(_PKG_NAME)
 
 const renderChild = child => {
-  debugger
   if (isString(child)) {
     return child
   }
   if (child instanceof Text) {
     return child.text
   }
-  if (child instanceof React.Component) {
-    return child
+  if (child instanceof React.Component && child.props.children) {
+    return child.props.children
   }
   return "?"
 }
@@ -38,11 +37,7 @@ export default class Readme extends Component {
 
   render() {
     debug("Render Readme")
-    if (isArray(this.renderedChildren)) {
-      return this.renderedChildren.map(child => renderChild(child)).join("\n\n")
-    } else {
-      return renderChild(this.renderedChildren)
-    }
+    return this.renderedChildren.map(child => renderChild(child)).join("\n\n")
   }
 
 }
