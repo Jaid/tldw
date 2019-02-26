@@ -6,6 +6,7 @@ import Header from "components/Header"
 import Div from "components/Div"
 import React from "react"
 import {noop, isObject} from "lodash"
+import isStringArray from "validate.io-string-array"
 
 const debug = require("debug")(_PKG_NAME)
 
@@ -48,7 +49,13 @@ export const getChildHostContext = (parentHostContext, type, rootContainerInstan
 }
 
 export const shouldSetTextContent = (type, props) => {
-  return typeof props.children === "string"
+  if (["number", "boolean", "string"].includes(typeof props.children)) {
+    return true
+  }
+  if (isStringArray(props.children)) {
+    return true
+  }
+  return false
 }
 
 export const createInstance = (type, props, rootContainer, hostContext, fiber) => {

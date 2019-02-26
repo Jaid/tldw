@@ -11,24 +11,23 @@ const debug = require("debug")(_PKG_NAME)
 
 it("example", () => {
   const renderer = reconciler(debugHostConfig)
-  const element = <div nested={1}>
-    <div nested={2}>
-      <div nested={3}>
-        moin
-      </div>
-    </div>
-  </div>
+  const element = <div><div>moin</div><div>bro</div></div>
   const root = debugHostConfig.createInstance("root", {
     children: element?.$$typeof ? element : <element/>,
   })
   const rootContainer = renderer.createContainer(root)
   renderer.updateContainer(element, rootContainer, null)
-  const data = {
-    result: root.render(),
-    testResult: reactTestRenderer.create(element).toJSON(),
-  }
-  debug(data)
-  fs.appendFileSync("./dist/playground-log.txt", `${inspect(data, {
+
+  const realResult = root.render()
+  const testResult = reactTestRenderer.create(element).toJSON()
+
+  debug(realResult)
+  debug(testResult)
+
+  fs.appendFileSync("./dist/playground-log.txt", `${inspect({
+    realResult,
+    testResult,
+  }, {
     colors: true,
     maxArrayLength: 10,
     depth: 8,

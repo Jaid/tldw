@@ -3,7 +3,7 @@ import reconciler from "react-reconciler"
 
 import debugHostConfig from "./debugHostConfig"
 
-const renderer = reconciler({createInstance:(}debugHostConfig)
+const renderer = reconciler(debugHostConfig)
 
 export default element => {
   const root = debugHostConfig.createInstance("root", {

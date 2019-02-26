@@ -10,7 +10,7 @@ export default class Readme extends Component {
 
   depth = 0
 
-  constructor(props, root) {
+  constructor(props) {
     super(props)
     debug("Render Readme")
     this.props = props

@@ -15,8 +15,13 @@ export default Object.keys(hostConfig).reduce((result, key) => {
   const value = hostConfig[key]
   if (typeof value === "function") {
     result[key] = (...args) => {
-      debug(`${key}(${args.map(x => stringify(x)).join(", ")})`)
-      return value(...args)
+      const returnValue = value(...args)
+      let logLine = `${key}(${args.map(x => stringify(x)).join(", ")})`
+      if (returnValue !== undefined) {
+        logLine += ` -> ${stringify(returnValue)}`
+      }
+      debug(logLine)
+      return returnValue
     }
   } else {
     result[key] = value

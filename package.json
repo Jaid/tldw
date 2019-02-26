@@ -8,7 +8,8 @@
     "publishimo": "^5.0.0",
     "react": "^16.8.3",
     "react-reconciler": "^0.20.1",
-    "resolve-pkg-option": "^1.0.4"
+    "resolve-pkg-option": "^1.0.4",
+    "validate.io-string-array": "^1.0.0"
   },
   "devDependencies": {
     "@absolunet/fsp": "^1.4.0",
