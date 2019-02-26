@@ -1,13 +1,12 @@
 import React from "react"
 import reconciler from "react-reconciler"
 
-import createElement from "./createElement"
 import debugHostConfig from "./debugHostConfig"
 
-const renderer = reconciler(debugHostConfig)
+const renderer = reconciler({createInstance:(}debugHostConfig)
 
 export default element => {
-  const root = createElement("root", {
+  const root = debugHostConfig.createInstance("root", {
     children: element?.$$typeof ? element : <element/>,
   })
   const rootContainer = renderer.createContainer(root)

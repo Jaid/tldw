@@ -5,6 +5,7 @@ import Component from "components/Component"
 export default class Div extends Component {
 
   static propTypes = {
+    nested: PropTypes.number.isRequired,
     children: PropTypes.node,
   }
 

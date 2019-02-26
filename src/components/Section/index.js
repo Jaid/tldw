@@ -15,6 +15,8 @@ export default class Section extends React.Component {
     title: "Section",
   }
 
+  static increaseDepth = 1
+
   render() {
     return <Container><header>{this.props.title}</header>{this.props.children}</Container>
   }
