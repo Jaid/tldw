@@ -11,7 +11,7 @@ const debug = require("debug")(_PKG_NAME)
 
 it("example", () => {
   const renderer = reconciler(debugHostConfig)
-  const element = <div><div>moin</div><div>bro</div></div>
+  const element = <span><span>moin</span><span>bro</span></span>
   const root = debugHostConfig.createInstance("root", {
     children: element?.$$typeof ? element : <element/>,
   })
