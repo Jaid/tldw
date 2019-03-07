@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "author": "Jaid <jaid.jsx@gmail.com> (https://github.com/Jaid)",
   "dependencies": {
-    "ajv": "^6.9.2",
+    "ajv": "^6.10.0",
     "debug": "^4.1.1",
     "publishimo": "^5.0.0",
     "react": "^16.8.3",
