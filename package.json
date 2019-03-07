@@ -12,7 +12,7 @@
     "validate.io-string-array": "^1.0.0"
   },
   "devDependencies": {
-    "@absolunet/fsp": "^1.4.0",
+    "@absolunet/fsp": "^1.6.0",
     "@absolunet/fss": "^1.4.0",
     "babel-jest": "^24.1.0",
     "babel-preset-jaid": "^5.2.1",
