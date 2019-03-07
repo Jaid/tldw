@@ -6,7 +6,7 @@
     "ajv": "^6.9.2",
     "debug": "^4.1.1",
     "publishimo": "^5.0.0",
-    "react": "^16.8.3",
+    "react": "^16.8.4",
     "react-reconciler": "^0.20.1",
     "resolve-pkg-option": "^1.0.4",
     "validate.io-string-array": "^1.0.0"
@@ -22,7 +22,7 @@
     "jest": "^24.1.0",
     "opn-cli": "^4.0.0",
     "react-devtools": "^3.6.0",
-    "react-test-renderer": "^16.8.3",
+    "react-test-renderer": "^16.8.4",
     "rimraf": "^2.6.3",
     "webpack-config-jaid": "^3.2.1"
   },
