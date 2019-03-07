@@ -17,7 +17,7 @@
     "babel-jest": "^24.1.0",
     "babel-preset-jaid": "^5.2.1",
     "cross-env": "^5.2.0",
-    "eslint": "^5.14.1",
+    "eslint": "^5.15.1",
     "eslint-config-jaid-react": "^1.12.0",
     "jest": "^24.1.0",
     "opn-cli": "^4.0.0",
