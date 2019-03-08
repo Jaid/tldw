@@ -16,7 +16,6 @@
     "@absolunet/fss": "^1.6.0",
     "babel-jest": "^24.3.1",
     "babel-preset-jaid": "^5.4.0",
-    "cross-env": "^5.2.0",
     "eslint": "^5.15.1",
     "eslint-config-jaid-react": "^1.12.0",
     "jest": "^24.3.1",
@@ -28,15 +27,15 @@
   },
   "scripts": {
     "clean": "rimraf dist/ test/**/dist/",
-    "babel:prod": "rimraf dist/src-transpiled/production && cross-env NODE_ENV=production babel --out-dir dist/src-transpiled/production --source-maps true src",
+    "babel:prod": "rimraf dist/src-transpiled/production && NODE_ENV=production babel --out-dir dist/src-transpiled/production --source-maps true src",
     "babel:dev": "rimraf dist/src-transpiled/development && babel --out-dir dist/src-transpiled/development src",
-    "babel:test": "rimraf dist/src-transpiled/test && cross-env NODE_ENV=test babel --out-dir dist/src-transpiled/test src",
-    "build:prod": "cross-env NODE_ENV=production webpack",
+    "babel:test": "rimraf dist/src-transpiled/test && NODE_ENV=test babel --out-dir dist/src-transpiled/test src",
+    "build:prod": "NODE_ENV=production webpack",
     "build:dev": "webpack",
-    "test": "npm run build:prod && cross-env NODE_ENV=production MAIN=dist/package/production jest --runInBand",
+    "test": "npm run build:prod && NODE_ENV=production MAIN=dist/package/production jest --runInBand",
     "test:coverage": "npm run test:dev -- --coverage --json --outputFile=dist/jest/stats.json",
-    "test:dev": "cross-env NODE_ENV=test jest --runInBand",
-    "test:debug": "cross-env DEBUG=\"$(basename $PWD),$(basename $PWD):*\" NODE_ENV=test node --inspect=9229 node_modules/jest/bin/jest.js --runInBand",
-    "release": "npm run clean && npm test && cross-env git tag v$npm_package_version && git push --tags && cross-env opn https://github.com/$npm_package_author_name/$(basename $PWD)/releases/new?tag=v$npm_package_version"
+    "test:dev": "NODE_ENV=test jest --runInBand",
+    "test:debug": "DEBUG=\"$(basename $PWD),$(basename $PWD):*\" NODE_ENV=test node --inspect=9229 node_modules/jest/bin/jest.js --runInBand",
+    "release": "npm run clean && npm test && git tag v$npm_package_version && git push --tags && opn https://github.com/$npm_package_author_name/$(basename $PWD)/releases/new?tag=v$npm_package_version"
   }
 }
