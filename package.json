@@ -5,7 +5,7 @@
   "dependencies": {
     "ajv": "^6.10.0",
     "debug": "^4.1.1",
-    "publishimo": "^5.0.0",
+    "publishimo": "^5.0.1",
     "react": "^16.8.4",
     "react-reconciler": "^0.20.2",
     "resolve-pkg-option": "^1.0.4",
