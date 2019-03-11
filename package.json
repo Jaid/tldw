@@ -8,7 +8,7 @@
     "publishimo": "^5.0.0",
     "react": "^16.8.4",
     "react-reconciler": "^0.20.2",
-    "resolve-pkg-option": "^1.0.4",
+    "resolve-pkg-option": "^1.0.5",
     "validate.io-string-array": "^1.0.0"
   },
   "devDependencies": {
