@@ -8,7 +8,7 @@
     "publishimo": "^5.0.0",
     "react": "^16.8.4",
     "react-reconciler": "^0.20.2",
-    "resolve-pkg-option": "^1.0.4",
+    "resolve-pkg-option": "^1.0.5",
     "validate.io-string-array": "^1.0.0"
   },
   "devDependencies": {
@@ -16,14 +16,16 @@
     "@absolunet/fss": "^1.6.0",
     "babel-jest": "^24.3.1",
     "babel-preset-jaid": "^5.5.0",
+    "babel-jest": "^24.5.0",
+    "babel-preset-jaid": "^5.4.0",
     "eslint": "^5.15.1",
     "eslint-config-jaid-react": "^1.12.0",
-    "jest": "^24.3.1",
+    "jest": "^24.5.0",
     "opn-cli": "^4.0.0",
     "react-devtools": "^3.6.1",
     "react-test-renderer": "^16.8.4",
     "rimraf": "^2.6.3",
-    "webpack-config-jaid": "^3.2.1"
+    "webpack-config-jaid": "^3.3.0"
   },
   "scripts": {
     "clean": "rimraf dist/ test/**/dist/",
