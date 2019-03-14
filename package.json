@@ -23,7 +23,7 @@
     "react-devtools": "^3.6.1",
     "react-test-renderer": "^16.8.4",
     "rimraf": "^2.6.3",
-    "webpack-config-jaid": "^3.2.1"
+    "webpack-config-jaid": "^3.3.0"
   },
   "scripts": {
     "clean": "rimraf dist/ test/**/dist/",
