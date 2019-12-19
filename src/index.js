@@ -7,8 +7,17 @@ const job = async ({outputFile}) => {
 }
 
 const main = async () => {
+  /**
+   * @type {import("yargs").CommandBuilder}
+   */
   const builder = {
     "output-file": {
+      alias: "o",
+      type: "string",
+      default: path.join(process.cwd(), "readme.md"),
+      description: "Output file",
+    },
+    "config-file": {
       type: "string",
       default: path.join(process.cwd(), "readme.md"),
       description: "Output file",
