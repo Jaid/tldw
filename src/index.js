@@ -1,16 +1,24 @@
-import resolvePkgOption from "resolve-pkg-option"
-import React from "react"
+import fsp from "@absolunet/fsp"
+import path from "path"
+import yargs from "yargs"
 
-import render from "./react/render"
-
-const debug = require("debug")(_PKG_NAME)
-
-export default async component => {
-  // const loadedPackage = await resolvePkgOption(options.pkg)
-
-  const text = render(component)
-
-  return {
-    text,
-  }
+const job = async ({outputFile}) => {
+  await fsp.outputFile(outputFile, "hello")
 }
+
+const main = async () => {
+  const builder = {
+    "output-file": {
+      type: "string",
+      default: path.join(process.cwd(), "readme.md"),
+      description: "Output file",
+    },
+  }
+
+  yargs
+    .scriptName(_PKG_NAME)
+    .version(_PKG_VERSION)
+    .command("$0", _PKG_DESCRIPTION, builder, job).argv
+}
+
+main()

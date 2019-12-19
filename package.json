@@ -1,43 +1,36 @@
 {
   "private": true,
   "version": "1.0.0",
+  "webpackConfigJaid": "cli",
   "author": "Jaid <jaid.jsx@gmail.com> (https://github.com/Jaid)",
+  "description": "Overwrites the readme based on info fetched from package.json and source code.",
   "dependencies": {
-    "ajv": "^6.10.0",
+    "@absolunet/fsp": "^1.6.0",
     "debug": "^4.1.1",
-    "publishimo": "^5.0.1",
-    "react": "^16.8.4",
-    "react-reconciler": "^0.20.2",
-    "resolve-pkg-option": "^1.0.5",
-    "validate.io-string-array": "^1.0.0"
+    "yargs": "^15.0.2"
   },
   "devDependencies": {
-    "@absolunet/fsp": "^1.6.0",
-    "@absolunet/fss": "^1.6.0",
-    "babel-jest": "^24.3.1",
-    "babel-preset-jaid": "^5.5.0",
     "babel-jest": "^24.5.0",
     "babel-preset-jaid": "^5.4.0",
+    "browserslist-config-jaid-node": "^2.2.2",
+    "coffee": "^5.2.2",
     "eslint": "^5.15.1",
-    "eslint-config-jaid-react": "^1.12.0",
+    "eslint-config-jaid": "^1.41.0",
     "jest": "^24.5.0",
-    "opn-cli": "^4.0.0",
-    "react-devtools": "^3.6.1",
-    "react-test-renderer": "^16.8.4",
     "rimraf": "^2.6.3",
     "webpack-config-jaid": "^3.3.0"
   },
   "scripts": {
-    "clean": "rimraf dist/ test/**/dist/",
-    "babel:prod": "rimraf dist/src-transpiled/production && NODE_ENV=production babel --out-dir dist/src-transpiled/production --source-maps true src",
-    "babel:dev": "rimraf dist/src-transpiled/development && babel --out-dir dist/src-transpiled/development src",
-    "babel:test": "rimraf dist/src-transpiled/test && NODE_ENV=test babel --out-dir dist/src-transpiled/test src",
+    "clean": "rimraf dist/",
+    "babel:prod": "rimraf dist/transpiled/production && NODE_ENV=production babel --out-dir dist/transpiled/production --source-maps true src",
+    "babel:dev": "rimraf dist/transpiled/development && NODE_ENV=development babel --out-dir dist/transpiled/development src",
+    "babel:test": "rimraf dist/transpiled/test && NODE_ENV=test babel --out-dir dist/transpiled/test src",
     "build:prod": "NODE_ENV=production webpack",
-    "build:dev": "webpack",
-    "test": "npm run build:prod && NODE_ENV=production MAIN=dist/package/production jest --runInBand",
+    "build:dev": "NODE_ENV=development webpack",
+    "test": "npm run build:prod && NODE_ENV=production MAIN=dist/package/production/cli.js jest --runInBand",
     "test:coverage": "npm run test:dev -- --coverage --json --outputFile=dist/jest/stats.json",
     "test:dev": "NODE_ENV=test jest --runInBand",
     "test:debug": "DEBUG=\"$(basename $PWD),$(basename $PWD):*\" NODE_ENV=test node --inspect=9229 node_modules/jest/bin/jest.js --runInBand",
-    "release": "npm run clean && npm test && git tag v$npm_package_version && git push --tags && opn https://github.com/$npm_package_author_name/$(basename $PWD)/releases/new?tag=v$npm_package_version"
+    "prepareActionJest": "npm run build:prod"
   }
 }
