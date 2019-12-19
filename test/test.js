@@ -11,9 +11,9 @@ it("should run", async () => {
     .end()
 })
 
-it("should output help", async () => {
-  return coffee.fork(main, ["--help"])
-    .expect("stdout", /Options:/)
+it("should output version", async () => {
+  return coffee.fork(main, ["--version"])
+    .expect("stdout", `${_PKG_VERSION}\n`)
     .expect("code", 0)
     .debug()
     .end()
