@@ -15,12 +15,13 @@ const main = async () => {
       alias: "o",
       type: "string",
       default: path.join(process.cwd(), "readme.md"),
-      description: "Output file",
+      description: "Output file.",
     },
-    "config-file": {
+    "config-directory": {
+      alias: "c",
       type: "string",
-      default: path.join(process.cwd(), "readme.md"),
-      description: "Output file",
+      default: path.join(process.cwd(), "readme"),
+      description: "Directory where config files for customizing readme output are stored in.",
     },
   }
 
