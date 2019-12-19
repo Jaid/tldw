@@ -5,20 +5,20 @@
   "author": "Jaid <jaid.jsx@gmail.com> (https://github.com/Jaid)",
   "description": "Overwrites the readme based on info fetched from package.json and source code.",
   "dependencies": {
-    "@absolunet/fsp": "^1.6.0",
+    "@absolunet/fsp": "^1.6.2",
     "debug": "^4.1.1",
     "yargs": "^15.0.2"
   },
   "devDependencies": {
-    "babel-jest": "^24.5.0",
-    "babel-preset-jaid": "^5.4.0",
+    "babel-jest": "^24.9.0",
+    "babel-preset-jaid": "^7.3.0",
     "browserslist-config-jaid-node": "^2.2.2",
     "coffee": "^5.2.2",
-    "eslint": "^5.15.1",
+    "eslint": "^6.7.2",
     "eslint-config-jaid": "^1.41.0",
-    "jest": "^24.5.0",
-    "rimraf": "^2.6.3",
-    "webpack-config-jaid": "^3.3.0"
+    "jest": "^24.9.0",
+    "rimraf": "^3.0.0",
+    "webpack-config-jaid": "^7.9.0"
   },
   "scripts": {
     "clean": "rimraf dist/",
