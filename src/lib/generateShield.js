@@ -13,6 +13,7 @@ const debug = require("debug")(_PKG_NAME)
  * @prop {string} logo
  * @prop {string} link
  * @prop {string|string[]} path
+ * @prop {string} label
  */
 
 function escapeShieldPart(input) {
@@ -33,8 +34,8 @@ export default options => {
   if (options.logo) {
     query.logo = options.logo
   }
-  if (options.link) {
-    query.link = options.link
+  if (options.label) {
+    query.label = options.label
   }
   let path
   if (options.path) {
@@ -49,6 +50,10 @@ export default options => {
     path,
     queryParams: query,
   })
-  debug(imgUrl)
-  return `![${altText}](${imgUrl})`
+  const img = `<img src="${imgUrl}" alt="${altText}"/>`
+  if (options.link) {
+    return `<a href="${options.link}">${img}</a>`
+  } else {
+    return img
+  }
 }
