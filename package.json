@@ -1,6 +1,6 @@
 {
   "private": true,
-  "version": "2.0.0",
+  "version": "2.0.1",
   "webpackConfigJaid": "cli",
   "author": "Jaid <jaid.jsx@gmail.com> (https://github.com/Jaid)",
   "description": "Overwrites the readme based on info fetched from package.json and source code.",
