@@ -46,6 +46,7 @@ const debug = require("debug")(_PKG_NAME)
  * @prop {string} license
  * @prop {string} slug
  * @prop {string} tag
+ * @prop {boolean} webCompatible
  */
 
 /**

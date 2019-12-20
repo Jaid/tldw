@@ -18,6 +18,12 @@ logo
 {{command}}
 ```
 {{/each}}
+{{#if webCompatible}}
+{{{shield "web" pkg.name}}}
+```html
+<script src="https://cdn.jsdelivr.net/npm/{{{pkg.name}}}@{{{pkg.version}}}/index.js"/>
+```
+{{/if}}
 {{/if}}
 
 {{#if example}}
@@ -28,30 +34,25 @@ logo
 {{/if}}
 
 {{#if config.tryInBrowser}}
-{{#if globalName}}
 ## Try it out
-{{{logoHeader "browser"}}}
+{{{shield "web" pkg.name}}}
 Open a browser's JavaScript console and execute:
 
 ```javascript
 const scriptElement = document.createElement("script");
-scriptElement.setAttribute("type","text/javascript");
-scriptElement.setAttribute("src","https://unpkg.com/{{pkg.name}}@{{pkg.version}}");
+scriptElement.setAttribute("type", "text/javascript");
+scriptElement.setAttribute("src", "https://cdn.jsdelivr.net/npm/{{pkg.name}}@{{pkg.version}}/index.js");
 document.querySelector("head").appendChild(scriptElement);
 ```
 
-This module is now loaded in a variable that can be accessed in any scope.
+{{{title}}} is now stored in the global variable `{{{globalName}}}`. This console expression should return somethin other than `"undefined"`.
 
 ```javascript
 typeof {{globalName}}.default
 ```
 {{/if}}
-{{/if}}
 
-{{#if apiMarkdown}}
-## Documentation
 {{{apiMarkdown}}}
-{{/if}}
 
 {{#if license}}
 ## License

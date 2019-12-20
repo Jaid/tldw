@@ -52,6 +52,7 @@ export default async context => {
       command: `yarn global add ${context.pkg.name}@^${context.pkg.version}`,
     })
   }
+  context.webCompatible = context.runtime === "web" || context.runtime === "hybrid"
   const readmeText = handlebars.compile(template)(context)
   return readmeText
 

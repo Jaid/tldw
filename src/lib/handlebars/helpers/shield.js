@@ -20,8 +20,22 @@ export default (type, ...args) => {
       leftText: "Yarn",
       rightText: packageName,
       logo: "yarn",
+      logoColor: "white",
       color: "2F8CB7",
       link: `https://yarnpkg.com/package/${packageName}`,
+    })
+  }
+
+  if (type === "web") {
+    const packageName = args[0]
+    return generateShield({
+      altText: "Web",
+      leftText: "Web",
+      rightText: packageName,
+      logo: "html5",
+      color: "orange",
+      logoColor: "white",
+      link: `https://jsdelivr.com/package/npm/${packageName}`,
     })
   }
 

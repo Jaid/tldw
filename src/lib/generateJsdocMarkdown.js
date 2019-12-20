@@ -26,7 +26,8 @@ export default async sourceGlob => {
     if (isEmpty(result.stdout)) {
       return null
     }
-    return result.stdout
+    const apiMarkdown = result.stdout.replace(/## \S+/s, "## Reference")
+    return apiMarkdown
   } catch (error) {
     console.warn("Could not run jsdoc-to-markdown")
     console.warn(error)

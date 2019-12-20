@@ -11,6 +11,7 @@ const debug = require("debug")(_PKG_NAME)
  * @prop {string} rightText
  * @prop {string} style
  * @prop {string} logo
+ * @prop {string} logoColor
  * @prop {string} link
  * @prop {string|string[]} path
  * @prop {string} label
@@ -33,6 +34,9 @@ export default options => {
   }
   if (options.logo) {
     query.logo = options.logo
+  }
+  if (options.logoColor) {
+    query.logoColor = options.logoColor
   }
   if (options.label) {
     query.label = options.label
