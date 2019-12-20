@@ -1,4 +1,5 @@
 import coffee from "coffee"
+import fs from "fs"
 import ms from "ms.macro"
 import path from "path"
 
@@ -14,8 +15,10 @@ it("should run", async () => {
 }, ms`30 seconds`)
 
 it("should output version", async () => {
+  const pkgFile = path.resolve(__dirname, "..", "package.json")
+  const pkg = JSON.parse(fs.readFileSync(pkgFile, "utf8"))
   return coffee.fork(main, ["--version"])
-    .expect("stdout", `${_PKG_VERSION}\n`)
+    .expect("stdout", `${pkg.version}\n`)
     .expect("code", 0)
     .debug()
     .end()
