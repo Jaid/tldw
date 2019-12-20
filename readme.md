@@ -4,11 +4,11 @@
 Overwrites the readme based on info fetched from package.json and source code.
 
 ## Installation
-<a href='https://npmjs.com/package/tldw'><img alt='npm logo' src='https://github.com/Jaid/action-readme/raw/master/images/base-assets/npm.png'/></a>
+![tldw on npm](https://img.shields.io/badge/npm-tldw-C23039?style=flat-square&logo=npm&link=https%3A%2F%2Fnpmjs.com%2Fpackage%2Ftldw)
 ```bash
 npm install --global tldw@^2.0.0
 ```
-<a href='https://yarnpkg.com/package/tldw'><img alt='Yarn logo' src='https://github.com/Jaid/action-readme/raw/master/images/base-assets/yarn.png'/></a>
+![tldw on Yarn](https://img.shields.io/badge/Yarn-tldw-2F8CB7?style=flat-square&logo=yarn)
 ```bash
 yarn global add tldw@^2.0.0
 ```
