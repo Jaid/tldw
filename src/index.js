@@ -54,6 +54,11 @@ const debug = require("debug")(_PKG_NAME)
  * @return {Promise<void>}
  */
 const job = async args => {
+  const packageJsonExists = await fsp.pathExists(args.packageFile)
+  if (!packageJsonExists) {
+    console.warn("No pkg data found, stopping")
+    process.exit(1)
+  }
   const [pkg, config, example, license, apiMarkdown] = await Promise.all([
     readPkg(args.packageFile),
     readConfig(path.join(args.configDirectory, "config.yml")),
