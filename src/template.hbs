@@ -8,7 +8,9 @@ logo
 {{{description}}}
 {{/if}}
 
-{{{shield "license" slug}}} {{{shield "commitsSince" slug tag}}} {{{shield "lastCommit" slug}}} {{{shield "issues" slug}}} {{{shield "npmLatest" pkg.name}}} {{{shield "dependents" pkg.name slug}}} {{{shield "npmDownloads" pkg.name}}}
+{{{shield "license" slug}}}
+{{{shield "commitsSince" slug tag}}} {{{shield "lastCommit" slug}}} {{{shield "issues" slug}}}
+{{{shield "npmLatest" pkg.name}}} {{{shield "dependents" pkg.name slug}}} {{{shield "npmDownloads" pkg.name}}}
 
 {{#if installationCommands.length}}
 ## Installation
@@ -35,7 +37,9 @@ logo
 
 {{#if config.tryInBrowser}}
 ## Try it out
+
 {{{shield "web" pkg.name}}}
+
 Open a browser's JavaScript console and execute:
 
 ```javascript
@@ -45,7 +49,7 @@ scriptElement.setAttribute("src", "https://cdn.jsdelivr.net/npm/{{pkg.name}}@{{p
 document.querySelector("head").appendChild(scriptElement);
 ```
 
-{{{title}}} is now stored in the global variable `{{{globalName}}}`. This console expression should return somethin other than `"undefined"`.
+{{{title}}} is now stored in the global variable `{{{globalName}}}`. The following console expression should return something other than `"undefined"`.
 
 ```javascript
 typeof {{globalName}}.default
