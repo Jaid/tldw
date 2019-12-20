@@ -17,6 +17,8 @@ const debug = require("debug")(_PKG_NAME)
  * @prop {"global"|"prod"|"dev"|false} installation
  * @prop {boolean} tryInBrowser
  * @prop {"node"|"web"|"hybrid"} runtime
+ * @prop {string} binName
+ * @prop {string} binExample
  */
 
 /**
@@ -47,6 +49,8 @@ const debug = require("debug")(_PKG_NAME)
  * @prop {string} slug
  * @prop {string} tag
  * @prop {boolean} webCompatible
+ * @prop {string} binName
+ * @prop {string} binExample
  */
 
 /**
@@ -77,11 +81,24 @@ const job = async args => {
     license,
     apiMarkdown,
     title: pkg.title || pkg.domain || pkg.name,
+    binName: false,
     tag: `v${pkg.version}`,
     slug: `Jaid/${pkg.name}`,
   }
   if (!context.runtime) {
     context.runtime = config.runtime || guessRuntime(context)
+  }
+  if (config.binName === true) {
+    context.binName = pkg.name
+  } else if (config.binName) {
+    context.binName = config.binName
+  }
+  if (!context.binExample) {
+    if (config.binExample) {
+      context.binExample = config.binExample
+    } else if (context.binName) {
+      context.binExample = context.binName
+    }
   }
   const readmeText = await generateReadme(context)
   await fsp.outputFile(args.outputFile, readmeText)
