@@ -6,8 +6,19 @@
   "description": "Overwrites the readme based on info fetched from package.json and source code.",
   "dependencies": {
     "@absolunet/fsp": "^1.6.2",
+    "build-url": "^2.0.0",
+    "camelcase": "^5.3.1",
     "debug": "^4.1.1",
-    "yargs": "^15.0.2"
+    "execa": "^4.0.0",
+    "handlebars": "^4.5.3",
+    "has-content": "^1.1.0",
+    "just-handlebars-helpers": "^1.0.17",
+    "pascal-case": "^3.1.1",
+    "read-file-json": "^1.0.0",
+    "read-file-string": "^1.0.0",
+    "read-file-yaml": "^1.0.0",
+    "yargs": "^15.0.2",
+    "zahl": "^2.0.3"
   },
   "devDependencies": {
     "babel-jest": "^24.9.0",

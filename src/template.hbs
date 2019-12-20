@@ -1,0 +1,59 @@
+# {{title}}
+
+{{#if logo}}
+logo
+{{/if}}
+
+{{#if description}}
+{{{description}}}
+{{/if}}
+
+{{#if installationCommands.length}}
+## Installation
+{{#each installationCommands}}
+{{{shield header ../pkg.name}}}
+```bash
+{{command}}
+```
+{{/each}}
+{{/if}}
+
+{{#if example}}
+## Example
+```javascript
+{{{example}}}
+```
+{{/if}}
+
+{{#if config.tryInBrowser}}
+{{#if globalName}}
+## Try it out
+{{{logoHeader "browser"}}}
+Open a browser's JavaScript console and execute:
+
+```javascript
+const scriptElement = document.createElement("script");
+scriptElement.setAttribute("type","text/javascript");
+scriptElement.setAttribute("src","https://unpkg.com/{{pkg.name}}@{{pkg.version}}");
+document.querySelector("head").appendChild(scriptElement);
+```
+
+This module is now loaded in a variable that can be accessed in any scope.
+
+```javascript
+typeof {{globalName}}.default
+```
+{{/if}}
+{{/if}}
+
+{{#if apiMarkdown}}
+## Documentation
+{{{apiMarkdown}}}
+{{/if}}
+
+{{#if license}}
+## License
+```text
+{{{license}}}
+```
+{{/if}}
