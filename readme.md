@@ -3,15 +3,18 @@
 
 Overwrites the readme based on info fetched from package.json and source code.
 
+<a href="https://raw.githubusercontent.com/Jaid/tldw/master/license.txt"><img src="https://img.shields.io/github/license/Jaid/tldw?style=flat-square&color=success" alt="License"/></a> <a href="https://github.com/Jaid/tldw/commits"><img src="https://img.shields.io/github/commits-since/Jaid/tldw/v2.1.0?style=flat-square&logo=github&color=success" alt="Commits since v2.1.0"/></a> <a href="https://github.com/Jaid/tldw/commits"><img src="https://img.shields.io/github/last-commit/Jaid/tldw?style=flat-square&logo=github&color=red" alt="Last commit"/></a> <a href="https://github.com/Jaid/tldw/issues"><img src="https://img.shields.io/github/issues/Jaid/tldw?style=flat-square&logo=github&color=red" alt="Issues"/></a> <a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/npm/v/tldw?style=flat-square&logo=npm&label=latest%20version&color=red" alt="Latest version on npm"/></a> <a href="https://github.com/Jaid/tldw/network/dependents"><img src="https://img.shields.io/librariesio/dependents/npm/tldw?style=flat-square&logo=npm&color=red" alt="Dependents"/></a> <a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/npm/dm/tldw?style=flat-square&logo=npm&color=red" alt="Downloads"/></a>
+
 ## Installation
-![tldw on npm](https://img.shields.io/badge/npm-tldw-C23039?style=flat-square&logo=npm&link=https%3A%2F%2Fnpmjs.com%2Fpackage%2Ftldw)
+<a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/badge/npm-tldw-C23039?style=flat-square&logo=npm" alt="tldw on npm"/></a>
 ```bash
 npm install --global tldw@^2.1.0
 ```
-![tldw on Yarn](https://img.shields.io/badge/Yarn-tldw-2F8CB7?style=flat-square&logo=yarn)
+<a href="https://yarnpkg.com/package/tldw"><img src="https://img.shields.io/badge/Yarn-tldw-2F8CB7?style=flat-square&logo=yarn&logoColor=white" alt="tldw on Yarn"/></a>
 ```bash
 yarn global add tldw@^2.1.0
 ```
+
 
 
 
