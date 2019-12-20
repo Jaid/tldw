@@ -3,6 +3,8 @@
 
 Overwrites the readme based on info fetched from package.json and source code.
 
+![License](https://img.shields.io/github/license/Jaid/tldw?style=flat-square&color=success) ![Commits since v2.0.1](https://img.shields.io/github/commits-since/Jaid/tldw/v2.0.1?style=flat-square&logo=github&color=success) ![Last commit](https://img.shields.io/github/last-commit/Jaid/tldw?style=flat-square&logo=github&color=red) ![Issues](https://img.shields.io/github/issues/Jaid/tldw?style=flat-square&logo=github&color=red)
+
 ## Installation
 ![tldw on npm](https://img.shields.io/badge/npm-tldw-C23039?style=flat-square&logo=npm&link=https%3A%2F%2Fnpmjs.com%2Fpackage%2Ftldw)
 ```bash

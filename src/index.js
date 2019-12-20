@@ -44,6 +44,8 @@ const debug = require("debug")(_PKG_NAME)
  * @prop {"node"|"web"|"hybrid"} runtime
  * @prop {string} apiMarkdown
  * @prop {string} license
+ * @prop {string} slug
+ * @prop {string} tag
  */
 
 /**
@@ -69,6 +71,8 @@ const job = async args => {
     license,
     apiMarkdown,
     title: pkg.title || pkg.domain || pkg.name,
+    tag: `v${pkg.version}`,
+    slug: `Jaid/${pkg.name}`,
   }
   if (!context.runtime) {
     context.runtime = config.runtime || guessRuntime(context)

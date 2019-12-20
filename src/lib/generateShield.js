@@ -1,4 +1,7 @@
 import buildUrl from "build-url"
+import ensureArray from "ensure-array"
+
+const debug = require("debug")(_PKG_NAME)
 
 /**
  * @typedef {Object} Options
@@ -9,6 +12,7 @@ import buildUrl from "build-url"
  * @prop {string} style
  * @prop {string} logo
  * @prop {string} link
+ * @prop {string|string[]} path
  */
 
 function escapeShieldPart(input) {
@@ -22,9 +26,7 @@ function escapeShieldPart(input) {
   */
 export default options => {
   const altText = options.altText || "Shield"
-  const color = options.color || "00CC00"
-  const leftText = escapeShieldPart(options.leftText, "Left")
-  const rightText = escapeShieldPart(options.rightText || "Right")
+  const color = options.color || "red"
   const query = {
     style: options.style || "flat-square",
   }
@@ -34,9 +36,19 @@ export default options => {
   if (options.link) {
     query.link = options.link
   }
+  let path
+  if (options.path) {
+    path = ensureArray(options.path).join("/")
+    query.color = color
+  } else {
+    const leftText = escapeShieldPart(options.leftText || "Left")
+    const rightText = escapeShieldPart(options.rightText || "Right")
+    path = `badge/${leftText}-${rightText}-${color}`
+  }
   const imgUrl = buildUrl("https://img.shields.io", {
-    path: `badge/${leftText}-${rightText}-${color}`,
+    path,
     queryParams: query,
   })
+  debug(imgUrl)
   return `![${altText}](${imgUrl})`
 }

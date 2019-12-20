@@ -9,6 +9,7 @@
     "build-url": "^2.0.0",
     "camelcase": "^5.3.1",
     "debug": "^4.1.1",
+    "ensure-array": "^1.0.0",
     "execa": "^4.0.0",
     "handlebars": "^4.5.3",
     "has-content": "^1.1.0",
