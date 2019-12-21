@@ -26,16 +26,29 @@ export default (type, ...args) => {
     })
   }
 
-  if (type === "web") {
+  if (type === "jsdelivr") {
     const packageName = args[0]
     return generateShield({
-      altText: "Web",
-      leftText: "Web",
+      altText: `${packageName} on jsDelivr`,
+      leftText: "jsDelivr",
       rightText: packageName,
       logo: "html5",
       color: "orange",
       logoColor: "white",
-      link: `https://jsdelivr.com/package/npm/${packageName}`,
+      link: `https://jsdelivr.com/package/npm/${packageName}/`,
+    })
+  }
+
+  if (type === "unpkg") {
+    const packageName = args[0]
+    return generateShield({
+      altText: `${packageName} on UNPKG`,
+      leftText: "UNPKG",
+      rightText: packageName,
+      logo: "html5",
+      color: "orange",
+      logoColor: "white",
+      link: `https://unpkg.com/browse/${packageName}/`,
     })
   }
 
@@ -110,6 +123,7 @@ export default (type, ...args) => {
       logo: "npm",
       link: `https://npmjs.com/package/${packageName}`,
       label: "latest version",
+      color: "success",
     })
   }
 }

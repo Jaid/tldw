@@ -8,8 +8,8 @@ logo
 {{{description}}}
 {{/if}}
 
-{{{shield "license" slug}}}
-{{{shield "commitsSince" slug tag}}} {{{shield "lastCommit" slug}}} {{{shield "issues" slug}}}
+{{{shield "license" slug}}}  
+{{{shield "commitsSince" slug tag}}} {{{shield "lastCommit" slug}}} {{{shield "issues" slug}}}  
 {{{shield "npmLatest" pkg.name}}} {{{shield "dependents" pkg.name slug}}} {{{shield "npmDownloads" pkg.name}}}
 
 {{#if installationCommands.length}}
@@ -21,7 +21,7 @@ logo
 ```
 {{/each}}
 {{#if webCompatible}}
-{{{shield "web" pkg.name}}}
+{{{shield "jsdelivr" pkg.name}}} {{{shield "unpkg" pkg.name}}}
 ```html
 <script src="https://cdn.jsdelivr.net/npm/{{{pkg.name}}}@{{{pkg.version}}}/index.js"/>
 ```
