@@ -8,6 +8,7 @@ import guessRuntime from "lib/guessRuntime"
 import readConfig from "lib/readConfig"
 import readPkg from "lib/readPkg"
 
+import fragments from "./fragments.yml"
 import generateReadme from "./generateReadme"
 
 const debug = require("debug")(_PKG_NAME)
@@ -51,6 +52,7 @@ const debug = require("debug")(_PKG_NAME)
  * @prop {boolean} webCompatible
  * @prop {string} binName
  * @prop {string} binExample
+ * @prop {Object} fragments
  */
 
 /**
@@ -63,13 +65,28 @@ const job = async args => {
     console.warn("No pkg data found, stopping")
     process.exit(1)
   }
-  const [pkg, config, example, license, apiMarkdown] = await Promise.all([
+  const jobs = [
     readPkg(args.packageFile),
     readConfig(path.join(args.configDirectory, "config.yml")),
     readFileString(path.join(args.configDirectory, "example.js")),
     readFileString(args.licenseFile),
     generateJsdocMarkdown(args.sourceGlob),
-  ])
+  ]
+  for (const [fragmentId, fragmentTitle] of Object.entries(fragments)) {
+    const loadFragmentsJob = async () => {
+      const file = path.join(args.configDirectory, `${fragmentId}.md`)
+      let content = await readFileString(file)
+      if (content) {
+        content = `## ${fragmentTitle}\n\n${content}`
+      }
+      return {
+        id: fragmentId,
+        content,
+      }
+    }
+    jobs.push(loadFragmentsJob())
+  }
+  const [pkg, config, example, license, apiMarkdown, ...loadedFragments] = await Promise.all(jobs)
   /**
    * @type {Context}
    */
@@ -80,6 +97,7 @@ const job = async args => {
     example,
     license,
     apiMarkdown,
+    fragments: {},
     title: pkg.title || pkg.domain || pkg.name,
     binName: false,
     tag: `v${pkg.version}`,
@@ -98,6 +116,11 @@ const job = async args => {
       context.binExample = config.binExample
     } else if (context.binName) {
       context.binExample = context.binName
+    }
+  }
+  for (const {id, content} of loadedFragments) {
+    if (content) {
+      context.fragments[id] = content
     }
   }
   const readmeText = await generateReadme(context)
