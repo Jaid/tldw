@@ -1,4 +1,5 @@
 import fsp from "@absolunet/fsp"
+import hasContent from "has-content"
 import {isString} from "lodash"
 import path from "path"
 import readFileString from "read-file-string"
@@ -56,6 +57,8 @@ const debug = require("debug")(_PKG_NAME)
  * @prop {string} binName
  * @prop {string} binExample
  * @prop {Object} fragments
+ * @prop {Object[]} developmentScripts
+ * @prop {boolean} hasDevelopmentSection
  */
 
 /**
@@ -100,6 +103,7 @@ const job = async args => {
     example,
     license,
     apiMarkdown,
+    developmentScripts: [],
     fragments: {},
     title: pkg.title || pkg.domain || pkg.name,
     binName: false,
@@ -126,6 +130,23 @@ const job = async args => {
       context.fragments[id] = content
     }
   }
+  context.developmentScripts.push({
+    name: "Setting up:",
+    script: `git clone git@github.com:${context.slug}.git\ncd ${pkg.name}\nnpm install`,
+  })
+  if (pkg?.scripts?.["test:dev"]) {
+    context.developmentScripts.push({
+      name: "Testing:",
+      script: "npm run test:dev",
+    })
+  }
+  if (pkg?.scripts?.test) {
+    context.developmentScripts.push({
+      name: "Testing in production environment:",
+      script: "npm run test",
+    })
+  }
+  context.hasDevelopmentSection = Boolean(context.fragments.development) || hasContent(context.developmentScripts)
   const readmeText = await generateReadme(context)
   await fsp.outputFile(args.outputFile, readmeText)
 }

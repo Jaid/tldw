@@ -3,5 +3,5 @@ warning: Warning
 usage: Usage
 advancedUsage: Advanced Usage
 example: Example
-development: Development
+development: true
 description: true

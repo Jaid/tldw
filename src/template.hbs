@@ -89,7 +89,19 @@ For usage instructions:
 
 {{{fragments.legal}}}
 
+{{#if hasDevelopmentSection}}
+## Development
+
 {{{fragments.development}}}
+
+{{#each developmentScripts}}
+{{{name}}}
+```bash
+{{{script}}}
+```
+{{/each}}
+
+{{/if}}
 
 {{#if license}}
 ## License
