@@ -1,4 +1,5 @@
 import fsp from "@absolunet/fsp"
+import {isString} from "lodash"
 import path from "path"
 import readFileString from "read-file-string"
 import yargs from "yargs"
@@ -77,7 +78,7 @@ const job = async args => {
     const loadFragmentsJob = async () => {
       const file = path.join(args.configDirectory, `${fragmentId}.md`)
       let content = await readFileString(file)
-      if (content) {
+      if (isString(fragmentTitle) && content) {
         content = `## ${fragmentTitle}\n\n${content}`
       }
       return {

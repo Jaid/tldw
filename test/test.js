@@ -12,7 +12,7 @@ it("should run", async () => {
     .expect("code", 0)
     .debug()
     .end()
-}, ms`30 seconds`)
+}, ms`1 minute`)
 
 it("should output version", async () => {
   const pkgFile = path.resolve(__dirname, "..", "package.json")

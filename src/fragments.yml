@@ -4,3 +4,4 @@ usage: Usage
 advancedUsage: Advanced Usage
 example: Example
 development: Development
+description: true
