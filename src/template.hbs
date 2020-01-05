@@ -4,14 +4,14 @@
 logo
 {{/if}}
 
-{{#if description}}
-{{{description}}}
-{{/if}}
-
 {{#if config.githubActions}}{{{shield "actions" slug}}}{{/if}} {{{shield "license" slug}}}  
 {{{shield "commitsSince" slug tag}}} {{{shield "lastCommit" slug}}} {{{shield "issues" slug}}}  
 {{#if installationCommands.length}}
 {{{shield "npmLatest" pkg.name}}} {{{shield "dependents" pkg.name slug}}} {{{shield "npmDownloads" pkg.name}}}
+{{/if}}
+
+{{#if description}}
+{{{description}}}
 {{/if}}
 
 {{{fragments.warning}}}
