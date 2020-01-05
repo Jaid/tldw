@@ -20,6 +20,7 @@ const debug = require("debug")(_PKG_NAME)
  * @prop {"node"|"web"|"hybrid"} runtime
  * @prop {string} binName
  * @prop {string} binExample
+ * @prop {boolean} githubActions
  */
 
 /**
