@@ -17,6 +17,7 @@ export default async file => {
   const config = {
     binName: loadedConfig.installation === "global",
     githubActions: hasGithubActions,
+    personal: false,
     ...loadedConfig,
   }
   return config
