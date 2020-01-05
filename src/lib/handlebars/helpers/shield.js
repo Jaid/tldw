@@ -59,7 +59,6 @@ export default (type, ...args) => {
       path: ["github", "commits-since", slug, tag],
       altText: `Commits since ${tag}`,
       logo: "github",
-      color: "success",
       link: `https://github.com/${slug}/commits`,
     })
   }
@@ -79,7 +78,6 @@ export default (type, ...args) => {
     return generateShield({
       path: ["github", "license", slug],
       altText: "License",
-      color: "success",
       link: `https://raw.githubusercontent.com/${slug}/master/license.txt`,
     })
   }
@@ -123,7 +121,18 @@ export default (type, ...args) => {
       logo: "npm",
       link: `https://npmjs.com/package/${packageName}`,
       label: "latest version",
-      color: "success",
+    })
+  }
+
+  if (type === "actions") {
+    const slug = args[0]
+    return generateShield({
+      altText: "Build status",
+      link: `https://actions-badge.atrox.dev/${slug}/goto`,
+      path: "endpoint.svg",
+      query: {
+        url: `https://actions-badge.atrox.dev/${slug}/badge`,
+      },
     })
   }
 }

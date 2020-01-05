@@ -15,6 +15,8 @@ const debug = require("debug")(_PKG_NAME)
  * @prop {string} link
  * @prop {string|string[]} path
  * @prop {string} label
+ * @prop {string} baseUrl
+ * @prop {Object} query
  */
 
 function escapeShieldPart(input) {
@@ -27,10 +29,13 @@ function escapeShieldPart(input) {
   * @return {string}
   */
 export default options => {
+  const baseUrl = options.baseUrl || "https://img.shields.io"
   const altText = options.altText || "Shield"
-  const color = options.color || "red"
+  const color = options.color || null
+  const additionalQuery = options.query || {}
   const query = {
     style: options.style || "flat-square",
+    ...additionalQuery,
   }
   if (options.logo) {
     query.logo = options.logo
@@ -44,13 +49,15 @@ export default options => {
   let path
   if (options.path) {
     path = ensureArray(options.path).join("/")
-    query.color = color
+    if (color) {
+      query.color = color
+    }
   } else {
     const leftText = escapeShieldPart(options.leftText || "Left")
     const rightText = escapeShieldPart(options.rightText || "Right")
     path = `badge/${leftText}-${rightText}-${color}`
   }
-  const imgUrl = buildUrl("https://img.shields.io", {
+  const imgUrl = buildUrl(baseUrl, {
     path,
     queryParams: query,
   })
