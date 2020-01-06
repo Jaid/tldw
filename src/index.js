@@ -22,6 +22,7 @@ import generateReadme from "./generateReadme"
  * @prop {string} binExample
  * @prop {boolean} githubActions
  * @prop {boolean} personal
+ * @prop {Object} environmentVariables
  */
 
 /**
@@ -57,6 +58,7 @@ import generateReadme from "./generateReadme"
  * @prop {Object} fragments
  * @prop {Object[]} developmentScripts
  * @prop {boolean} hasDevelopmentSection
+ * @prop {boolean} hasEnvironmentVariables
  */
 
 /**
@@ -99,6 +101,7 @@ const job = async args => {
     config,
     example,
     license,
+    hasEnvironmentVariables: hasContent(config.environmentVariables),
     developmentScripts: [],
     fragments: {},
     title: pkg.title || pkg.domain || pkg.name,

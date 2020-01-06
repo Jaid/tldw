@@ -87,6 +87,15 @@ For usage instructions:
 ```
 {{/if}}
 
+{{#if hasEnvironmentVariables}}
+Following environment variables are read by {{{title}}}:
+Name|Description
+---|---
+{{#each config.environmentVariables}}
+{{{@key}}}|{{{this}}}
+{{/each}}
+{{/if}}
+
 {{{fragments.legal}}}
 
 {{#if hasDevelopmentSection}}
