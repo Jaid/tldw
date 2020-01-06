@@ -11,7 +11,6 @@ async function findModules() {
   const findModulesJobs = [
     "jsdoc-export-default-interop/dist/index.js",
     "jsdoc-babel/lib/index.js",
-    "jsdoc-json",
   ].map(async file => {
     const possiblePaths = [
       path.resolve("node_modules", file),
@@ -25,12 +24,11 @@ async function findModules() {
     return foundFile
   })
 
-  const [jsdocExportDefaultInteropPath, jsdocBabelPath, jsdocJsonPath] = await Promise.all(findModulesJobs)
+  const [jsdocExportDefaultInteropPath, jsdocBabelPath] = await Promise.all(findModulesJobs)
 
   return {
     jsdocExportDefaultInteropPath,
     jsdocBabelPath,
-    jsdocJsonPath,
   }
 }
 
