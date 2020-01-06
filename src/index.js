@@ -13,8 +13,6 @@ import readPkg from "lib/readPkg"
 import fragments from "./fragments.yml"
 import generateReadme from "./generateReadme"
 
-const debug = require("debug")(_PKG_NAME)
-
 /**
  * @typedef {Object} Config
  * @prop {"global"|"prod"|"dev"|false} installation
@@ -76,7 +74,6 @@ const job = async args => {
     readConfig(path.join(args.configDirectory, "config.yml")),
     readFileString(path.join(args.configDirectory, "example.js")),
     readFileString(args.licenseFile),
-    generateJsdocMarkdown(args.sourceGlob),
   ]
   for (const [fragmentId, fragmentTitle] of Object.entries(fragments)) {
     const loadFragmentsJob = async () => {
@@ -92,7 +89,7 @@ const job = async args => {
     }
     jobs.push(loadFragmentsJob())
   }
-  const [pkg, config, example, license, apiMarkdown, ...loadedFragments] = await Promise.all(jobs)
+  const [pkg, config, example, license, ...loadedFragments] = await Promise.all(jobs)
   /**
    * @type {Context}
    */
@@ -102,7 +99,6 @@ const job = async args => {
     config,
     example,
     license,
-    apiMarkdown,
     developmentScripts: [],
     fragments: {},
     title: pkg.title || pkg.domain || pkg.name,
@@ -147,6 +143,7 @@ const job = async args => {
     })
   }
   context.hasDevelopmentSection = Boolean(context.fragments.development) || hasContent(context.developmentScripts)
+  context.apiMarkdown = await generateJsdocMarkdown(context)
   const readmeText = await generateReadme(context)
   await fsp.outputFile(args.outputFile, readmeText)
 }
