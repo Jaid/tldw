@@ -44,7 +44,7 @@ async function getJsdocConfig(context) {
       encoding: "utf8",
     },
     sourceType: "module",
-    plugins: [modulePaths.jsdocExportDefaultInteropPath],
+    plugins: [],
   }
   const babel = true
   if (babel) {
