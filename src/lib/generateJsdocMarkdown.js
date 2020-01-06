@@ -72,14 +72,7 @@ export default async context => {
     const jsdocConfigFile = await tempy.file({extension: "json"})
     debug(`JSDoc config written to: ${jsdocConfigFile}`)
     await fsp.outputJson(jsdocConfigFile, jsdocConfig)
-    const customPartials = []
     const jsdocToMarkdownArgs = ["jsdoc-to-markdown", "--files", context.args.sourceGlob, "--example-lang", "javascript", "--configure", jsdocConfigFile]
-    for (const customPartial of customPartials) {
-      const partialFile = path.join("dist", "partials", `${customPartial}.hbs`)
-      await fsp.outputFile(partialFile, require(`!raw-loader!../partials/${customPartial}.hbs`).default)
-      jsdocToMarkdownArgs.push("--partial")
-      jsdocToMarkdownArgs.push(partialFile)
-    }
     const result = await execa("npx", jsdocToMarkdownArgs)
     debug(`Executed: ${result.command}`)
     debug(`= ${result.exitCode}`)
