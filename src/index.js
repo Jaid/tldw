@@ -23,6 +23,7 @@ import generateReadme from "./generateReadme"
  * @prop {boolean} githubActions
  * @prop {boolean} personal
  * @prop {Object} environmentVariables
+ * @prop {boolean} jsdoc
  */
 
 /**
@@ -146,7 +147,9 @@ const job = async args => {
     })
   }
   context.hasDevelopmentSection = Boolean(context.fragments.development) || hasContent(context.developmentScripts)
-  context.apiMarkdown = await generateJsdocMarkdown(context)
+  if (config.jsdoc) {
+    context.apiMarkdown = await generateJsdocMarkdown(context)
+  }
   const readmeText = await generateReadme(context)
   await fsp.outputFile(args.outputFile, readmeText)
 }
