@@ -12,29 +12,29 @@
     "ensure-array": "^1.0.0",
     "execa": "^4.0.0",
     "first-existing-path": "^1.0.1",
-    "handlebars": "^4.5.3",
+    "handlebars": "^4.7.0",
     "has-content": "^1.1.0",
     "jsdoc-babel": "^0.5.0",
     "jsdoc-export-default-interop": "^0.3.1",
     "just-handlebars-helpers": "^1.0.17",
     "pascal-case": "^3.1.1",
-    "read-file-json": "^1.0.0",
-    "read-file-string": "^1.0.0",
-    "read-file-yaml": "^1.0.0",
+    "read-file-json": "^1.0.1",
+    "read-file-string": "^1.0.1",
+    "read-file-yaml": "^1.0.1",
     "tempy": "^0.3.0",
-    "yargs": "^15.0.2",
-    "zahl": "^2.0.3"
+    "yargs": "^15.1.0",
+    "zahl": "^2.0.6"
   },
   "devDependencies": {
     "babel-jest": "^24.9.0",
     "babel-preset-jaid": "^7.3.0",
     "browserslist-config-jaid-node": "^2.2.2",
     "coffee": "^5.2.2",
-    "eslint": "^6.7.2",
-    "eslint-config-jaid": "^1.41.0",
+    "eslint": "^6.8.0",
+    "eslint-config-jaid": "^1.41.1",
     "jest": "^24.9.0",
     "rimraf": "^3.0.0",
-    "webpack-config-jaid": "^7.9.0"
+    "webpack-config-jaid": "^9.4.0"
   },
   "scripts": {
     "clean": "rimraf dist/",
