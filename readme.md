@@ -1,8 +1,8 @@
 # tldw
 
 
-<a href="https://actions-badge.atrox.dev/Jaid/tldw/goto"><img src="https://img.shields.io/endpoint.svg?style=flat-square&url=https%3A%2F%2Factions-badge.atrox.dev%2FJaid%2Ftldw%2Fbadge" alt="Build status"/></a> <a href="https://raw.githubusercontent.com/Jaid/tldw/master/license.txt"><img src="https://img.shields.io/github/license/Jaid/tldw?style=flat-square" alt="License"/></a>  
-<a href="https://github.com/Jaid/tldw/commits"><img src="https://img.shields.io/github/commits-since/Jaid/tldw/v5.1.0?style=flat-square&logo=github" alt="Commits since v5.1.0"/></a> <a href="https://github.com/Jaid/tldw/commits"><img src="https://img.shields.io/github/last-commit/Jaid/tldw?style=flat-square&logo=github" alt="Last commit"/></a> <a href="https://github.com/Jaid/tldw/issues"><img src="https://img.shields.io/github/issues/Jaid/tldw?style=flat-square&logo=github" alt="Issues"/></a>  
+<a href="https://raw.githubusercontent.com/Jaid/tldw/master/license.txt"><img src="https://img.shields.io/github/license/Jaid/tldw?style=flat-square" alt="License"/></a>  
+<a href="https://actions-badge.atrox.dev/Jaid/tldw/goto"><img src="https://img.shields.io/endpoint.svg?style=flat-square&url=https%3A%2F%2Factions-badge.atrox.dev%2FJaid%2Ftldw%2Fbadge" alt="Build status"/></a> <a href="https://github.com/Jaid/tldw/commits"><img src="https://img.shields.io/github/commits-since/Jaid/tldw/v5.1.0?style=flat-square&logo=github" alt="Commits since v5.1.0"/></a> <a href="https://github.com/Jaid/tldw/commits"><img src="https://img.shields.io/github/last-commit/Jaid/tldw?style=flat-square&logo=github" alt="Last commit"/></a> <a href="https://github.com/Jaid/tldw/issues"><img src="https://img.shields.io/github/issues/Jaid/tldw?style=flat-square&logo=github" alt="Issues"/></a>  
 <a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/npm/v/tldw?style=flat-square&logo=npm&label=latest%20version" alt="Latest version on npm"/></a> <a href="https://github.com/Jaid/tldw/network/dependents"><img src="https://img.shields.io/librariesio/dependents/npm/tldw?style=flat-square&logo=npm" alt="Dependents"/></a> <a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/npm/dm/tldw?style=flat-square&logo=npm" alt="Downloads"/></a>
 
 **Overwrites the readme based on info fetched from package.json and source code.**
@@ -10,6 +10,8 @@
 #### Opinionated
 
 This project is tailored to my personal needs and workflows and therefore highly opinionated. Feel free to use it or get inspired by it, but please do not get frustrated if you come across weird features or have difficulties integrating it in your own ecosystem.
+
+
 
 
 
