@@ -3,5 +3,6 @@ warning: Warning
 usage: Usage
 advancedUsage: Advanced Usage
 example: Example
+options: Options
 development: true
 description: true
