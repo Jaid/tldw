@@ -19,6 +19,8 @@ export default async file => {
     githubActions: hasGithubActions,
     personal: false,
     jsdoc: false,
+    link: null,
+    linkName: null,
     ...loadedConfig,
   }
   return config

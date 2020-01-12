@@ -3,6 +3,7 @@ import hasContent from "has-content"
 import {isString} from "lodash"
 import path from "path"
 import readFileString from "read-file-string"
+import urlParse from "url-parse"
 import yargs from "yargs"
 
 import generateJsdocMarkdown from "lib/generateJsdocMarkdown"
@@ -24,6 +25,7 @@ import generateReadme from "./generateReadme"
  * @prop {boolean} personal
  * @prop {Object} environmentVariables
  * @prop {boolean} jsdoc
+ * @prop {string} link
  */
 
 /**
@@ -109,6 +111,12 @@ const job = async args => {
     binName: false,
     tag: `v${pkg.version}`,
     slug: `Jaid/${pkg.name}`,
+  }
+  if (!config.link === null && pkg.domain) {
+    config.link = `https://${pkg.domain}`
+  }
+  if (config.link && config.linkName === null) {
+    config.linkName = urlParse(config.link).host
   }
   if (!context.runtime) {
     context.runtime = config.runtime || guessRuntime(context)

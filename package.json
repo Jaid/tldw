@@ -22,6 +22,7 @@
     "read-file-string": "^1.0.1",
     "read-file-yaml": "^1.0.1",
     "tempy": "^0.3.0",
+    "url-parse": "^1.4.7",
     "yargs": "^15.1.0",
     "zahl": "^2.0.6"
   },
