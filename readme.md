@@ -17,6 +17,7 @@ This project is tailored to my personal needs and workflows and therefore highly
 
 
 
+
 ## Usage
 
 Generated readme can be extended with following files in your repository:
