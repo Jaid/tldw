@@ -6,7 +6,6 @@ Generated readme can be extended with following files in your repository:
 
 ##### Markdown fragments
 
-- `readme/environmentVariables.yml`
 - `readme/legal.md`
 - `readme/warning.md`
 - `readme/usage.md`
