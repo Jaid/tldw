@@ -13,7 +13,7 @@ import template from "!raw-loader!./template.hbs"
 export default async context => {
 
   context.installationCommands = []
-  context.description = context.pkg?.description || context.payload.repository?.description
+  context.description = context.pkg?.description || null
   context.camelCaseName = camelcase(context.pkg.name)
   context.pascalCaseName = pascalCase(context.pkg.name)
   context.globalName = context.pkg?.webpackConfigJaid?.endsWith("Class") ? context.pascalCaseName : context.camelCaseName
