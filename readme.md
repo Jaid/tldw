@@ -26,6 +26,10 @@ Generated readme can be extended with following files in your repository:
 
 - `readme/config.yml`
 
+##### JavaScript fragments
+
+- `readme/example.js`
+
 ##### Markdown fragments
 
 - `readme/legal.md`
