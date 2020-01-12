@@ -17,11 +17,6 @@ export default async context => {
   context.camelCaseName = camelcase(context.pkg.name)
   context.pascalCaseName = pascalCase(context.pkg.name)
   context.globalName = context.pkg?.webpackConfigJaid?.endsWith("Class") ? context.pascalCaseName : context.camelCaseName
-  context.config = {
-    installation: false,
-    tryInBrowser: context.runtime === "hybrid" || context.runtime === "web",
-    ...context.config,
-  }
   if (context.config.installation === "prod") {
     context.installationCommands.push({
       header: "npm",

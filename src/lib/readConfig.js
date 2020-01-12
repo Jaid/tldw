@@ -21,6 +21,8 @@ export default async file => {
     jsdoc: false,
     link: null,
     linkName: null,
+    installation: false,
+    tryInBrowser: false,
     ...loadedConfig,
   }
   return config
