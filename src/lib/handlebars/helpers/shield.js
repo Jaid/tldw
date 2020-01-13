@@ -135,4 +135,15 @@ export default (type, ...args) => {
       },
     })
   }
+  if (type === "sponsor") {
+    const name = args[0]
+    const fundingLink = args[1]
+    return generateShield({
+      altText: `Sponsor ${name}`,
+      link: fundingLink,
+      leftText: "<3",
+      rightText: "Sponsor",
+      color: "pink",
+    })
+  }
 }

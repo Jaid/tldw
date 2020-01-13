@@ -4,7 +4,7 @@
 logo
 {{/if}}
 
-{{{shield "license" slug}}}  
+{{{shield "license" slug}}} {{#if pkg.funding}}{{{shield "sponsor" pkg.name pkg.funding}}}{{/if}}
 {{#if config.githubActions}}{{{shield "actions" slug}}}{{/if}} {{{shield "commitsSince" slug tag}}} {{{shield "lastCommit" slug}}} {{{shield "issues" slug}}}  
 {{#if installationCommands.length}}
 {{{shield "npmLatest" pkg.name}}} {{{shield "dependents" pkg.name slug}}} {{{shield "npmDownloads" pkg.name}}}
