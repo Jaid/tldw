@@ -82,7 +82,6 @@ const job = async args => {
     readFileString(path.join(args.configDirectory, "example.js")),
     readFileString(path.join(args.configDirectory, "result.js")),
     readFileString(args.licenseFile),
-    readFileString(path.join(args.configDirectory, "result.js")),
     readFileYaml(path.join(args.configDirectory, "envVars.yml")),
   ]
   for (const [fragmentId, fragmentTitle] of Object.entries(fragments)) {
