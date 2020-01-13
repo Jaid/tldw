@@ -22,8 +22,9 @@ export default async file => {
     link: null,
     linkName: null,
     installation: false,
-    tryInBrowser: false,
     environmentVariables: {},
+    needsNodeRuntime: true,
+    tryInBrowser: null,
     ...loadedConfig,
   }
   return config

@@ -4,7 +4,7 @@
 logo
 {{/if}}
 
-{{{shield "license" slug}}} {{#if pkg.funding}}{{{shield "sponsor" pkg.name pkg.funding}}}{{/if}}
+{{{shield "license" slug}}} {{#if pkg.funding}}{{{shield "sponsor" pkg.name pkg.funding}}}{{/if}}  
 {{#if config.githubActions}}{{{shield "actions" slug}}}{{/if}} {{{shield "commitsSince" slug tag}}} {{{shield "lastCommit" slug}}} {{{shield "issues" slug}}}  
 {{#if installationCommands.length}}
 {{{shield "npmLatest" pkg.name}}} {{{shield "dependents" pkg.name slug}}} {{{shield "npmDownloads" pkg.name}}}
@@ -60,7 +60,7 @@ Variable `result` will now be:
 {{command}}
 ```
 {{/each}}
-{{#if webCompatible}}
+{{#if worksAsScriptTag}}
 {{{shield "jsdelivr" pkg.name}}} {{{shield "unpkg" pkg.name}}}
 ```html
 <script src="https://cdn.jsdelivr.net/npm/{{{pkg.name}}}@{{{pkg.version}}}/index.js"/>

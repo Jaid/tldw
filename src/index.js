@@ -29,6 +29,7 @@ import generateReadme from "./generateReadme"
  * @prop {Object} environmentVariables
  * @prop {boolean} jsdoc
  * @prop {string} link
+ * @prop {boolean} needsNodeRuntime
  */
 
 /**
@@ -59,7 +60,6 @@ import generateReadme from "./generateReadme"
  * @prop {string} license
  * @prop {string} slug
  * @prop {string} tag
- * @prop {boolean} webCompatible
  * @prop {string} binName
  * @prop {string} binExample
  * @prop {Object} fragments
@@ -67,6 +67,7 @@ import generateReadme from "./generateReadme"
  * @prop {boolean} hasDevelopmentSection
  * @prop {boolean} hasEnvironmentVariables
  * @prop {Object} repository
+ * @prop {boolean} worksAsScriptTag
  */
 
 /**
@@ -123,6 +124,7 @@ const job = async args => {
     title: pkg.title || pkg.domain || pkg.name,
     binName: false,
     tag: `v${pkg.version}`,
+    worksAsScriptTag: !config.needsNodeRuntime,
   }
   if (!context.repository) {
     console.warn("tldw is made for GitHub repositories, but package.json#repository is not set")
@@ -135,6 +137,9 @@ const job = async args => {
   }
   if (config.link && config.linkName === null) {
     config.linkName = urlParse(config.link).host
+  }
+  if (config.tryInBrowser === null) {
+    config.tryInBrowser = context.worksAsScriptTag
   }
   if (!context.runtime) {
     context.runtime = config.runtime || guessRuntime(context)
