@@ -1,6 +1,8 @@
 import fsp from "@absolunet/fsp"
+import gitUrlParse from "git-url-parse"
 import hasContent from "has-content"
 import {isString} from "lodash"
+import normalizePackageData from "normalize-package-data"
 import path from "path"
 import readFileString from "read-file-string"
 import readFileYaml from "read-file-yaml"
@@ -64,6 +66,7 @@ import generateReadme from "./generateReadme"
  * @prop {Object[]} developmentScripts
  * @prop {boolean} hasDevelopmentSection
  * @prop {boolean} hasEnvironmentVariables
+ * @prop {Object} repository
  */
 
 /**
@@ -99,6 +102,7 @@ const job = async args => {
     jobs.push(loadFragmentsJob())
   }
   const [pkg, config, example, exampleResult, license, envVars, ...loadedFragments] = await Promise.all(jobs)
+  normalizePackageData(pkg)
   if (envVars) {
     Object.assign(config.environmentVariables, envVars)
   }
@@ -112,6 +116,7 @@ const job = async args => {
     example,
     exampleResult,
     license,
+    repository: pkg.repository?.url,
     hasEnvironmentVariables: hasContent(config.environmentVariables),
     developmentScripts: [],
     fragments: {},
@@ -119,6 +124,10 @@ const job = async args => {
     binName: false,
     tag: `v${pkg.version}`,
     slug: `Jaid/${pkg.name}`,
+  }
+  if (!context.repository) {
+    console.warn("tldw is made for GitHub repositories, but package.json#repository is not set")
+    process.exit(1)
   }
   if (!config.link === null && pkg.domain) {
     config.link = `https://${pkg.domain}`
