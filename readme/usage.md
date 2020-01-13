@@ -3,6 +3,7 @@ Generated readme can be extended with following files in your repository:
 ##### Config
 
 - `readme/config.yml`
+- `readme/envVars.yml` (same as `readme/config.yml#environmentVariables`)
 
 ##### JavaScript fragments
 

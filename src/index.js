@@ -3,6 +3,7 @@ import hasContent from "has-content"
 import {isString} from "lodash"
 import path from "path"
 import readFileString from "read-file-string"
+import readFileYaml from "read-file-yaml"
 import urlParse from "url-parse"
 import yargs from "yargs"
 
@@ -81,6 +82,8 @@ const job = async args => {
     readFileString(path.join(args.configDirectory, "example.js")),
     readFileString(path.join(args.configDirectory, "result.js")),
     readFileString(args.licenseFile),
+    readFileString(path.join(args.configDirectory, "result.js")),
+    readFileYaml(path.join(args.configDirectory, "envVars.yml")),
   ]
   for (const [fragmentId, fragmentTitle] of Object.entries(fragments)) {
     const loadFragmentsJob = async () => {
@@ -96,7 +99,10 @@ const job = async args => {
     }
     jobs.push(loadFragmentsJob())
   }
-  const [pkg, config, example, exampleResult, license, ...loadedFragments] = await Promise.all(jobs)
+  const [pkg, config, example, exampleResult, license, envVars, ...loadedFragments] = await Promise.all(jobs)
+  if (envVars) {
+    Object.assign(config.environmentVariables, envVars)
+  }
   /**
    * @type {Context}
    */

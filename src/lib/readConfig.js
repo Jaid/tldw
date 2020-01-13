@@ -23,6 +23,7 @@ export default async file => {
     linkName: null,
     installation: false,
     tryInBrowser: false,
+    environmentVariables: {},
     ...loadedConfig,
   }
   return config
