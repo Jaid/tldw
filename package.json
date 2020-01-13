@@ -1,5 +1,4 @@
 {
-  "private": true,
   "version": "6.0.0",
   "webpackConfigJaid": "cli",
   "author": "Jaid <jaid.jsx@gmail.com> (https://github.com/Jaid)",
@@ -56,5 +55,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/jaid/tldw"
-  }
+  },
+  "name": "tldw"
 }
