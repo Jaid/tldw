@@ -123,12 +123,13 @@ const job = async args => {
     title: pkg.title || pkg.domain || pkg.name,
     binName: false,
     tag: `v${pkg.version}`,
-    slug: `Jaid/${pkg.name}`,
   }
   if (!context.repository) {
     console.warn("tldw is made for GitHub repositories, but package.json#repository is not set")
-    process.exit(1)
+    console.warn("Doing nothing")
+    process.exit(0)
   }
+  context.slug = gitUrlParse(context.repository).full_name
   if (!config.link === null && pkg.domain) {
     config.link = `https://${pkg.domain}`
   }
