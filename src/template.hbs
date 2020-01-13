@@ -28,7 +28,23 @@ This project is tailored to my personal needs and workflows and therefore highly
 
 {{{fragments.warning}}}
 
+{{#if example}}
+## Example
+
+```javascript
+{{{example}}}
+```
+
+{{#if exampleResult}}
+Variable `result` will now be:
+
+```javascript
+{{{exampleResult}}}
+```
+{{/if}}
+{{else}}
 {{{fragments.example}}}
+{{/if}}
 
 {{{fragments.usage}}}
 
@@ -50,13 +66,6 @@ This project is tailored to my personal needs and workflows and therefore highly
 <script src="https://cdn.jsdelivr.net/npm/{{{pkg.name}}}@{{{pkg.version}}}/index.js"/>
 ```
 {{/if}}
-{{/if}}
-
-{{#if example}}
-## Example
-```javascript
-{{{example}}}
-```
 {{/if}}
 
 {{#if config.tryInBrowser}}

@@ -7,6 +7,7 @@ Generated readme can be extended with following files in your repository:
 ##### JavaScript fragments
 
 - `readme/example.js`
+- `readme/result.js`
 
 ##### Markdown fragments
 

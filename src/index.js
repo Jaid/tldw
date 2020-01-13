@@ -49,6 +49,7 @@ import generateReadme from "./generateReadme"
  * @prop {string} configFile
  * @prop {Config} config
  * @prop {string} example
+ * @prop {string} exampleresult
  * @prop {Args} args
  * @prop {"node"|"web"|"hybrid"} runtime
  * @prop {string} apiMarkdown
@@ -78,6 +79,7 @@ const job = async args => {
     readPkg(args.packageFile),
     readConfig(path.join(args.configDirectory, "config.yml")),
     readFileString(path.join(args.configDirectory, "example.js")),
+    readFileString(path.join(args.configDirectory, "result.js")),
     readFileString(args.licenseFile),
   ]
   for (const [fragmentId, fragmentTitle] of Object.entries(fragments)) {
@@ -94,7 +96,7 @@ const job = async args => {
     }
     jobs.push(loadFragmentsJob())
   }
-  const [pkg, config, example, license, ...loadedFragments] = await Promise.all(jobs)
+  const [pkg, config, example, exampleResult, license, ...loadedFragments] = await Promise.all(jobs)
   /**
    * @type {Context}
    */
@@ -103,6 +105,7 @@ const job = async args => {
     args,
     config,
     example,
+    exampleResult,
     license,
     hasEnvironmentVariables: hasContent(config.environmentVariables),
     developmentScripts: [],
