@@ -26,6 +26,22 @@ This project is tailored to my personal needs and workflows and therefore highly
 ##### View online at [{{{config.linkName}}}]({{{config.link}}}).
 {{/if}}
 
+{{#if installationCommands.length}}
+## Installation
+{{#each installationCommands}}
+{{{shield header ../pkg.name}}}
+```bash
+{{command}}
+```
+{{/each}}
+{{#if worksAsScriptTag}}
+{{{shield "jsdelivr" pkg.name}}} {{{shield "unpkg" pkg.name}}}
+```html
+<script src="https://cdn.jsdelivr.net/npm/{{{pkg.name}}}@{{{pkg.version}}}/index.js" />
+```
+{{/if}}
+{{/if}}
+
 {{{fragments.warning}}}
 
 {{#if example}}
@@ -51,22 +67,6 @@ Variable `result` will now be:
 {{{fragments.advancedUsage}}}
 
 {{{fragments.options}}}
-
-{{#if installationCommands.length}}
-## Installation
-{{#each installationCommands}}
-{{{shield header ../pkg.name}}}
-```bash
-{{command}}
-```
-{{/each}}
-{{#if worksAsScriptTag}}
-{{{shield "jsdelivr" pkg.name}}} {{{shield "unpkg" pkg.name}}}
-```html
-<script src="https://cdn.jsdelivr.net/npm/{{{pkg.name}}}@{{{pkg.version}}}/index.js"/>
-```
-{{/if}}
-{{/if}}
 
 {{#if config.tryInBrowser}}
 ## Try it out
