@@ -92,6 +92,19 @@ export default (type, ...args) => {
     })
   }
 
+  if (type === "githubPackages") {
+    const slug = args[0]
+    const packageName = `@${slug}`
+    return generateShield({
+      logo: "github",
+      link: `https://github.com/${slug}/packages`,
+      altText: `${packageName} on GitHub Packages`,
+      leftText: "GitHub Packages",
+      rightText: packageName,
+      color: "24282e",
+    })
+  }
+
   if (type === "dependents") {
     const packageName = args[0]
     const slug = args[1]

@@ -29,7 +29,7 @@ This project is tailored to my personal needs and workflows and therefore highly
 {{#if installationCommands.length}}
 ## Installation
 {{#each installationCommands}}
-{{{shield header ../pkg.name}}}
+{{{shield header headerArgument}}}{{#if bonusText}} {{{bonusText}}}{{/if}}
 ```bash
 {{command}}
 ```
