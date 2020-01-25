@@ -32,7 +32,7 @@ export default async context => {
       context.installationCommands.push({
         header: "githubPackages",
         headerArgument: context.slug,
-        bonusText: "(if [configured properly](https://help.github.com/en/github/managing-packages-with-github-packages/configuring-npm-for-use-with-github-packages))",
+        bonusText: "(if <a style=\"vertical-align: top\" href='https://help.github.com/en/github/managing-packages-with-github-packages/configuring-npm-for-use-with-github-packages'>configured properly</a>)",
         command: `npm install --save @${context.slug}@^${context.pkg.version}`,
       })
     }
@@ -52,7 +52,7 @@ export default async context => {
       context.installationCommands.push({
         header: "githubPackages",
         headerArgument: context.slug,
-        bonusText: "(if [configured properly](https://help.github.com/en/github/managing-packages-with-github-packages/configuring-npm-for-use-with-github-packages))",
+        bonusText: "(if <a style=\"vertical-align: top\" href='https://help.github.com/en/github/managing-packages-with-github-packages/configuring-npm-for-use-with-github-packages'>configured properly</a>)",
         command: `npm install --save-dev @${context.slug}@^${context.pkg.version}`,
       })
     }
@@ -72,7 +72,7 @@ export default async context => {
       context.installationCommands.push({
         header: "githubPackages",
         headerArgument: context.slug,
-        bonusText: "(if [configured properly](https://help.github.com/en/github/managing-packages-with-github-packages/configuring-npm-for-use-with-github-packages))",
+        bonusText: "(if <a style=\"vertical-align: top\" href='https://help.github.com/en/github/managing-packages-with-github-packages/configuring-npm-for-use-with-github-packages'>configured properly</a>)",
         command: `npm install --global @${context.slug}@^${context.pkg.version}`,
       })
     }
