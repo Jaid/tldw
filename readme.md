@@ -14,6 +14,16 @@ This project is tailored to my personal needs and workflows and therefore highly
 
 
 
+## Installation
+<a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/badge/npm-tldw-C23039?style=flat-square&logo=npm" alt="tldw on npm"/></a>
+```bash
+npm install --global tldw@^6.2.0
+```
+<a href="https://yarnpkg.com/package/tldw"><img src="https://img.shields.io/badge/Yarn-tldw-2F8CB7?style=flat-square&logo=yarn&logoColor=white" alt="tldw on Yarn"/></a>
+```bash
+yarn global add tldw@^6.2.0
+```
+
 
 
 
@@ -46,16 +56,6 @@ Generated readme can be extended with following files in your repository:
 
 
 
-
-## Installation
-<a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/badge/npm-tldw-C23039?style=flat-square&logo=npm" alt="tldw on npm"/></a>
-```bash
-npm install --global tldw@^6.2.0
-```
-<a href="https://yarnpkg.com/package/tldw"><img src="https://img.shields.io/badge/Yarn-tldw-2F8CB7?style=flat-square&logo=yarn&logoColor=white" alt="tldw on Yarn"/></a>
-```bash
-yarn global add tldw@^6.2.0
-```
 
 
 
