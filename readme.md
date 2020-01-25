@@ -23,6 +23,10 @@ npm install --global tldw@^6.3.0
 ```bash
 yarn global add tldw@^6.3.0
 ```
+<a href="https://github.com/jaid/tldw/packages"><img src="https://img.shields.io/badge/GitHub Packages-@jaid/tldw-24282e?style=flat-square&logo=github" alt="@jaid/tldw on GitHub Packages"/></a> (if [configured properly](https://help.github.com/en/github/managing-packages-with-github-packages/configuring-npm-for-use-with-github-packages))
+```bash
+npm install --global @jaid/tldw@^6.3.0
+```
 
 
 
