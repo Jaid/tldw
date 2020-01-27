@@ -15,15 +15,21 @@ This project is tailored to my personal needs and workflows and therefore highly
 
 
 ## Installation
+
 <a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/badge/npm-tldw-C23039?style=flat-square&logo=npm" alt="tldw on npm"/></a>
+
 ```bash
 npm install --global tldw@^6.3.1
 ```
+
 <a href="https://yarnpkg.com/package/tldw"><img src="https://img.shields.io/badge/Yarn-tldw-2F8CB7?style=flat-square&logo=yarn&logoColor=white" alt="tldw on Yarn"/></a>
+
 ```bash
 yarn global add tldw@^6.3.1
 ```
-<a href="https://github.com/jaid/tldw/packages"><img src="https://img.shields.io/badge/GitHub Packages-@jaid/tldw-24282e?style=flat-square&logo=github" alt="@jaid/tldw on GitHub Packages"/></a> (if [configured properly](https://help.github.com/en/github/managing-packages-with-github-packages/configuring-npm-for-use-with-github-packages))
+
+<a href="https://github.com/jaid/tldw/packages"><img src="https://img.shields.io/badge/GitHub Packages-@jaid/tldw-24282e?style=flat-square&logo=github" alt="@jaid/tldw on GitHub Packages"/></a> <span style="vertical-align: top">(if <a style="vertical-align: top" href='https://help.github.com/en/github/managing-packages-with-github-packages/configuring-npm-for-use-with-github-packages'>configured properly</a>)</span>
+
 ```bash
 npm install --global @jaid/tldw@^6.3.1
 ```
