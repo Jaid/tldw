@@ -28,7 +28,8 @@ npm install --global tldw@^6.4.0
 yarn global add tldw@^6.4.0
 ```
 
-<a href="https://github.com/jaid/tldw/packages"><img src="https://img.shields.io/badge/GitHub Packages-@jaid/tldw-24282e?style=flat-square&logo=github" alt="@jaid/tldw on GitHub Packages"/></a> <span style="vertical-align: top">(if <a style="vertical-align: top" href='https://help.github.com/en/github/managing-packages-with-github-packages/configuring-npm-for-use-with-github-packages'>configured properly</a>)</span>
+<a href="https://github.com/jaid/tldw/packages"><img src="https://img.shields.io/badge/GitHub Packages-@jaid/tldw-24282e?style=flat-square&logo=github" alt="@jaid/tldw on GitHub Packages"/></a>  
+(if [configured properly](https://help.github.com/en/github/managing-packages-with-github-packages/configuring-npm-for-use-with-github-packages))
 
 ```bash
 npm install --global @jaid/tldw@^6.4.0
@@ -50,7 +51,7 @@ Generated readme can be extended with following files in your repository:
 ##### JavaScript fragments
 
 - `readme/example.js`
-- `readme/result.js`
+- `readme/result*.js`
 
 ##### Markdown fragments
 
