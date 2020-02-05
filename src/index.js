@@ -12,6 +12,7 @@ import yargs from "yargs"
 import generateJsdocMarkdown from "lib/generateJsdocMarkdown"
 import guessRuntime from "lib/guessRuntime"
 import readConfig from "lib/readConfig"
+import readExampleResults from "lib/readExampleResults"
 import readPkg from "lib/readPkg"
 
 import fragments from "./fragments.yml"
@@ -53,7 +54,7 @@ import generateReadme from "./generateReadme"
  * @prop {string} configFile
  * @prop {Config} config
  * @prop {string} example
- * @prop {string} exampleresult
+ * @prop {string} exampleResults
  * @prop {Args} args
  * @prop {"node"|"web"|"hybrid"} runtime
  * @prop {string} apiMarkdown
@@ -84,7 +85,7 @@ const job = async args => {
     readPkg(args.packageFile),
     readConfig(path.join(args.configDirectory, "config.yml")),
     readFileString(path.join(args.configDirectory, "example.js")),
-    readFileString(path.join(args.configDirectory, "result.js")),
+    readExampleResults(args),
     readFileString(args.licenseFile),
     readFileYaml(path.join(args.configDirectory, "envVars.yml")),
   ]
@@ -102,7 +103,7 @@ const job = async args => {
     }
     jobs.push(loadFragmentsJob())
   }
-  const [pkg, config, example, exampleResult, license, envVars, ...loadedFragments] = await Promise.all(jobs)
+  const [pkg, config, example, exampleResults, license, envVars, ...loadedFragments] = await Promise.all(jobs)
   normalizePackageData(pkg)
   if (envVars) {
     Object.assign(config.environmentVariables, envVars)
@@ -115,7 +116,7 @@ const job = async args => {
     args,
     config,
     example,
-    exampleResult,
+    exampleResults,
     license,
     repository: pkg.repository?.url,
     hasEnvironmentVariables: hasContent(config.environmentVariables),

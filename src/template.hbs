@@ -50,17 +50,18 @@ This project is tailored to my personal needs and workflows and therefore highly
 {{#if example}}
 ## Example
 
+{{{fragments.example}}}
 ```javascript
 {{{example}}}
 ```
 
-{{#if exampleResult}}
-Variable `result` will now be:
+{{#each exampleResults}}
+Variable `{{{@key}}}` will be:
 
 ```javascript
-{{{exampleResult}}}
+{{{this}}}
 ```
-{{/if}}
+{{/each}}
 {{else}}
 {{{fragments.example}}}
 {{/if}}
