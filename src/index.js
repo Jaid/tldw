@@ -133,7 +133,7 @@ const job = async args => {
     process.exit(0)
   }
   context.slug = gitUrlParse(context.repository).full_name
-  if (!config.link === null && pkg.domain) {
+  if (config.link === null && pkg.domain) {
     config.link = `https://${pkg.domain}`
   }
   if (config.link && config.linkName === null) {
