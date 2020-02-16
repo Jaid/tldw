@@ -136,7 +136,12 @@ Name|Description
 
 {{#if license}}
 ## License
+{{#if isMitLicense}}
+[MIT License](https://raw.githubusercontent.com/{{{slug}}}/master/license.txt)  
+{{{license}}}
+{{else}}
 ```text
 {{{license}}}
 ```
+{{/if}}
 {{/if}}

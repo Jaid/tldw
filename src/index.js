@@ -69,6 +69,7 @@ import generateReadme from "./generateReadme"
  * @prop {boolean} hasEnvironmentVariables
  * @prop {Object} repository
  * @prop {boolean} worksAsScriptTag
+ * @prop {boolean} isMitLicense
  */
 
 /**
@@ -161,6 +162,10 @@ const job = async args => {
     if (content) {
       context.fragments[id] = content
     }
+  }
+  if (context.license && context.license.startsWith("MIT License")) {
+    context.isMitLicense = true
+    context.license = context.license.split("\n")[2]
   }
   context.developmentScripts.push({
     name: "Setting up:",
