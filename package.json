@@ -32,14 +32,14 @@
   },
   "devDependencies": {
     "babel-jest": "^25.1.0",
-    "babel-preset-jaid": "^7.3.2",
+    "babel-preset-jaid": "^7.3.3",
     "browserslist-config-jaid-node": "^2.2.2",
     "coffee": "^5.2.2",
     "eslint": "^6.8.0",
-    "eslint-config-jaid": "^1.46.0",
+    "eslint-config-jaid": "^1.47.0",
     "jest": "^25.1.0",
     "rimraf": "^3.0.2",
-    "webpack-config-jaid": "^11.6.0"
+    "webpack-config-jaid": "^11.7.1"
   },
   "scripts": {
     "clean": "rimraf dist/",
