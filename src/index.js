@@ -14,6 +14,7 @@ import guessRuntime from "lib/guessRuntime"
 import readConfig from "lib/readConfig"
 import readExampleResults from "lib/readExampleResults"
 import readPkg from "lib/readPkg"
+import readUsageOptions from "lib/readUsageOptions"
 
 import fragments from "./fragments.yml"
 import generateReadme from "./generateReadme"
@@ -70,6 +71,9 @@ import generateReadme from "./generateReadme"
  * @prop {Object} repository
  * @prop {boolean} worksAsScriptTag
  * @prop {boolean} isMitLicense
+ * @prop {Object} usageOptions
+ * @prop {boolean} hasUsageOptions
+ * @prop {boolean} hasOptionsSection
  */
 
 /**
@@ -85,6 +89,7 @@ const job = async args => {
   const jobs = [
     readPkg(args.packageFile),
     readConfig(path.join(args.configDirectory, "config.yml")),
+    readUsageOptions(path.join(args.configDirectory, "usageOptions.yml")),
     readFileString(path.join(args.configDirectory, "example.js")),
     readExampleResults(args),
     readFileString(args.licenseFile),
@@ -104,11 +109,12 @@ const job = async args => {
     }
     jobs.push(loadFragmentsJob())
   }
-  const [pkg, config, example, exampleResults, license, envVars, ...loadedFragments] = await Promise.all(jobs)
+  const [pkg, config, usageOptions, example, exampleResults, license, envVars, ...loadedFragments] = await Promise.all(jobs)
   normalizePackageData(pkg)
   if (envVars) {
     Object.assign(config.environmentVariables, envVars)
   }
+  const hasUsageOptions = hasContent(usageOptions)
   /**
    * @type {Context}
    */
@@ -119,6 +125,8 @@ const job = async args => {
     example,
     exampleResults,
     license,
+    usageOptions,
+    hasUsageOptions,
     repository: pkg.repository?.url,
     hasEnvironmentVariables: hasContent(config.environmentVariables),
     developmentScripts: [],
@@ -184,6 +192,7 @@ const job = async args => {
     })
   }
   context.hasDevelopmentSection = Boolean(context.fragments.development) || hasContent(context.developmentScripts)
+  context.hasOptionsSection = hasUsageOptions || Boolean(context.fragments.options)
   if (config.jsdoc) {
     context.apiMarkdown = await generateJsdocMarkdown(context)
   }

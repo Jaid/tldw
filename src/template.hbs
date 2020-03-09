@@ -70,7 +70,48 @@ Variable `{{{@key}}}` will be:
 
 {{{fragments.advancedUsage}}}
 
+{{#if hasOptionsSection}}
+## Options
+
 {{{fragments.options}}}
+
+{{#if hasUsageOptions}}
+<table>
+<tr>
+<th></th>
+{{#if usageOptions.anyEntryHasRequired}}
+<th></th>
+{{/if}}
+{{#if usageOptions.anyEntryHasType}}
+<th>Type</th>
+{{/if}}
+{{#if usageOptions.anyEntryHasDefault}}
+<th>Default</th>
+{{/if}}
+{{#if usageOptions.anyEntryHasInfo}}
+<th>Info</th>
+{{/if}}
+</tr>
+{{#each usageOptions.entries}}
+<tr>
+<td>{{{name}}}</td>
+{{#if ../usageOptions.anyEntryHasRequired}}
+<td>{{#if required}}*{{/if}}</td>
+{{/if}}
+{{#if ../usageOptions.anyEntryHasType}}
+<td>{{{type}}}</td>
+{{/if}}
+{{#if ../usageOptions.anyEntryHasDefault}}
+<td>{{{default}}}</td>
+{{/if}}
+{{#if ../usageOptions.anyEntryHasInfo}}
+<td>{{{info}}}</td>
+{{/if}}
+</tr>
+{{/each}}
+</table>
+{{/if}}
+{{/if}}
 
 {{#if config.tryInBrowser}}
 ## Try it out
