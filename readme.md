@@ -73,7 +73,6 @@ Generated readme can be extended with following files in your repository:
 
 
 
-
 ## CLI Usage
 After installing package `tldw` globally, you can use its command line interface.
 ```bash
@@ -109,4 +108,4 @@ npm run test
 
 ## License
 [MIT License](https://raw.githubusercontent.com/jaid/tldw/master/license.txt)  
-Copyright © 2020, Jaid <jaid.jsx@gmail.com> (github.com/jaid)
+Copyright © 2020, Jaid \<jaid.jsx@gmail.com> (https://github.com/jaid)
