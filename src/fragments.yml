@@ -2,7 +2,7 @@ legal: Legal
 warning: Warning
 usage: Usage
 advancedUsage: Advanced Usage
-example: Example
+example: true
 options: true
 development: true
 description: true
