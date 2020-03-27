@@ -6,3 +6,4 @@ example: true
 options: true
 development: true
 description: true
+result: true
