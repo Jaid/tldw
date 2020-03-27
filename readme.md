@@ -7,9 +7,6 @@
 
 **Overwrites the readme based on info fetched from package.json and source code.**
 
-#### Opinionated
-
-This project is tailored to my personal needs and workflows and therefore highly opinionated. Feel free to use it or get inspired by it, but please do not get frustrated if you come across weird features or have difficulties integrating it in your own ecosystem.
 
 
 
@@ -70,6 +67,7 @@ Generated readme can be extended with following files in your repository:
 - `readme/description.md`
 - `readme/result.md`
 - `readme/related.md`
+- `readme/faq.md`
 
 
 
