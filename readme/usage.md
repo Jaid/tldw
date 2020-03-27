@@ -26,3 +26,4 @@ Generated readme can be extended with following files in your repository:
 - `readme/description.md`
 - `readme/result.md`
 - `readme/related.md`
+- `readme/faq.md`
