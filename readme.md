@@ -67,6 +67,8 @@ Generated readme can be extended with following files in your repository:
 - `readme/options.md`
 - `readme/development.md`
 - `readme/description.md`
+- `readme/result.md`
+- `readme/related.md`
 
 
 
