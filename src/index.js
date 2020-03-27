@@ -6,6 +6,7 @@ import normalizePackageData from "normalize-package-data"
 import path from "path"
 import readFileString from "read-file-string"
 import readFileYaml from "read-file-yaml"
+import sortObject from "sort-object"
 import urlParse from "url-parse"
 import yargs from "yargs"
 
@@ -113,6 +114,9 @@ const job = async args => {
   normalizePackageData(pkg)
   if (envVars) {
     Object.assign(config.environmentVariables, envVars)
+  }
+  if (hasContent(config.environmentVariables)) {
+    config.environmentVariables = sortObject(config.environmentVariables)
   }
   const hasUsageOptions = hasContent(usageOptions)
   /**
