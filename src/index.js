@@ -75,6 +75,7 @@ import generateReadme from "./generateReadme"
  * @prop {Object} usageOptions
  * @prop {boolean} hasUsageOptions
  * @prop {boolean} hasOptionsSection
+ * @prop {boolean} hasExampleSection
  */
 
 /**
@@ -195,6 +196,7 @@ const job = async args => {
       script: "npm run test",
     })
   }
+  context.hasExampleSection = Boolean(context.example || context.fragments.example)
   context.hasDevelopmentSection = Boolean(context.fragments.development) || hasContent(context.developmentScripts)
   context.hasOptionsSection = hasUsageOptions || Boolean(context.fragments.options)
   if (config.jsdoc) {

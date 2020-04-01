@@ -47,13 +47,15 @@ This project is tailored to my personal needs and workflows and therefore highly
 
 {{{fragments.warning}}}
 
-{{#if example}}
+{{#if hasExampleSection}}
 ## Example
 
 {{{fragments.example}}}
+{{#if example}}
 ```javascript
 {{{example}}}
 ```
+{{/if}}
 
 {{#each exampleResults}}
 Variable `{{{@key}}}` will be:
