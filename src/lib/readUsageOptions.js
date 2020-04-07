@@ -45,6 +45,5 @@ export default async file => {
     anyEntryHasRequired,
     anyEntryHasDefault,
   }
-  console.dir(optionEntries)
   return usageOptions
 }
