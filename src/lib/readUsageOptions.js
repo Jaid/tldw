@@ -22,16 +22,41 @@ function sortEntries(entry1, entry2) {
  */
 export default async file => {
   debug(`Reading config from ${file}`)
-  const options = await readFileYaml(file) || {}
-  if (isEmpty(options)) {
-    return null
-  }
-  const optionEntries = Object.entries(options).map(([name, values]) => {
+  const [options, actionInfo] = await Promise.all([
+    readFileYaml(file),
+    readFileYaml("action.yml"),
+  ])
+  const optionEntries = Object.entries(options || {}).map(([name, values]) => {
     return {
       name,
       ...ensureObject(values, "default"),
     }
   })
+  if (actionInfo?.inputs) {
+    for (const [inputId, input] of Object.entries(actionInfo.inputs)) {
+      let optionEntry = optionEntries.find(entry => entry.name === inputId)
+      if (optionEntry) {
+        debug(`Option "${inputId}" is defined in both readme/usageOptions.yml and action.yml, will be merged with usageOptions.yml prioritized`)
+      } else {
+        optionEntry = {
+          name: inputId,
+        }
+        optionEntries.push(optionEntry)
+      }
+      if (optionEntry.info === undefined && input.description) {
+        optionEntry.info = input.description
+      }
+      if (optionEntry.default === undefined && input.default) {
+        optionEntry.default = input.default
+      }
+      if (optionEntry.required === undefined && input.required) {
+        optionEntry.required = true
+      }
+    }
+  }
+  if (isEmpty(optionEntries)) {
+    return null
+  }
   optionEntries.sort(sortEntries)
   const optionEntriesValues = Object.values(optionEntries)
   const anyEntryHasType = Boolean(optionEntriesValues.find(option => hasContent(option.type)))
