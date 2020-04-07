@@ -17,7 +17,7 @@
     "first-existing-path": "^1.0.1",
     "git-url-parse": "^11.1.2",
     "globby": "^11.0.0",
-    "handlebars": "^4.7.3",
+    "handlebars": "^4.7.6",
     "has-content": "^1.1.1",
     "jsdoc-babel": "^0.5.0",
     "jsdoc-export-default-interop": "^0.3.1",
@@ -29,21 +29,21 @@
     "read-file-string": "^1.0.4",
     "read-file-yaml": "^1.0.2",
     "sort-object": "^3.0.3",
-    "tempy": "^0.4.0",
+    "tempy": "^0.5.0",
     "url-parse": "^1.4.7",
-    "yargs": "^15.1.0",
+    "yargs": "^15.3.1",
     "zahl": "^2.0.6"
   },
   "devDependencies": {
-    "babel-jest": "^25.1.0",
-    "babel-preset-jaid": "^7.3.3",
+    "babel-jest": "^25.2.6",
+    "babel-preset-jaid": "^7.3.5",
     "browserslist-config-jaid-node": "^2.2.2",
     "coffee": "^5.2.2",
     "eslint": "^6.8.0",
-    "eslint-config-jaid": "^1.47.0",
-    "jest": "^25.1.0",
+    "eslint-config-jaid": "^1.49.0",
+    "jest": "^25.2.7",
     "rimraf": "^3.0.2",
-    "webpack-config-jaid": "^11.7.1"
+    "webpack-config-jaid": "^11.7.2"
   },
   "scripts": {
     "clean": "rimraf dist/",
