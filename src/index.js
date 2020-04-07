@@ -1,4 +1,6 @@
 import fsp from "@absolunet/fsp"
+import chalk from "chalk"
+import filesize from "filesize"
 import gitUrlParse from "git-url-parse"
 import hasContent from "has-content"
 import {isString} from "lodash"
@@ -77,6 +79,8 @@ import generateReadme from "./generateReadme"
  * @prop {boolean} hasOptionsSection
  * @prop {boolean} hasExampleSection
  */
+
+const cwd = process.cwd()
 
 /**
  * @param {Args} args
@@ -203,11 +207,14 @@ const job = async args => {
     context.apiMarkdown = await generateJsdocMarkdown(context)
   }
   const readmeText = await generateReadme(context)
+  const outputFileExists = await fsp.pathExists(args.outputFile)
   await fsp.outputFile(args.outputFile, readmeText)
+  const fileName = path.relative(cwd, args.outputFile)
+  const logMessage = `${chalk.green(outputFileExists ? "Overwrote" : "Created")} ${chalk.yellow(fileName)} ${chalk.green("with")} ${chalk.yellow(filesize(readmeText.length))}`
+  console.log(logMessage)
 }
 
 const main = async () => {
-  const cwd = process.cwd()
   /**
    * @type {import("yargs").CommandBuilder}
    */
