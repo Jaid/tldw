@@ -1,5 +1,5 @@
 {
-  "version": "6.12.0",
+  "version": "6.12.1",
   "webpackConfigJaid": "cli",
   "author": "Jaid <jaid.jsx@gmail.com> (https://github.com/Jaid)",
   "description": "Overwrites the readme based on info fetched from package.json and source code.",
