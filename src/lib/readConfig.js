@@ -25,6 +25,7 @@ export default async file => {
     environmentVariables: {},
     needsNodeRuntime: true,
     tryInBrowser: null,
+    exampleResultMayVary: false,
     ...loadedConfig,
   }
   return config

@@ -58,7 +58,11 @@ This project is tailored to my personal needs and workflows and therefore highly
 {{/if}}
 
 {{#each exampleResults}}
+{{#if config.exampleResultMayVary}}
+Variable `{{{@key}}}` will be something like:
+{{else}}
 Variable `{{{@key}}}` will be:
+{{/if}}
 
 ```javascript
 {{{this}}}

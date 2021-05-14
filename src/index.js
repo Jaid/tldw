@@ -35,6 +35,7 @@ import generateReadme from "./generateReadme"
  * @prop {boolean} jsdoc
  * @prop {string} link
  * @prop {boolean} needsNodeRuntime
+ * @prop {boolean} exampleResultMayVary
  */
 
 /**
