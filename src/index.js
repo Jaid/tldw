@@ -211,7 +211,8 @@ const job = async args => {
   if (config.jsdoc) {
     context.apiMarkdown = await generateJsdocMarkdown(context)
   }
-  const readmeText = await generateReadme(context)
+  const generatedReadme = await generateReadme(context)
+  const readmeText = generatedReadme.trim()
   const outputFileExists = await fsp.pathExists(args.outputFile)
   await fsp.outputFile(args.outputFile, readmeText)
   const fileName = path.relative(cwd, args.outputFile)
