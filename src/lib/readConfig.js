@@ -26,6 +26,7 @@ export default async file => {
     needsNodeRuntime: true,
     tryInBrowser: null,
     exampleResultMayVary: false,
+    renderComment: true,
     ...loadedConfig,
   }
   return config

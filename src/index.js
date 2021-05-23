@@ -36,6 +36,7 @@ import generateReadme from "./generateReadme"
  * @prop {string} link
  * @prop {boolean} needsNodeRuntime
  * @prop {boolean} exampleResultMayVary
+ * @prop {boolean} [renderComment=true]
  */
 
 /**
@@ -79,6 +80,7 @@ import generateReadme from "./generateReadme"
  * @prop {boolean} hasUsageOptions
  * @prop {boolean} hasOptionsSection
  * @prop {boolean} hasExampleSection
+ * @prop {string} tldwVersion
  */
 
 const cwd = process.cwd()
@@ -145,6 +147,7 @@ const job = async args => {
     binName: false,
     tag: `v${pkg.version}`,
     worksAsScriptTag: !config.needsNodeRuntime,
+    tldwVersion: process.env.REPLACE_PKG_VERSION,
   }
   if (!context.repository) {
     console.warn("tldw is made for GitHub repositories, but package.json#repository is not set")
