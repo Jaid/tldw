@@ -1,7 +1,7 @@
 import buildUrl from "build-url"
 import ensureArray from "ensure-array"
 
-const debug = require("debug")(_PKG_NAME)
+const debug = require("debug")(process.env.REPLACE_PKG_NAME)
 
 /**
  * @typedef {Object} Options

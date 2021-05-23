@@ -5,7 +5,7 @@ import {isEmpty} from "has-content"
 import path from "path"
 import tempy from "tempy"
 
-const debug = require("debug")(_PKG_NAME)
+const debug = require("debug")(process.env.REPLACE_PKG_NAME)
 
 async function findModules() {
   const findModulesJobs = [

@@ -4,7 +4,7 @@ import readFileYaml from "read-file-yaml"
 
 import collator from "lib/collator"
 
-const debug = require("debug")(_PKG_NAME)
+const debug = require("debug")(process.env.REPLACE_PKG_NAME)
 
 function sortEntries(entry1, entry2) {
   if (entry1.required && !entry2.required) {

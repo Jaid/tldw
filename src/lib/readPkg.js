@@ -1,7 +1,7 @@
 import path from "path"
 import readFileJson from "read-file-json"
 
-const debug = require("debug")(_PKG_NAME)
+const debug = require("debug")(process.env.REPLACE_PKG_NAME)
 
 export default async file => {
   debug(`Reading pkg from ${file}`)

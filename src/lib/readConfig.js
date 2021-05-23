@@ -1,7 +1,7 @@
 import fsp from "@absolunet/fsp"
 import readFileYaml from "read-file-yaml"
 
-const debug = require("debug")(_PKG_NAME)
+const debug = require("debug")(process.env.REPLACE_PKG_NAME)
 
 /**
  * @param {string} file
