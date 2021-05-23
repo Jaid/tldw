@@ -28,7 +28,7 @@ export default async context => {
       headerArgument: context.pkg.name,
       command: `yarn add ${context.pkg.name}@^${context.pkg.version}`,
     })
-    if (context.slug) {
+    if (context.config.githubPackage && context.slug) {
       context.installationCommands.push({
         header: "githubPackages",
         headerArgument: context.slug,
@@ -48,7 +48,7 @@ export default async context => {
       headerArgument: context.pkg.name,
       command: `yarn add --dev ${context.pkg.name}@^${context.pkg.version}`,
     })
-    if (context.slug) {
+    if (context.config.githubPackage && context.slug) {
       context.installationCommands.push({
         header: "githubPackages",
         headerArgument: context.slug,
@@ -68,7 +68,7 @@ export default async context => {
       headerArgument: context.pkg.name,
       command: `yarn global add ${context.pkg.name}@^${context.pkg.version}`,
     })
-    if (context.slug) {
+    if (context.config.githubPackage && context.slug) {
       context.installationCommands.push({
         header: "githubPackages",
         headerArgument: context.slug,

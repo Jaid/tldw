@@ -27,6 +27,7 @@ export default async file => {
     tryInBrowser: null,
     exampleResultMayVary: false,
     renderComment: true,
+    githubPackage: false,
     ...loadedConfig,
   }
   return config

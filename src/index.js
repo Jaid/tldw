@@ -37,6 +37,7 @@ import generateReadme from "./generateReadme"
  * @prop {boolean} needsNodeRuntime
  * @prop {boolean} exampleResultMayVary
  * @prop {boolean} [renderComment=true]
+ * @prop {boolean} [githubPackage=false]
  */
 
 /**
