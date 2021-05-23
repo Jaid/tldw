@@ -7,5 +7,6 @@ options: true
 development: true
 description: true
 result: true
+notes: Notes
 related: Related
 faq: Questions & Answers
