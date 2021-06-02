@@ -28,13 +28,6 @@ npm install --global tldw@^7.0.0
 yarn global add tldw@^7.0.0
 ```
 
-<a href="https://github.com/jaid/tldw/packages"><img src="https://img.shields.io/badge/GitHub Packages-@jaid/tldw-24282e?style=flat-square&logo=github" alt="@jaid/tldw on GitHub Packages"/></a>  
-(if [configured properly](https://help.github.com/en/github/managing-packages-with-github-packages/configuring-npm-for-use-with-github-packages))
-
-```bash
-npm install --global @jaid/tldw@^7.0.0
-```
-
 
 
 
@@ -95,6 +88,8 @@ tldw --help
 
 
 
+
+
 ## Development
 
 
@@ -118,3 +113,8 @@ npm run test
 ## License
 [MIT License](https://raw.githubusercontent.com/jaid/tldw/master/license.txt)  
 Copyright © 2021, Jaid \<jaid.jsx@gmail.com> (https://github.com/jaid)
+
+<!---
+Readme generated with tldw v7.0.0
+https://github.com/Jaid/tldw
+-->
