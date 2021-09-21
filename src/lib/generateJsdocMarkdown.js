@@ -1,8 +1,9 @@
+import path from "node:path"
+
 import fsp from "@absolunet/fsp"
 import execa from "execa"
 import firstExistingPath from "first-existing-path"
 import {isEmpty} from "has-content"
-import path from "path"
 import tempy from "tempy"
 
 const debug = require("debug")(process.env.REPLACE_PKG_NAME)

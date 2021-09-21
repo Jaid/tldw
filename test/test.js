@@ -1,7 +1,8 @@
+import fs from "node:fs"
+import path from "node:path"
+
 import coffee from "coffee"
-import fs from "fs"
 import ms from "ms.macro"
-import path from "path"
 
 const main = path.resolve(process.env.MAIN)
 

@@ -1,4 +1,5 @@
-import path from "path"
+import path from "node:path"
+
 import readFileJson from "read-file-json"
 
 const debug = require("debug")(process.env.REPLACE_PKG_NAME)

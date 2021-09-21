@@ -1,3 +1,5 @@
+import path from "node:path"
+
 import fsp from "@absolunet/fsp"
 import chalk from "chalk"
 import filesize from "filesize"
@@ -5,7 +7,6 @@ import gitUrlParse from "git-url-parse"
 import hasContent from "has-content"
 import {isString} from "lodash"
 import normalizePackageData from "normalize-package-data"
-import path from "path"
 import readFileString from "read-file-string"
 import readFileYaml from "read-file-yaml"
 import sortObject from "sort-object"

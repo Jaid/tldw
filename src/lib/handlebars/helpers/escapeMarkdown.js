@@ -1,3 +1,3 @@
 export default input => {
-  return input.replace(/</g, "\\<")
+  return input.replaceAll("<", "\\<")
 }

@@ -20,7 +20,7 @@ const debug = require("debug")(process.env.REPLACE_PKG_NAME)
  */
 
 function escapeShieldPart(input) {
-  return input.replace(/-/g, "--").replace(/_/g, "__")
+  return input.replaceAll("-", "--").replaceAll("_", "__")
 }
 
 /**

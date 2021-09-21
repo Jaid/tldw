@@ -1,6 +1,7 @@
+import path from "node:path"
+
 import {parallel as arrayToObjectKeys} from "array-to-object-keys"
 import globby from "globby"
-import path from "path"
 import preventEnd from "prevent-end"
 import readFileString from "read-file-string"
 
