@@ -1,8 +1,9 @@
+import {it} from "@jest/globals"
+
 import fs from "node:fs"
 import path from "node:path"
 import {fileURLToPath} from "node:url"
 
-import {it} from "@jest/globals"
 import coffee from "coffee"
 import ms from "ms.macro"
 
