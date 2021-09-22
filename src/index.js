@@ -257,10 +257,8 @@ const builder = {
   },
 }
 
-const x = yargs(hideBin(process.argv))
+await yargs(hideBin(process.argv))
   .scriptName(process.env.REPLACE_PKG_NAME)
   .version(process.env.REPLACE_PKG_VERSION)
   .command("$0", process.env.REPLACE_PKG_DESCRIPTION, builder, job)
   .argv
-
-console.dir(x)
