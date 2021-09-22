@@ -9,6 +9,7 @@ import normalizePackageData from "normalize-package-data"
 import sortObject from "sort-object"
 import urlParse from "url-parse"
 import yargs from "yargs"
+import {hideBin} from "yargs/helpers" // eslint-disable-line node/file-extension-in-import -- This is not a real file path, this is a resolve shortcut defined in node_modules/yargs/package.json[exports][./helpers]
 
 import fragments from "./fragments.yml"
 import generateReadme from "./generateReadme.js"
@@ -256,8 +257,10 @@ const builder = {
   },
 }
 
-yargs()
-  .strict()
+const x = yargs(hideBin(process.argv))
   .scriptName(process.env.REPLACE_PKG_NAME)
   .version(process.env.REPLACE_PKG_VERSION)
-  .command("$0", process.env.REPLACE_PKG_DESCRIPTION, builder, job).argv
+  .command("$0", process.env.REPLACE_PKG_DESCRIPTION, builder, job)
+  .argv
+
+console.dir(x)
