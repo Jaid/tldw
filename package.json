@@ -74,5 +74,6 @@
     "react-renderer",
     "readme",
     "readme-template"
-  ]
+  ],
+  "type": "module"
 }
