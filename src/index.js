@@ -4,24 +4,23 @@ import fsp from "@absolunet/fsp"
 import chalk from "chalk"
 import filesize from "filesize"
 import gitUrlParse from "git-url-parse"
-import hasContent from "has-content"
 import {isString} from "lodash"
 import normalizePackageData from "normalize-package-data"
-import readFileString from "read-file-string"
-import readFileYaml from "read-file-yaml"
 import sortObject from "sort-object"
 import urlParse from "url-parse"
 import yargs from "yargs"
 
-import generateJsdocMarkdown from "lib/generateJsdocMarkdown"
-import guessRuntime from "lib/guessRuntime"
-import readConfig from "lib/readConfig"
-import readExampleResults from "lib/readExampleResults"
-import readPkg from "lib/readPkg"
-import readUsageOptions from "lib/readUsageOptions"
-
 import fragments from "./fragments.yml"
 import generateReadme from "./generateReadme.js"
+import hasContent from "./lib/esm/has-content.js"
+import readFileString from "./lib/esm/read-file-string.js"
+import readFileYaml from "./lib/esm/read-file-yaml.js"
+import generateJsdocMarkdown from "./lib/generateJsdocMarkdown.js"
+import guessRuntime from "./lib/guessRuntime.js"
+import readConfig from "./lib/readConfig.js"
+import readExampleResults from "./lib/readExampleResults.js"
+import readPkg from "./lib/readPkg.js"
+import readUsageOptions from "./lib/readUsageOptions.js"
 
 /**
  * @typedef {Object} Config
@@ -221,47 +220,44 @@ const job = async args => {
   console.log(logMessage)
 }
 
-const main = async () => {
-  /**
+/**
    * @type {import("yargs").CommandBuilder}
    */
-  const builder = {
-    "output-file": {
-      alias: "o",
-      type: "string",
-      default: path.join(cwd, "readme.md"),
-      description: "Output file.",
-    },
-    "config-directory": {
-      alias: "c",
-      type: "string",
-      default: path.join(cwd, "readme"),
-      description: "Directory where config files for customizing readme output are stored in.",
-    },
-    "package-file": {
-      alias: "p",
-      type: "string",
-      default: path.join(cwd, "package.json"),
-      description: "Path to a package.json file.",
-    },
-    "source-glob": {
-      alias: "s",
-      type: "string",
-      default: "src/**",
-      description: "Glob for source files that will be read for JSDoc comments.",
-    },
-    "license-file": {
-      alias: "l",
-      type: "string",
-      default: "license.txt",
-      description: "Path to license file.",
-    },
-  }
-
-  yargs
-    .scriptName(process.env.REPLACE_PKG_NAME)
-    .version(process.env.REPLACE_PKG_VERSION)
-    .command("$0", process.env.REPLACE_PKG_DESCRIPTION, builder, job).argv
+const builder = {
+  "output-file": {
+    alias: "o",
+    type: "string",
+    default: path.join(cwd, "readme.md"),
+    description: "Output file.",
+  },
+  "config-directory": {
+    alias: "c",
+    type: "string",
+    default: path.join(cwd, "readme"),
+    description: "Directory where config files for customizing readme output are stored in.",
+  },
+  "package-file": {
+    alias: "p",
+    type: "string",
+    default: path.join(cwd, "package.json"),
+    description: "Path to a package.json file.",
+  },
+  "source-glob": {
+    alias: "s",
+    type: "string",
+    default: "src/**",
+    description: "Glob for source files that will be read for JSDoc comments.",
+  },
+  "license-file": {
+    alias: "l",
+    type: "string",
+    default: "license.txt",
+    description: "Path to license file.",
+  },
 }
 
-main()
+yargs()
+  .strict()
+  .scriptName(process.env.REPLACE_PKG_NAME)
+  .version(process.env.REPLACE_PKG_VERSION)
+  .command("$0", process.env.REPLACE_PKG_DESCRIPTION, builder, job).argv

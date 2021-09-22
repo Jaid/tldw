@@ -1,10 +1,11 @@
+import createDebug from "debug"
 import ensureObject from "ensure-object"
-import hasContent, {isEmpty} from "has-content"
-import readFileYaml from "read-file-yaml"
 
-import collator from "lib/collator"
+import collator from "./collator.js"
+import hasContent, {isEmpty} from "./esm/has-content.js"
+import readFileYaml from "./esm/read-file-yaml.js"
 
-const debug = require("debug")(process.env.REPLACE_PKG_NAME)
+const debug = createDebug(process.env.REPLACE_PKG_NAME)
 
 function sortEntries(entry1, entry2) {
   if (entry1.required && !entry2.required) {

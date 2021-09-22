@@ -1,12 +1,14 @@
 import path from "node:path"
 
 import fsp from "@absolunet/fsp"
+import createDebug from "debug"
 import execa from "execa"
 import firstExistingPath from "first-existing-path"
-import {isEmpty} from "has-content"
 import tempy from "tempy"
 
-const debug = require("debug")(process.env.REPLACE_PKG_NAME)
+import {isEmpty} from "./esm/has-content.js"
+
+const debug = createDebug(process.env.REPLACE_PKG_NAME)
 
 async function findModules() {
   const findModulesJobs = [

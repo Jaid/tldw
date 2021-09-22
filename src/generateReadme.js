@@ -1,7 +1,7 @@
 import camelcase from "camelcase"
 import {pascalCase} from "pascal-case"
 
-import handlebars from "lib/handlebars"
+import handlebars from "./lib/handlebars/index.js"
 
 import template from "!raw-loader!./template.hbs"
 

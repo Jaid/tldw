@@ -1,8 +1,10 @@
 import path from "node:path"
 
-import readFileJson from "read-file-json"
+import createDebug from "debug"
 
-const debug = require("debug")(process.env.REPLACE_PKG_NAME)
+import readFileJson from "./esm/read-file-json.js"
+
+const debug = createDebug(process.env.REPLACE_PKG_NAME)
 
 export default async file => {
   debug(`Reading pkg from ${file}`)

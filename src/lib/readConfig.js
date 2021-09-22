@@ -1,7 +1,9 @@
 import fsp from "@absolunet/fsp"
-import readFileYaml from "read-file-yaml"
+import createDebug from "debug"
 
-const debug = require("debug")(process.env.REPLACE_PKG_NAME)
+import readFileYaml from "./esm/read-file-yaml.js"
+
+const debug = createDebug(process.env.REPLACE_PKG_NAME)
 
 /**
  * @param {string} file

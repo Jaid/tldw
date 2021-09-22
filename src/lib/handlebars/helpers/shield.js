@@ -1,4 +1,4 @@
-import generateShield from "lib/generateShield"
+import generateShield from "../../generateShield.js"
 
 export default (type, ...args) => {
   if (type === "npm") {

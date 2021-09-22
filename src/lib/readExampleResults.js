@@ -1,9 +1,10 @@
 import path from "node:path"
 
-import {parallel as arrayToObjectKeys} from "array-to-object-keys"
-import globby from "globby"
+import {globby} from "globby"
 import preventEnd from "prevent-end"
 import readFileString from "read-file-string"
+
+import {parallel as arrayToObjectKeys} from "./esm/array-to-object-keys.js"
 
 /**
  * @param {import("src/index").Args} args
