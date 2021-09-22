@@ -21,7 +21,7 @@ import readPkg from "lib/readPkg"
 import readUsageOptions from "lib/readUsageOptions"
 
 import fragments from "./fragments.yml"
-import generateReadme from "./generateReadme"
+import generateReadme from "./generateReadme.js"
 
 /**
  * @typedef {Object} Config
