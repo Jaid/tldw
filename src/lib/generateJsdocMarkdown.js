@@ -1,4 +1,5 @@
 import path from "node:path"
+import {fileURLToPath} from "node:url"
 
 import fsp from "@absolunet/fsp"
 import createDebug from "debug"
@@ -15,9 +16,10 @@ async function findModules() {
     "jsdoc-export-default-interop/dist/index.js",
     "jsdoc-babel/lib/index.js",
   ].map(async file => {
+    const dirName = path.dirname(fileURLToPath(import.meta.url))
     const possiblePaths = [
       path.resolve("node_modules", file),
-      path.resolve(__dirname, "node_modules", file),
+      path.resolve(dirName, "node_modules", file),
     ]
     const foundFile = await firstExistingPath(possiblePaths)
     if (!foundFile) {
