@@ -222,8 +222,8 @@ const job = async args => {
 }
 
 /**
-   * @type {import("yargs").CommandBuilder}
-   */
+ * @type {import("yargs").CommandBuilder}
+ */
 const builder = {
   "output-file": {
     alias: "o",
