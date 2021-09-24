@@ -82,8 +82,11 @@ import readUsageOptions from "./lib/readUsageOptions.js"
  * @prop {boolean} hasUsageOptions
  * @prop {boolean} hasOptionsSection
  * @prop {boolean} hasExampleSection
+ * @prop {boolean} esmWarning
  * @prop {string} tldwVersion
  */
+
+// TODO Implement ESM warning
 
 const cwd = process.cwd()
 
