@@ -86,8 +86,6 @@ import readUsageOptions from "./lib/readUsageOptions.js"
  * @prop {string} tldwVersion
  */
 
-// TODO Implement ESM warning
-
 const cwd = process.cwd()
 
 /**
@@ -209,6 +207,7 @@ const job = async args => {
       script: "npm run test",
     })
   }
+  context.esmWarning = pkg.type === "module" && (pkg.webpackConfigJaid?.endsWith?.("Lib") || pkg.webpackConfigJaid?.endsWith?.("Class")) // If this is true, the package is an ESM library
   context.hasExampleSection = Boolean(context.example || context.fragments.example)
   context.hasDevelopmentSection = Boolean(context.fragments.development) || hasContent(context.developmentScripts)
   context.hasOptionsSection = hasUsageOptions || Boolean(context.fragments.options)
