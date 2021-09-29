@@ -92,6 +92,9 @@ tldw --help
 
 ## Development
 
+<details>
+<summary><b>Development hints for maintaining and improving tldw</b></summary>
+
 
 
 Setting up:
@@ -109,6 +112,7 @@ Testing in production environment:
 npm run test
 ```
 
+</details>
 
 ## License
 [MIT License](https://raw.githubusercontent.com/jaid/tldw/master/license.txt)  
