@@ -16,7 +16,6 @@ import generateReadme from "./generateReadme.js"
 import hasContent from "./lib/esm/has-content.js"
 import readFileString from "./lib/esm/read-file-string.js"
 import readFileYaml from "./lib/esm/read-file-yaml.js"
-import generateJsdocMarkdown from "./lib/generateJsdocMarkdown.js"
 import guessRuntime from "./lib/guessRuntime.js"
 import readConfig from "./lib/readConfig.js"
 import readExampleResults from "./lib/readExampleResults.js"
@@ -65,7 +64,6 @@ import readUsageOptions from "./lib/readUsageOptions.js"
  * @prop {string} exampleResults
  * @prop {Args} args
  * @prop {"node"|"web"|"hybrid"} runtime
- * @prop {string} apiMarkdown
  * @prop {string} license
  * @prop {string} slug
  * @prop {string} tag
@@ -211,9 +209,6 @@ const job = async args => {
   context.hasExampleSection = Boolean(context.example || context.fragments.example)
   context.hasDevelopmentSection = Boolean(context.fragments.development) || hasContent(context.developmentScripts)
   context.hasOptionsSection = hasUsageOptions || Boolean(context.fragments.options)
-  if (config.jsdoc) {
-    context.apiMarkdown = await generateJsdocMarkdown(context)
-  }
   const generatedReadme = await generateReadme(context)
   const readmeText = generatedReadme.trim()
   const outputFileExists = await fsp.pathExists(args.outputFile)
