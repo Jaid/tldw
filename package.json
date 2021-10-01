@@ -25,7 +25,6 @@
     "read-file-string": "^1.1.2",
     "read-file-yaml": "^2.0.0",
     "sort-object": "^3.0.3",
-    "tempy": "^2.0.0",
     "url-parse": "^1.5.3",
     "yargs": "^17.2.1",
     "zahl": "^2.0.6"
