@@ -119,6 +119,6 @@ npm run test
 Copyright © 2021, Jaid \<jaid.jsx@gmail.com> (https://github.com/jaid)
 
 <!---
-Readme generated with tldw v7.2.0
+Readme generated with tldw v7.1.0
 https://github.com/Jaid/tldw
 -->
