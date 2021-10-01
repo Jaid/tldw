@@ -9,7 +9,8 @@
 
 #### Opinionated
 
-This project is tailored to my personal needs and workflows and therefore highly opinionated. Feel free to use it or get inspired by it, but please do not get frustrated if you come across weird features or difficulties integrating it in your own ecosystem.
+:warning: This project is tailored to my personal needs and workflows and therefore highly opinionated. Feel free to use it or get inspired by it, but please do not get frustrated if you come across weird features or difficulties integrating it in your own ecosystem.
+
 
 
 
@@ -70,7 +71,6 @@ Generated readme can be extended with following files in your repository:
 
 
 
-
 ## CLI Usage
 After installing package `tldw` globally, you can use its command line interface.
 ```bash
@@ -119,6 +119,6 @@ npm run test
 Copyright © 2021, Jaid \<jaid.jsx@gmail.com> (https://github.com/jaid)
 
 <!---
-Readme generated with tldw v7.1.0
+Readme generated with tldw v7.3.1
 https://github.com/Jaid/tldw
 -->
