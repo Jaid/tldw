@@ -1,30 +1,21 @@
-name: Validate and autofix
+name: validate
 on:
   push:
-    branches: [master]
+    branches:
+      - main
+      - master
+  pull_request:
 jobs:
-  build:
+  validate:
     runs-on: ubuntu-latest
     steps:
-      - name: actions/checkout
-        uses: actions/checkout@v2.3.4
-      - name: actions/setup-node
-        uses: actions/setup-node@v2.1.5
+      - name: checkout
+        uses: actions/checkout@v5.0.0
+      - name: setupBun
+        uses: oven-sh/setup-bun@v2.0.2
         with:
-          node-version: "16.1.0"
-      - name: npm install
-        uses: jaid/action-npm-install@master
-      - name: Jest
-        uses: jaid/action-jest@master
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Sync Node Meta
-        uses: jaid/action-sync-node-meta@master
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Uptodater
-        uses: jaid/action-uptodater@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          fix: "true"
-          approve: "true"
+          bun-version: latest
+      - name: install
+        run: bun install --frozen-lockfile
+      - name: check
+        run: bun run check

@@ -1,74 +1,58 @@
 {
-  "version": "7.3.1",
-  "webpackConfigJaid": "cli",
-  "author": "Jaid <jaid.jsx@gmail.com> (https://github.com/Jaid)",
-  "description": "Overwrites the readme based on info fetched from package.json and source code.",
-  "dependencies": {
-    "array-to-object-keys": "^1.3.7",
-    "build-url": "^6.0.1",
-    "camelcase": "^9.0.0",
-    "chalk": "^5.6.2",
-    "debug": "^4.4.3",
-    "ensure-array": "^1.0.0",
-    "ensure-object": "^1.0.1",
-    "filesize": "^11.0.17",
-    "forward-slash-path": "^0.3.0",
-    "fs-extra": "^11.3.5",
-    "git-url-parse": "^16.1.0",
-    "globby": "^16.2.0",
-    "handlebars": "^4.7.9",
-    "has-content": "^1.1.1",
-    "just-handlebars-helpers": "^1.0.19",
-    "lodash-es": "^4.18.1",
-    "normalize-package-data": "^8.0.0",
-    "pascal-case": "^4.0.0",
-    "prevent-end": "^1.0.6",
-    "read-file-json": "^1.1.0",
-    "read-file-string": "^1.1.2",
-    "read-file-yaml": "^2.0.0",
-    "sort-object": "^3.0.3",
-    "url-parse": "^1.5.10",
-    "yargs": "^18.0.0"
-  },
-  "devDependencies": {
-    "browserslist-config-jaid-node": "^3.0.0",
-    "bun-types": "^1.3.14",
-    "coffee": "^5.5.1",
-    "eslint": "^10.3.0",
-    "eslint-config-jaid": "^26.0.0",
-    "tsconfig-jaid-bun": "^15.2.0",
-    "typescript": "^6.0.3",
-    "webpack-config-jaid": "^17.4.2"
-  },
-  "scripts": {
-    "clean": "rimraf dist/",
-    "babel:prod": "rimraf dist/transpiled/production && NODE_ENV=production babel --out-dir dist/transpiled/production --source-maps true src",
-    "babel:dev": "rimraf dist/transpiled/development && NODE_ENV=development babel --out-dir dist/transpiled/development src",
-    "babel:test": "rimraf dist/transpiled/test && NODE_ENV=test babel --out-dir dist/transpiled/test src",
-    "build:prod": "NODE_ENV=production webpack",
-    "build:dev": "NODE_ENV=development webpack",
-    "test": "bun test --max-concurrency 1 ./test",
-    "test:coverage": "npm run test:dev -- --coverage --json --outputFile=dist/jest/stats.json",
-    "test:dev": "npm run build:dev && NODE_ENV=test MAIN=dist/package/development/cli.js jest --runInBand",
-    "test:debug": "DEBUG=\"$(basename $PWD),$(basename $PWD):*\" NODE_ENV=test node --inspect=9229 node_modules/jest/bin/jest.js --runInBand"
-  },
-  "funding": "https://github.com/sponsors/Jaid",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Jaid/tldw.git"
-  },
   "name": "tldw",
-  "homepage": "https://github.com/jaid/tldw",
+  "version": "7.3.1",
+  "type": "module",
+  "description": "Generate README files from package metadata and configurable fragments.",
   "keywords": [
+    "bun",
+    "cli",
     "documentation",
-    "github",
-    "jsx",
     "markdown",
-    "react",
-    "react-renderer",
     "readme",
     "readme-template"
   ],
-  "type": "module",
-  "license": "MIT"
+  "author": "Jaid <jaid.jsx@gmail.com> (https://github.com/Jaid)",
+  "homepage": "https://github.com/Jaid/tldw",
+  "funding": "https://github.com/sponsors/jaid",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:Jaid/tldw.git"
+  },
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "bin": "./src/cli.ts",
+  "scripts": {
+    "check": "bun run lint && bun run typecheck && bun run test",
+    "dev": "bun --watch src/cli.ts",
+    "lint": "bun x eslint src test package.json eslint.config.ts",
+    "start": "bun src/cli.ts",
+    "test": "bun test --max-concurrency 1 ./test",
+    "typecheck": "bun x tsc --noEmit"
+  },
+  "dependencies": {
+    "camelcase": "^9.0.0",
+    "chalk": "^5.6.2",
+    "clerc": "^1.3.1",
+    "filesize": "^11.0.17",
+    "forward-slash-path": "^0.3.0",
+    "fs-extra": "^11.3.5",
+    "globby": "^16.2.0",
+    "handlebars": "^4.7.9",
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "@types/bun": "^1.3.14",
+    "eslint": "^10.3.0",
+    "eslint-config-jaid": "^26.0.0",
+    "jiti": "^2.6.1",
+    "tsconfig-jaid-bun": "^15.2.0",
+    "typescript": "^6.0.3"
+  },
+  "files": [
+    "src",
+    "license.txt",
+    "readme.md"
+  ]
 }

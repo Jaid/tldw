@@ -1,11 +1,10 @@
 # tldw
 
+<a href="https://raw.githubusercontent.com/Jaid/tldw/HEAD/license.txt"><img src="https://img.shields.io/github/license/Jaid%2Ftldw?style=flat-square" alt="License"/></a> <a href="https://github.com/sponsors/jaid"><img src="https://img.shields.io/badge/%3C3-Sponsor-FF45F1?style=flat-square" alt="Sponsor tldw"/></a>  
+<a href="https://actions-badge.atrox.dev/Jaid/tldw/goto"><img src="https://img.shields.io/endpoint.svg?style=flat-square&url=https%3A%2F%2Factions-badge.atrox.dev%2FJaid%2Ftldw%2Fbadge" alt="Build status"/></a> <a href="https://github.com/Jaid/tldw/commits"><img src="https://img.shields.io/github/commits-since/Jaid%2Ftldw/v7.3.1?style=flat-square&logo=github" alt="Commits since v7.3.1"/></a> <a href="https://github.com/Jaid/tldw/commits"><img src="https://img.shields.io/github/last-commit/Jaid%2Ftldw?style=flat-square&logo=github" alt="Last commit"/></a> <a href="https://github.com/Jaid/tldw/issues"><img src="https://img.shields.io/github/issues/Jaid%2Ftldw?style=flat-square&logo=github" alt="Issues"/></a>  
+<a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/npm/v/tldw?style=flat-square&logo=npm&label=latest+version" alt="Latest version on npm"/></a> <a href="https://github.com/Jaid/tldw/network/dependents"><img src="https://img.shields.io/librariesio/dependents/npm/tldw?style=flat-square&logo=npm" alt="Dependents"/></a> <a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/npm/dm/tldw?style=flat-square&logo=npm" alt="Downloads"/></a>
 
-<a href="https://raw.githubusercontent.com/jaid/tldw/master/license.txt"><img src="https://img.shields.io/github/license/jaid/tldw?style=flat-square" alt="License"/></a> <a href="https://github.com/sponsors/jaid"><img src="https://img.shields.io/badge/<3-Sponsor-FF45F1?style=flat-square" alt="Sponsor tldw"/></a>  
-<a href="https://actions-badge.atrox.dev/jaid/tldw/goto"><img src="https://img.shields.io/endpoint.svg?style=flat-square&url=https%3A%2F%2Factions-badge.atrox.dev%2Fjaid%2Ftldw%2Fbadge" alt="Build status"/></a> <a href="https://github.com/jaid/tldw/commits"><img src="https://img.shields.io/github/commits-since/jaid/tldw/v7.3.1?style=flat-square&logo=github" alt="Commits since v7.3.1"/></a> <a href="https://github.com/jaid/tldw/commits"><img src="https://img.shields.io/github/last-commit/jaid/tldw?style=flat-square&logo=github" alt="Last commit"/></a> <a href="https://github.com/jaid/tldw/issues"><img src="https://img.shields.io/github/issues/jaid/tldw?style=flat-square&logo=github" alt="Issues"/></a>  
-<a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/npm/v/tldw?style=flat-square&logo=npm&label=latest%20version" alt="Latest version on npm"/></a> <a href="https://github.com/jaid/tldw/network/dependents"><img src="https://img.shields.io/librariesio/dependents/npm/tldw?style=flat-square&logo=npm" alt="Dependents"/></a> <a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/npm/dm/tldw?style=flat-square&logo=npm" alt="Downloads"/></a>
-
-**Overwrites the readme based on info fetched from package.json and source code.**
+**Generate README files from package metadata and configurable fragments.**
 
 #### Opinionated
 
@@ -16,6 +15,12 @@
 
 
 ## Installation
+
+<a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/badge/Bun-tldw-000000?style=flat-square&logo=bun&logoColor=FBF0DF" alt="tldw on Bun"/></a>
+
+```bash
+bun add --global tldw@^7.3.1
+```
 
 <a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/badge/npm-tldw-C23039?style=flat-square&logo=npm" alt="tldw on npm"/></a>
 
@@ -47,10 +52,10 @@ Generated readme can be extended with following files in your repository:
 - `readme/envVars.yml` (same as `readme/config.yml#environmentVariables`)
 - `readme/usageOptions.yml`
 
-##### JavaScript fragments
+##### Code fragments
 
-- `readme/example.js`
-- `readme/result*.js`
+- `readme/example.ts` or `readme/example.js`
+- `readme/result*.ts` or `readme/result*.js`
 
 ##### Markdown fragments
 
@@ -76,6 +81,10 @@ After installing package `tldw` globally, you can use its command line interface
 ```bash
 tldw
 ```
+Or run it without installing it globally:
+```bash
+bunx tldw
+```
 For usage instructions:
 ```bash
 tldw --help
@@ -99,24 +108,28 @@ tldw --help
 
 Setting up:
 ```bash
-git clone git@github.com:jaid/tldw.git
+git clone git@github.com:Jaid/tldw.git
 cd tldw
-npm install
+bun install
+```
+Linting:
+```bash
+bun run lint
+```
+Type checking:
+```bash
+bun run typecheck
 ```
 Testing:
 ```bash
-npm run test:dev
-```
-Testing in production environment:
-```bash
-npm run test
+bun run test
 ```
 
 </details>
 
 ## License
-[MIT License](https://raw.githubusercontent.com/jaid/tldw/master/license.txt)  
-Copyright © 2021, Jaid \<jaid.jsx@gmail.com> (https://github.com/jaid)
+[MIT License](https://raw.githubusercontent.com/Jaid/tldw/HEAD/license.txt)  
+Copyright © 2021, Jaid \<jaid.jsx@gmail.com> (https://github.com/Jaid)
 
 <!---
 Readme generated with tldw v7.3.1

@@ -9,10 +9,10 @@ Generated readme can be extended with following files in your repository:
 - `readme/envVars.yml` (same as `readme/config.yml#environmentVariables`)
 - `readme/usageOptions.yml`
 
-##### JavaScript fragments
+##### Code fragments
 
-- `readme/example.js`
-- `readme/result*.js`
+- `readme/example.ts` or `readme/example.js`
+- `readme/result*.ts` or `readme/result*.js`
 
 ##### Markdown fragments
 

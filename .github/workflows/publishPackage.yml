@@ -1,29 +1,26 @@
-name: Publish Node package
+name: publishPackage
 on:
   push:
-    tags: ["v[0-9]+.[0-9]+.[0-9]+"]
+    tags:
+      - v*
 jobs:
-  build:
+  publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
     steps:
-      - name: actions/checkout
-        uses: actions/checkout@v2.3.4
-      - name: actions/setup-node
-        uses: actions/setup-node@v2.1.5
+      - name: checkout
+        uses: actions/checkout@v5.0.0
+      - name: setupBun
+        uses: oven-sh/setup-bun@v2.0.2
         with:
-          node-version: "16.1.0"
-      - name: npm install
-        uses: jaid/action-npm-install@master
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Jest
-        uses: jaid/action-jest@master
-        with:
-          githubToken: ${{ secrets.GITHUB_TOKEN }}
-      - name: Publish
-        uses: jaid/action-publish@master
-        with:
-          githubToken: ${{ secrets.packagesToken }}
-          npmPrepareScript: build:prod
-          publishDirectory: dist/package/production
-          npmToken: ${{ secrets.npmToken }}
+          bun-version: latest
+      - name: install
+        run: bun install --frozen-lockfile
+      - name: check
+        run: bun run check
+      - name: publish
+        run: bun publish
+        env:
+          NPM_CONFIG_TOKEN: ${{ secrets.npmToken }}

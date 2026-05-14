@@ -1,10 +1,6 @@
 # {{title}}
 
-{{#if logo}}
-logo
-{{/if}}
-
-{{{shield "license" slug}}} {{#if pkg.funding}}{{{shield "sponsor" pkg.name pkg.funding}}}{{/if}}  
+{{{shield "license" slug}}} {{#if fundingLink}}{{{shield "sponsor" pkg.name fundingLink}}}{{/if}}  
 {{#if config.githubActions}}{{{shield "actions" slug}}}{{/if}} {{{shield "commitsSince" slug tag}}} {{{shield "lastCommit" slug}}} {{{shield "issues" slug}}}  
 {{#if installationCommands.length}}
 {{{shield "npmLatest" pkg.name}}} {{{shield "dependents" pkg.name slug}}} {{{shield "npmDownloads" pkg.name}}}
@@ -46,7 +42,7 @@ logo
 {{#if worksAsScriptTag}}
 {{{shield "jsdelivr" pkg.name}}} {{{shield "unpkg" pkg.name}}}
 ```html
-<script src="https://cdn.jsdelivr.net/npm/{{{pkg.name}}}@{{{pkg.version}}}/index.js" />
+<script src="https://cdn.jsdelivr.net/npm/{{{pkg.name}}}@{{{pkg.version}}}/index.js"></script>
 ```
 {{/if}}
 {{/if}}
@@ -58,7 +54,7 @@ logo
 
 {{{fragments.example}}}
 {{#if example}}
-```javascript
+```ts
 {{{example}}}
 ```
 {{/if}}
@@ -70,7 +66,7 @@ Variable `{{{@key}}}` will be something like:
 Variable `{{{@key}}}` will be:
 {{/if}}
 
-```javascript
+```ts
 {{{this}}}
 ```
 {{/each}}
@@ -153,6 +149,10 @@ After installing package `{{{pkg.name}}}` globally, you can use its command line
 ```bash
 {{{binExample}}}
 ```
+Or run it without installing it globally:
+```bash
+bunx {{{pkg.name}}}
+```
 For usage instructions:
 ```bash
 {{{binName}}} --help
@@ -200,7 +200,7 @@ Name|Description
 {{#if license}}
 ## License
 {{#if isMitLicense}}
-[MIT License](https://raw.githubusercontent.com/{{{slug}}}/master/license.txt)  
+[MIT License](https://raw.githubusercontent.com/{{{slug}}}/HEAD/license.txt)  
 {{{escapeMarkdown license}}}
 {{else}}
 ```text
