@@ -69,5 +69,6 @@
     "readme",
     "readme-template"
   ],
-  "type": "module"
+  "type": "module",
+  "license": "MIT"
 }
