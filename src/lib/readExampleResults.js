@@ -1,4 +1,4 @@
-import path from "node:path"
+import * as path from 'forward-slash-path'
 
 import {globby} from "globby"
 import preventEnd from "prevent-end"

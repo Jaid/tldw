@@ -1,4 +1,4 @@
-import path from "node:path"
+import * as path from 'forward-slash-path'
 
 import fsp from "@absolunet/fsp"
 import chalk from "chalk"

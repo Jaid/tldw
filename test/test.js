@@ -1,7 +1,7 @@
 import {it} from "@jest/globals"
 
 import fs from "node:fs/promises"
-import path from "node:path"
+import * as path from 'forward-slash-path'
 import {fileURLToPath} from "node:url"
 
 import coffee from "coffee"
