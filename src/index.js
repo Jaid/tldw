@@ -4,7 +4,7 @@ import fsp from "@absolunet/fsp"
 import chalk from "chalk"
 import filesize from "filesize"
 import gitUrlParse from "git-url-parse"
-import {isString} from "lodash-es"
+import * as lodash from 'lodash-es'
 import normalizePackageData from "normalize-package-data"
 import sortObject from "sort-object"
 import urlParse from "url-parse"
