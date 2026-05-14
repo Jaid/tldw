@@ -1,6 +1,5 @@
 import {it} from "@jest/globals"
-
-import fs from "node:fs/promises"
+import fs from 'fs-extra'
 import * as path from 'forward-slash-path'
 import {fileURLToPath} from "node:url"
 
