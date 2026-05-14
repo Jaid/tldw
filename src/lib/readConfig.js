@@ -1,4 +1,4 @@
-import fsp from "@absolunet/fsp"
+import fs from 'fs-extra'
 import createDebug from "debug"
 
 import readFileYaml from "./esm/read-file-yaml.js"

@@ -1,6 +1,5 @@
 import * as path from 'forward-slash-path'
-
-import fsp from "@absolunet/fsp"
+import fs from 'fs-extra'
 import chalk from "chalk"
 import filesize from "filesize"
 import gitUrlParse from "git-url-parse"
