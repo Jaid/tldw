@@ -47,11 +47,10 @@
     "babel:test": "rimraf dist/transpiled/test && NODE_ENV=test babel --out-dir dist/transpiled/test src",
     "build:prod": "NODE_ENV=production webpack",
     "build:dev": "NODE_ENV=development webpack",
-    "test": "npm run build:prod && NODE_ENV=production MAIN=dist/package/production/cli.js jest --runInBand",
+    "test": "bun test --max-concurrency 1 ./test",
     "test:coverage": "npm run test:dev -- --coverage --json --outputFile=dist/jest/stats.json",
     "test:dev": "npm run build:dev && NODE_ENV=test MAIN=dist/package/development/cli.js jest --runInBand",
-    "test:debug": "DEBUG=\"$(basename $PWD),$(basename $PWD):*\" NODE_ENV=test node --inspect=9229 node_modules/jest/bin/jest.js --runInBand",
-    "prepareActionJest": "npm run build:prod"
+    "test:debug": "DEBUG=\"$(basename $PWD),$(basename $PWD):*\" NODE_ENV=test node --inspect=9229 node_modules/jest/bin/jest.js --runInBand"
   },
   "funding": "https://github.com/sponsors/Jaid",
   "repository": {
