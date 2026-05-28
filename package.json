@@ -45,14 +45,14 @@
     "fs-extra": "^11.3.5",
     "globby": "^16.2.0",
     "handlebars": "^4.7.9",
-    "yaml": "^2.8.1"
+    "yaml": "^2.9.0"
   },
   "devDependencies": {
     "@types/bun": "^1.3.14",
-    "eslint": "^10.3.0",
+    "eslint": "^10.4.0",
     "eslint-config-jaid": "^26.0.0",
     "github-markdown-css": "^5.9.0",
-    "jiti": "^2.6.1",
+    "jiti": "^2.7.0",
     "rehype-stringify": "^10.0.1",
     "remark": "^15.0.1",
     "remark-breaks": "^4.0.0",
