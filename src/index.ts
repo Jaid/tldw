@@ -1,3 +1,4 @@
+import type {PackageManager} from './lib/packageManagers.ts'
 import type {CliArgs, Context, DevelopmentScript, FragmentContent, InstallationCommand, WriteReadmeResult} from './lib/types.ts'
 
 import camelcase from 'camelcase'
@@ -8,12 +9,14 @@ import fs from 'fs-extra'
 
 import fragments from './fragments.ts'
 import generateReadme from './generateReadme.ts'
-import {getDefaultBinName, getFundingLink, getLinkHost, getRepositoryUrl, hasContent, normalizeReadmeText, parseGitHubSlug, readOptionalCodeFragment, readOptionalText, readOptionalYaml, sortRecord} from './lib/helpers.ts'
+import generateBanner from './lib/generateBanner.ts'
+import {applyMaxBlankLines, getDefaultBinName, getFundingLink, getLinkHost, getRepositoryUrl, hasContent, normalizeReadmeText, parseGitHubSlug, readOptionalCodeFragment, readOptionalText, readOptionalYaml, sortRecord, toArray} from './lib/helpers.ts'
 import readConfig from './lib/readConfig.ts'
 import readExampleResults from './lib/readExampleResults.ts'
 import {readOwnPackageMetadata} from './lib/readOwnPackageMetadata.ts'
 import readPkg from './lib/readPkg.ts'
 import readUsageOptions from './lib/readUsageOptions.ts'
+import {renderConfiguredShield} from './lib/renderShield.ts'
 
 const getGithubPackagesInstallFlag = (installation: Context['config']['installation']) => {
   if (installation === 'dev') {
@@ -24,67 +27,53 @@ const getGithubPackagesInstallFlag = (installation: Context['config']['installat
   }
   return '--save '
 }
+
+type ActiveInstallationMode = Exclude<Context['config']['installation'], false>
+
+const appendVersionToPackageSpec = (packageSpec: string, version: string, versionInInstallation: boolean) => {
+  if (!versionInInstallation) {
+    return packageSpec
+  }
+  return `${packageSpec}@^${version}`
+}
+const installationCommandFactories = {
+  bun: {
+    prod: (packageSpec: string) => `bun add ${packageSpec}`,
+    dev: (packageSpec: string) => `bun add --development ${packageSpec}`,
+    global: (packageSpec: string) => `bun add --global ${packageSpec}`,
+  },
+  npm: {
+    prod: (packageSpec: string) => `npm install --save ${packageSpec}`,
+    dev: (packageSpec: string) => `npm install --save-dev ${packageSpec}`,
+    global: (packageSpec: string) => `npm install --global ${packageSpec}`,
+  },
+  pnpm: {
+    prod: (packageSpec: string) => `pnpm add ${packageSpec}`,
+    dev: (packageSpec: string) => `pnpm add --save-dev ${packageSpec}`,
+    global: (packageSpec: string) => `pnpm add --global ${packageSpec}`,
+  },
+  yarn: {
+    prod: (packageSpec: string) => `yarn add ${packageSpec}`,
+    dev: (packageSpec: string) => `yarn add --dev ${packageSpec}`,
+    global: (packageSpec: string) => `yarn global add ${packageSpec}`,
+  },
+  deno: {
+    prod: (packageSpec: string) => `deno add npm:${packageSpec}`,
+    dev: (packageSpec: string) => `deno add --dev npm:${packageSpec}`,
+    global: (packageSpec: string) => `deno install --global npm:${packageSpec}`,
+  },
+} satisfies Record<PackageManager, Record<ActiveInstallationMode, (packageSpec: string) => string>>
 const createInstallationCommands = (context: Pick<Context, 'config' | 'pkg' | 'slug'>): Array<InstallationCommand> => {
   const commands: Array<InstallationCommand> = []
-  const packageSpec = `${context.pkg.name}@^${context.pkg.version}`
+  const packageSpec = appendVersionToPackageSpec(context.pkg.name, context.pkg.version, context.config.versionInInstallation)
   const githubPackagesBonusText = '(if [configured properly](https://help.github.com/en/github/managing-packages-with-github-packages/configuring-npm-for-use-with-github-packages))'
-  switch (context.config.installation) {
-    case 'prod': {
+  if (context.config.installation) {
+    for (const packageManager of toArray(context.config.packageManagers)) {
       commands.push({
-        header: 'bun',
+        header: packageManager,
         headerArgument: context.pkg.name,
-        command: `bun add ${packageSpec}`,
+        command: installationCommandFactories[packageManager][context.config.installation](packageSpec),
       })
-      commands.push({
-        header: 'npm',
-        headerArgument: context.pkg.name,
-        command: `npm install --save ${packageSpec}`,
-      })
-      commands.push({
-        header: 'yarn',
-        headerArgument: context.pkg.name,
-        command: `yarn add ${packageSpec}`,
-      })
-      break
-    }
-    case 'dev': {
-      commands.push({
-        header: 'bun',
-        headerArgument: context.pkg.name,
-        command: `bun add --development ${packageSpec}`,
-      })
-      commands.push({
-        header: 'npm',
-        headerArgument: context.pkg.name,
-        command: `npm install --save-dev ${packageSpec}`,
-      })
-      commands.push({
-        header: 'yarn',
-        headerArgument: context.pkg.name,
-        command: `yarn add --dev ${packageSpec}`,
-      })
-      break
-    }
-    case 'global': {
-      commands.push({
-        header: 'bun',
-        headerArgument: context.pkg.name,
-        command: `bun add --global ${packageSpec}`,
-      })
-      commands.push({
-        header: 'npm',
-        headerArgument: context.pkg.name,
-        command: `npm install --global ${packageSpec}`,
-      })
-      commands.push({
-        header: 'yarn',
-        headerArgument: context.pkg.name,
-        command: `yarn global add ${packageSpec}`,
-      })
-      break
-    }
-    default: {
-      break
     }
   }
   if (context.config.githubPackage && context.config.installation) {
@@ -92,10 +81,59 @@ const createInstallationCommands = (context: Pick<Context, 'config' | 'pkg' | 's
       header: 'githubPackages',
       headerArgument: context.slug,
       bonusText: githubPackagesBonusText,
-      command: `npm install ${getGithubPackagesInstallFlag(context.config.installation)}@${context.slug}@^${context.pkg.version}`,
+      command: `npm install ${getGithubPackagesInstallFlag(context.config.installation)}${appendVersionToPackageSpec(`@${context.slug}`, context.pkg.version, context.config.versionInInstallation)}`,
     })
   }
   return commands
+}
+const createBannerSvg = (context: Pick<Context, 'config' | 'title'>) => {
+  if (context.config.banner === false) {
+    return null
+  }
+  if (context.config.banner === true) {
+    return generateBanner({
+      text: context.title,
+    })
+  }
+  if (typeof context.config.banner === 'string') {
+    return generateBanner({
+      text: context.config.banner,
+    })
+  }
+  return generateBanner({
+    bottomColor: context.config.banner.bottomColor,
+    font: context.config.banner.font,
+    text: context.config.banner.text || context.title,
+    topColor: context.config.banner.topColor,
+  })
+}
+const createDefaultShieldLines = (context: Pick<Context, 'config' | 'fundingLink' | 'installationCommands' | 'pkg' | 'slug' | 'tag'>) => {
+  const defaultLines: Array<Array<string>> = [
+    ['license', ...context.fundingLink ? ['sponsor'] : []],
+    [
+      ...context.config.githubActions ? ['actions'] : [],
+      'commitsSince',
+      'lastCommit',
+      'issues',
+    ],
+  ]
+  if (context.installationCommands.length > 0) {
+    defaultLines.push(['npmLatest', 'dependents', 'npmDownloads'])
+  }
+  return defaultLines
+}
+const createShieldLines = (context: Pick<Context, 'config' | 'fundingLink' | 'installationCommands' | 'pkg' | 'slug' | 'tag'>) => {
+  const configuredLines = context.config.shields ?? createDefaultShieldLines(context)
+  return configuredLines
+    .map(line => {
+      const lineEntries = Array.isArray(line) ? line : [line]
+      return lineEntries
+        .map(entry => renderConfiguredShield(entry, context))
+        .filter(Boolean)
+        .join(' ')
+        .trim()
+    })
+    .filter(Boolean)
 }
 const createDevelopmentScripts = (pkg: Context['pkg'], slug: string): Array<DevelopmentScript> => {
   const developmentScripts: Array<DevelopmentScript> = [
@@ -204,8 +242,23 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
   })
   const developmentScripts = createDevelopmentScripts(pkg, slug)
   const hasUsageOptions = usageOptions !== null
+  const title = pkg.displayName || pkg.title || pkg.domain || pkg.name
+  const bannerSvg = createBannerSvg({
+    config,
+    title,
+  })
+  const shieldLines = createShieldLines({
+    config,
+    fundingLink: getFundingLink(pkg.funding),
+    installationCommands,
+    pkg,
+    slug,
+    tag: `v${pkg.version}`,
+  })
+  const fundingLink = getFundingLink(pkg.funding)
   return {
     args,
+    bannerSvg,
     binExample,
     binName,
     camelCaseName: camelcase(pkg.name),
@@ -215,11 +268,10 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
     },
     description: pkg.description ?? null,
     developmentScripts,
-    esmWarning: pkg.type === 'module' && Boolean(pkg.webpackConfigJaid?.endsWith('Class') || pkg.webpackConfigJaid?.endsWith('Lib')),
     example,
     exampleResults,
     fragments: loadedFragments,
-    fundingLink: getFundingLink(pkg.funding),
+    fundingLink,
     globalName: pkg.webpackConfigJaid?.endsWith('Class') ? camelcase(pkg.name, {pascalCase: true}) : camelcase(pkg.name),
     hasDevelopmentSection: Boolean(loadedFragments.development) || developmentScripts.length > 0,
     hasEnvironmentVariables: hasContent(sortedEnvironmentVariables),
@@ -231,9 +283,10 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
     license: normalizedLicense,
     pascalCaseName: camelcase(pkg.name, {pascalCase: true}),
     pkg,
+    shieldLines,
     slug,
     tag: `v${pkg.version}`,
-    title: pkg.displayName || pkg.title || pkg.domain || pkg.name,
+    title,
     tldwVersion: ownPackageMetadata.version,
     usageOptions,
     worksAsScriptTag,
@@ -249,7 +302,7 @@ export const writeReadme = async (args: CliArgs): Promise<WriteReadmeResult> => 
       reason: 'tldw is made for GitHub repositories, but package.json#repository is not set. Doing nothing.',
     }
   }
-  const readmeText = normalizeReadmeText(await generateReadme(context))
+  const readmeText = applyMaxBlankLines(normalizeReadmeText(await generateReadme(context)), context.config.maxBlankLines)
   const previousReadme = await readOptionalText(args.outputFile)
   const bytes = Buffer.byteLength(readmeText)
   if (previousReadme === readmeText) {
@@ -287,6 +340,7 @@ export const logWriteReadmeResult = (result: WriteReadmeResult, cwd = process.cw
 }
 
 export {createReadmeContext}
-export type {CliArgs, Config, Context, PackageData, UsageOptionEntry, UsageOptions, WriteReadmeResult} from './lib/types.ts'
+export type {PackageManager} from './lib/packageManagers.ts'
+export type {Arrayable, BannerConfig, BannerDefinition, CliArgs, Config, ConfiguredShield, Context, CustomShieldDefinition, PackageData, ShieldsConfig, UsageOptionEntry, UsageOptions, WriteReadmeResult} from './lib/types.ts'
 
 export default writeReadme

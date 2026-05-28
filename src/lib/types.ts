@@ -1,21 +1,48 @@
 import type {FragmentId} from '../fragments.ts'
+import type {GenerateShieldOptions} from './generateShield.ts'
+import type {PackageManager} from './packageManagers.ts'
+
+export type Arrayable<Type> = Array<Type> | Type
 
 export type InstallationMode = 'dev' | 'global' | 'prod' | false
 
+export interface BannerDefinition {
+  bottomColor?: string
+  font?: string
+  text?: string
+  topColor?: string
+}
+
+export type BannerConfig = BannerDefinition | boolean | string
+
+export interface CustomShieldDefinition extends GenerateShieldOptions {
+  id?: string
+}
+
+export type ConfiguredShield = CustomShieldDefinition | string
+
+export type ShieldsConfig = Array<Array<ConfiguredShield> | ConfiguredShield>
+
 export interface Config {
+  banner: BannerConfig
   binExample: string | null
   binName: boolean | string
   environmentVariables: Record<string, string>
   exampleResultMayVary: boolean
+  excludeShields: Arrayable<string>
   githubActions: boolean
   githubPackage: boolean
   installation: InstallationMode
   link: string | null
   linkName: string | null
+  maxBlankLines: number
   needsNodeRuntime: boolean
+  packageManagers: Arrayable<PackageManager>
   personal: boolean
   renderComment: boolean
+  shields: ShieldsConfig | null
   tryInBrowser: boolean | null
+  versionInInstallation: boolean
 }
 
 export interface PackageRepositoryObject {
@@ -82,13 +109,13 @@ export type FragmentContent = Partial<Record<FragmentId, string>>
 
 export interface Context {
   args: CliArgs
+  bannerSvg: string | null
   binExample: string | null
   binName: false | string
   camelCaseName: string
   config: Config
   description: string | null
   developmentScripts: Array<DevelopmentScript>
-  esmWarning: boolean
   example: string | null
   exampleResults: Record<string, string>
   fragments: FragmentContent
@@ -104,6 +131,7 @@ export interface Context {
   license: string | null
   pascalCaseName: string
   pkg: PackageData
+  shieldLines: Array<string>
   slug: string
   tag: string
   title: string

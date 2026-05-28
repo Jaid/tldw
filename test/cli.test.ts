@@ -48,15 +48,35 @@ test('generates a README for this repository through the CLI', async () => {
   const result = await runCli(['--output-file', outputFile])
   expect(result.exitCode).toBe(0)
   const output = await Bun.file(outputFile).text()
-  expect(output).toContain('# tldw')
-  expect(output).toContain(`bun add --global tldw@^${packageJson.version}`)
-  expect(output).toContain('Generated readme can be extended with following files in your repository:')
+  const expectedOutput = await Bun.file(path.join(root, 'readme.md')).text()
+  expect(output).toBe(expectedOutput)
   expect(output).toContain(`Readme generated with tldw v${packageJson.version}`)
+})
+test('resolves default config and license paths relative to the package file', async () => {
+  const tempDirectory = await createTempDirectory()
+  const callerDirectory = path.join(tempDirectory, 'caller')
+  const projectDirectory = path.join(callerDirectory, 'fixture')
+  const outputFile = path.join(callerDirectory, 'out', 'readme.md')
+  await fs.ensureDir(path.join(callerDirectory, 'docs', 'tldw'))
+  await fs.ensureDir(projectDirectory)
+  await fs.writeJson(path.join(projectDirectory, 'package.json'), {
+    name: 'fixture-project',
+    version: '1.2.3',
+    description: 'Fixture project',
+    repository: 'https://github.com/Jaid/fixture-project.git',
+  }, {spaces: 2})
+  await fs.outputFile(path.join(callerDirectory, 'docs', 'tldw', 'usage.md'), 'This must not be loaded.')
+  await fs.outputFile(path.join(callerDirectory, 'license.txt'), 'Wrong License Text')
+  const result = await runCli(['--package-file', 'fixture/package.json', '--output-file', 'out/readme.md'], callerDirectory)
+  expect(result.exitCode).toBe(0)
+  const output = await Bun.file(outputFile).text()
+  expect(output).not.toContain('This must not be loaded.')
+  expect(output).not.toContain('Wrong License Text')
 })
 test('prefers TypeScript fragments and reports unchanged output on repeat runs', async () => {
   const tempDirectory = await createTempDirectory()
   const projectDirectory = path.join(tempDirectory, 'project')
-  const configDirectory = path.join(projectDirectory, 'readme')
+  const configDirectory = path.join(projectDirectory, 'docs', 'tldw')
   const outputFile = path.join(projectDirectory, 'README.md')
   await fs.ensureDir(configDirectory)
   await fs.writeJson(path.join(projectDirectory, 'package.json'), {
@@ -89,4 +109,167 @@ test('prefers TypeScript fragments and reports unchanged output on repeat runs',
     licenseFile: path.join(projectDirectory, 'license.txt'),
   })
   expect(secondResult.status).toBe('unchanged')
+})
+test('supports excludeShields as an Arrayable string config value', async () => {
+  const tempDirectory = await createTempDirectory()
+  const projectDirectory = path.join(tempDirectory, 'project')
+  const configDirectory = path.join(projectDirectory, 'docs', 'tldw')
+  const outputFile = path.join(projectDirectory, 'README.md')
+  await fs.ensureDir(configDirectory)
+  await fs.writeJson(path.join(projectDirectory, 'package.json'), {
+    name: 'fixture-project',
+    version: '1.2.3',
+    description: 'Fixture project',
+    repository: 'https://github.com/Jaid/fixture-project.git',
+  }, {spaces: 2})
+  await fs.outputFile(path.join(projectDirectory, 'license.txt'), 'Fixture License')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\nexcludeShields: license\n')
+  const firstResult = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  expect(firstResult.readmeText).not.toContain('img.shields.io/github/license/Jaid%2Ffixture-project')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\nexcludeShields:\n  - license\n  - issues\n')
+  const secondResult = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  expect(secondResult.readmeText).not.toContain('img.shields.io/github/license/Jaid%2Ffixture-project')
+  expect(secondResult.readmeText).not.toContain('img.shields.io/github/issues/Jaid%2Ffixture-project')
+})
+test('supports packageManagers as an Arrayable string config value', async () => {
+  const tempDirectory = await createTempDirectory()
+  const projectDirectory = path.join(tempDirectory, 'project')
+  const configDirectory = path.join(projectDirectory, 'docs', 'tldw')
+  const outputFile = path.join(projectDirectory, 'README.md')
+  await fs.ensureDir(configDirectory)
+  await fs.writeJson(path.join(projectDirectory, 'package.json'), {
+    name: 'fixture-project',
+    version: '1.2.3',
+    description: 'Fixture project',
+    repository: 'https://github.com/Jaid/fixture-project.git',
+  }, {spaces: 2})
+  await fs.outputFile(path.join(projectDirectory, 'license.txt'), 'Fixture License')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\ninstallation: prod\nversionInInstallation: true\npackageManagers: pnpm\n')
+  const firstResult = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  expect(firstResult.readmeText).toContain('pnpm add fixture-project@^1.2.3')
+  expect(firstResult.readmeText).toContain('img.shields.io/badge/pnpm-fixture--project-F69220')
+  expect(firstResult.readmeText).not.toContain('bun add fixture-project@^1.2.3')
+  expect(firstResult.readmeText).not.toContain('npm install --save fixture-project@^1.2.3')
+  expect(firstResult.readmeText).not.toContain('yarn add fixture-project@^1.2.3')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), [
+    'renderComment: false',
+    'installation: dev',
+    'versionInInstallation: true',
+    'packageManagers:',
+    '  - yarn',
+    '  - bun',
+  ].join('\n'))
+  const secondResult = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  const secondReadmeText = secondResult.readmeText ?? ''
+  expect(secondReadmeText).toContain('yarn add --dev fixture-project@^1.2.3')
+  expect(secondReadmeText).toContain('bun add --development fixture-project@^1.2.3')
+  expect(secondReadmeText).not.toContain('pnpm add --save-dev fixture-project@^1.2.3')
+  expect(secondReadmeText).not.toContain('npm install --save-dev fixture-project@^1.2.3')
+  expect(secondReadmeText.indexOf('yarn add --dev fixture-project@^1.2.3')).toBeLessThan(secondReadmeText.indexOf('bun add --development fixture-project@^1.2.3'))
+})
+test('omits installation versions by default and includes them when enabled', async () => {
+  const tempDirectory = await createTempDirectory()
+  const projectDirectory = path.join(tempDirectory, 'project')
+  const configDirectory = path.join(projectDirectory, 'docs', 'tldw')
+  const outputFile = path.join(projectDirectory, 'README.md')
+  await fs.ensureDir(configDirectory)
+  await fs.writeJson(path.join(projectDirectory, 'package.json'), {
+    name: 'fixture-project',
+    version: '1.2.3',
+    description: 'Fixture project',
+    repository: 'https://github.com/Jaid/fixture-project.git',
+  }, {spaces: 2})
+  await fs.outputFile(path.join(projectDirectory, 'license.txt'), 'Fixture License')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\ninstallation: global\n')
+  const firstResult = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  expect(firstResult.readmeText).toContain('npm install --global fixture-project')
+  expect(firstResult.readmeText).not.toContain('npm install --global fixture-project@^1.2.3')
+  expect(firstResult.readmeText).not.toContain('bun add --global fixture-project')
+  expect(firstResult.readmeText).not.toContain('pnpm add --global fixture-project')
+  expect(firstResult.readmeText).not.toContain('yarn global add fixture-project')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\ninstallation: global\nversionInInstallation: true\n')
+  const secondResult = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  expect(secondResult.readmeText).toContain('npm install --global fixture-project@^1.2.3')
+})
+test('supports banner fallback, custom shields and maxBlankLines', async () => {
+  const tempDirectory = await createTempDirectory()
+  const projectDirectory = path.join(tempDirectory, 'project')
+  const configDirectory = path.join(projectDirectory, 'docs', 'tldw')
+  const outputFile = path.join(projectDirectory, 'README.md')
+  await fs.ensureDir(configDirectory)
+  await fs.writeJson(path.join(projectDirectory, 'package.json'), {
+    name: 'fixture-project',
+    version: '1.2.3',
+    description: 'Fixture project',
+    repository: 'https://github.com/Jaid/fixture-project.git',
+  }, {spaces: 2})
+  await fs.outputFile(path.join(projectDirectory, 'license.txt'), 'Fixture License')
+  await fs.outputFile(path.join(configDirectory, 'description.md'), 'First paragraph\n\n\n\nSecond paragraph')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), [
+    'banner: false',
+    'renderComment: false',
+    'maxBlankLines: 0',
+    'shields:',
+    '  - - license',
+    '    - issues',
+    '  - - leftText: custom',
+    '      rightText: wow',
+    '      color: blue',
+    '      link: https://example.com',
+  ].join('\n'))
+  const firstResult = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  expect(firstResult.readmeText?.startsWith('# fixture-project\n')).toBeTrue()
+  expect(firstResult.readmeText).toContain('img.shields.io/github/license/Jaid%2Ffixture-project')
+  expect(firstResult.readmeText).toContain('img.shields.io/github/issues/Jaid%2Ffixture-project')
+  expect(firstResult.readmeText).toContain('img.shields.io/badge/custom-wow-blue')
+  expect(firstResult.readmeText).not.toContain('img.shields.io/github/last-commit/Jaid%2Ffixture-project')
+  expect(firstResult.readmeText).not.toContain('\n\n\n')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), [
+    'banner: Custom Banner',
+    'renderComment: false',
+    'shields:',
+    '  - license',
+  ].join('\n'))
+  const secondResult = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  expect(secondResult.readmeText).toContain('>Custom Banner</text>')
 })

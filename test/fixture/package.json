@@ -1,0 +1,46 @@
+{
+  "name": "remote-target",
+  "description": "SSH helper",
+  "version": "0.3.1",
+  "type": "module",
+  "funding": "https://github.com/sponsors/Jaid",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jaid/remote-target.git"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/main.ts",
+      "default": "./src/main.ts"
+    }
+  },
+  "imports": {
+    "#src/*": "./src/*",
+    "#root/*": "./*"
+  },
+  "scripts": {
+    "lint": "bunx --bun eslint .",
+    "test": "bun test --max-concurrency 1",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/plugin-transform-react-jsx": "^7.27.1",
+    "@babel/plugin-transform-typescript": "^7.28.5",
+    "optis": "^0.1.0",
+    "serialize-javascript": "^7.0.5"
+  },
+  "devDependencies": {
+    "@types/babel__core": "^7.20.5",
+    "@types/serialize-javascript": "^5.0.4",
+    "bun-types": "^1.3.14",
+    "eslint": "^10.4.0",
+    "eslint-config-jaid": "^26.0.0",
+    "guess-runtime": "^0.1.0",
+    "make-ssh-keys": "^0.1.0",
+    "tsconfig-jaid-bun": "^15.2.0",
+    "typescript": "^6.0.3",
+    "zeug": "^2.1.0"
+  }
+}

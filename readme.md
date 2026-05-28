@@ -1,110 +1,70 @@
-# tldw
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16000 1000"><style>.text { font: 500px Bahnschrift, Lexend, sans-serif }</style><defs><linearGradient id="color" x1="50%" y1="0%" x2="50%" y2="100%"><stop stop-color="oklch(37% 50% 320)"/><stop offset="100%" stop-color="oklch(29% 75% 335)"/></linearGradient></defs><rect width="16000" height="1000" fill="url(#color)" rx="0" ry="0"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="white" class="text">tl;dw</text></svg>
 
-<a href="https://raw.githubusercontent.com/Jaid/tldw/HEAD/license.txt"><img src="https://img.shields.io/github/license/Jaid%2Ftldw?style=flat-square" alt="License"/></a> <a href="https://github.com/sponsors/jaid"><img src="https://img.shields.io/badge/%3C3-Sponsor-FF45F1?style=flat-square" alt="Sponsor tldw"/></a>  
-<a href="https://actions-badge.atrox.dev/Jaid/tldw/goto"><img src="https://img.shields.io/endpoint.svg?style=flat-square&url=https%3A%2F%2Factions-badge.atrox.dev%2FJaid%2Ftldw%2Fbadge" alt="Build status"/></a> <a href="https://github.com/Jaid/tldw/commits"><img src="https://img.shields.io/github/commits-since/Jaid%2Ftldw/v7.3.1?style=flat-square&logo=github" alt="Commits since v7.3.1"/></a> <a href="https://github.com/Jaid/tldw/commits"><img src="https://img.shields.io/github/last-commit/Jaid%2Ftldw?style=flat-square&logo=github" alt="Last commit"/></a> <a href="https://github.com/Jaid/tldw/issues"><img src="https://img.shields.io/github/issues/Jaid%2Ftldw?style=flat-square&logo=github" alt="Issues"/></a>  
-<a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/npm/v/tldw?style=flat-square&logo=npm&label=latest+version" alt="Latest version on npm"/></a> <a href="https://github.com/Jaid/tldw/network/dependents"><img src="https://img.shields.io/librariesio/dependents/npm/tldw?style=flat-square&logo=npm" alt="Dependents"/></a> <a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/npm/dm/tldw?style=flat-square&logo=npm" alt="Downloads"/></a>
+<a href="https://raw.githubusercontent.com/Jaid/tldw/HEAD/license.txt"><img src="https://img.shields.io/github/license/Jaid%2Ftldw?style=flat-square" alt="License"/></a> <a href="https:/npmx.dev/package/tldw"><img src="https://img.shields.io/badge/npmx-tldw-C23039?style=flat-square&logo=npm" alt="tldw on npm"/></a>
 
-**Generate README files from package metadata and configurable fragments.**
+# tl;dw
 
-#### Opinionated
+Generate README files from package metadata and configurable fragments.
 
-:warning: This project is tailored to my personal needs and workflows and therefore highly opinionated. Feel free to use it or get inspired by it, but please do not get frustrated if you come across weird features or difficulties integrating it in your own ecosystem.
-
-
-
-
+> [!NOTE]
+> This project is tailored to my personal environments and preferences and therefore highly opinionated.
+>
+> Feel free to use it or get inspired by it, but please do not get frustrated if you come across weird features or difficulties integrating it into your own ecosystem.
 
 ## Installation
-
-<a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/badge/Bun-tldw-000000?style=flat-square&logo=bun&logoColor=FBF0DF" alt="tldw on Bun"/></a>
-
-```bash
-bun add --global tldw@^7.3.1
-```
 
 <a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/badge/npm-tldw-C23039?style=flat-square&logo=npm" alt="tldw on npm"/></a>
 
 ```bash
-npm install --global tldw@^7.3.1
+npm install --save-dev tldw
 ```
-
-<a href="https://yarnpkg.com/package/tldw"><img src="https://img.shields.io/badge/Yarn-tldw-2F8CB7?style=flat-square&logo=yarn&logoColor=white" alt="tldw on Yarn"/></a>
-
-```bash
-yarn global add tldw@^7.3.1
-```
-
-
-
-
-
 
 ## Usage
 
 Generated readme can be extended with following files in your repository:
 
-##### Config
+#### Config
 
-- `readme/config.yml`
+- `docs/tldw/config.yml`
 
-##### YAML representation of Markdown fragments
+Useful `docs/tldw/config.yml` fields include:
 
-- `readme/envVars.yml` (same as `readme/config.yml#environmentVariables`)
-- `readme/usageOptions.yml`
+- `banner`: `true`, a string or `{text, font, topColor, bottomColor}`
+- `shields`: an array for one shield line or an array of arrays for multiple shield lines. Each shield can be a string ID or a custom shield definition object
+- `excludeShields`: a string or array of strings with shield IDs to skip
+- `packageManagers`: a string or array of `npm`, `pnpm`, `yarn` and `bun` to choose which package managers are shown in `## Installation`. Default is `npm`
+- `versionInInstallation`: if `true`, append `@^<version>` to installation commands
+- `maxBlankLines`: maximum number of consecutive blank lines in generated Markdown
 
-##### Code fragments
+#### YAML representation of Markdown fragments
 
-- `readme/example.ts` or `readme/example.js`
-- `readme/result*.ts` or `readme/result*.js`
+- `docs/tldw/envVars.yml` (same as `docs/tldw/config.yml#environmentVariables`)
+- `docs/tldw/usageOptions.yml`
 
-##### Markdown fragments
+#### Code fragments
 
-- `readme/legal.md`
-- `readme/warning.md`
-- `readme/usage.md`
-- `readme/advancedUsage.md`
-- `readme/example.md`
-- `readme/options.md`
-- `readme/development.md`
-- `readme/description.md`
-- `readme/result.md`
-- `readme/notes.md`
-- `readme/related.md`
-- `readme/faq.md`
+- `docs/tldw/example.ts` or `docs/tldw/example.js`
+- `docs/tldw/result*.ts` or `docs/tldw/result*.js`
 
+#### Markdown fragments
 
-
-
-
-## CLI Usage
-After installing package `tldw` globally, you can use its command line interface.
-```bash
-tldw
-```
-Or run it without installing it globally:
-```bash
-bunx tldw
-```
-For usage instructions:
-```bash
-tldw --help
-```
-
-
-
-
-
-
-
-
-
+- `docs/tldw/legal.md`
+- `docs/tldw/warning.md`
+- `docs/tldw/usage.md`
+- `docs/tldw/advancedUsage.md`
+- `docs/tldw/example.md`
+- `docs/tldw/options.md`
+- `docs/tldw/development.md`
+- `docs/tldw/description.md`
+- `docs/tldw/result.md`
+- `docs/tldw/notes.md`
+- `docs/tldw/related.md`
+- `docs/tldw/faq.md`
 
 ## Development
 
 <details>
-<summary><b>Development hints for maintaining and improving tldw</b></summary>
-
-
+<summary><b>Development hints for maintaining and improving tl;dw</b></summary>
 
 Setting up:
 ```bash
@@ -129,7 +89,7 @@ bun run test
 
 ## License
 [MIT License](https://raw.githubusercontent.com/Jaid/tldw/HEAD/license.txt)  
-Copyright © 2021, Jaid \<jaid.jsx@gmail.com> (https://github.com/Jaid)
+Copyright © 2026, Jaid \<jaid.jsx@gmail.com> (https://github.com/Jaid)
 
 <!---
 Readme generated with tldw v7.3.1
