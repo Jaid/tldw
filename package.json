@@ -1,7 +1,7 @@
 {
   "name": "tldw",
   "displayName": "tl;dw",
-  "version": "8.0.0",
+  "version": "8.0.1",
   "type": "module",
   "description": "Generate README files from package metadata and configurable fragments.",
   "keywords": [
