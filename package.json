@@ -1,7 +1,7 @@
 {
   "name": "tldw",
   "displayName": "tl;dw",
-  "version": "7.3.1",
+  "version": "8.0.0",
   "type": "module",
   "description": "Generate README files from package metadata and configurable fragments.",
   "keywords": [
@@ -29,6 +29,7 @@
     "#root/*": "./*"
   },
   "scripts": {
+    "build": "build_lib --mode production",
     "check": "bun run lint && bun run typecheck && bun run test",
     "dev": "bun --watch src/cli.ts",
     "lint": "bun x eslint src test package.json eslint.config.ts",
