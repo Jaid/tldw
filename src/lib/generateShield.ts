@@ -2,6 +2,7 @@ export interface GenerateShieldOptions {
   altText?: string
   baseUrl?: string
   color?: string
+  colorSchemeAware?: boolean
   label?: string
   leftText?: string
   link?: string
@@ -11,13 +12,37 @@ export interface GenerateShieldOptions {
   query?: Record<string, string>
   rightText?: string
   style?: string
+  variant?: string
 }
 
+const defaultBaseUrl = 'https://shieldcn.dev'
+const shieldcnVariantByShieldsStyle: Partial<Record<string, string>> = {
+  flat: 'secondary',
+  'flat-square': 'secondary',
+  'for-the-badge': 'default',
+  plastic: 'outline',
+  social: 'ghost',
+}
+const imageExtensions = new Set(['.gif', '.png', '.svg'])
 const escapeShieldPart = (input: string) => {
   return input.replaceAll('-', '--').replaceAll('_', '__')
 }
 const encodePath = (input: string) => {
   return input.split('/').map(part => encodeURIComponent(part)).join('/')
+}
+const hasImageExtension = (input: string) => {
+  return [...imageExtensions].some(extension => input.endsWith(extension))
+}
+const appendSvgExtension = (input: string) => {
+  return hasImageExtension(input) ? input : `${input}.svg`
+}
+const isShieldcnUrl = (input: string) => {
+  try {
+    const hostname = new URL(input).hostname
+    return hostname === 'shieldcn.dev' || hostname === 'www.shieldcn.dev'
+  } catch {
+    return false
+  }
 }
 const buildUrl = (baseUrl: string, path: string, query: URLSearchParams) => {
   const normalizedBaseUrl = baseUrl.replace(/\/+$/u, '')
@@ -27,11 +52,15 @@ const buildUrl = (baseUrl: string, path: string, query: URLSearchParams) => {
 }
 
 export default (options: GenerateShieldOptions) => {
-  const baseUrl = options.baseUrl ?? 'https://img.shields.io'
+  const baseUrl = options.baseUrl ?? defaultBaseUrl
   const altText = options.altText ?? 'Shield'
-  const query = new URLSearchParams({
-    style: options.style ?? 'flat-square',
-  })
+  const isShieldcn = isShieldcnUrl(baseUrl)
+  const query = new URLSearchParams
+  if (isShieldcn) {
+    query.set('variant', options.variant ?? shieldcnVariantByShieldsStyle[options.style ?? 'flat-square'] ?? options.style ?? 'secondary')
+  } else {
+    query.set('style', options.style ?? 'flat-square')
+  }
   if (options.logo) {
     query.set('logo', options.logo)
   }
@@ -57,7 +86,15 @@ export default (options: GenerateShieldOptions) => {
   if (options.path && options.color) {
     query.set('color', options.color)
   }
-  const imgUrl = buildUrl(baseUrl, pathValue, query)
-  const image = `<img src="${imgUrl}" alt="${altText}"/>`
+  const normalizedPathValue = isShieldcn ? appendSvgExtension(pathValue) : pathValue
+  const imgUrl = buildUrl(baseUrl, normalizedPathValue, query)
+  let image = `<img src="${imgUrl}" alt="${altText}"/>`
+  if (options.colorSchemeAware && isShieldcn) {
+    const lightQuery = new URLSearchParams(query)
+    lightQuery.set('mode', 'light')
+    const darkQuery = new URLSearchParams(query)
+    darkQuery.set('mode', 'dark')
+    image = `<picture><source media="(prefers-color-scheme: dark)" srcset="${buildUrl(baseUrl, normalizedPathValue, darkQuery)}"><img src="${buildUrl(baseUrl, normalizedPathValue, lightQuery)}" alt="${altText}"/></picture>`
+  }
   return options.link ? `<a href="${options.link}">${image}</a>` : image
 }

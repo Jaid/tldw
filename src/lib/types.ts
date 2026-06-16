@@ -129,6 +129,7 @@ export interface Context {
   hasUsageOptions: boolean
   hasUsageSection: boolean
   installationCommands: Array<InstallationCommand>
+  isBunProject: boolean
   isMitLicense: boolean
   license: string | null
   pascalCaseName: string

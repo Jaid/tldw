@@ -1,19 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16000 1000"><style>.text { font: 500px Bahnschrift, Lexend, sans-serif }</style><defs><linearGradient id="color" x1="50%" y1="0%" x2="50%" y2="100%"><stop stop-color="oklch(37% 50% 320)"/><stop offset="100%" stop-color="oklch(29% 75% 335)"/></linearGradient></defs><rect width="16000" height="1000" fill="url(#color)" rx="0" ry="0"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="white" class="text">tl;dw</text></svg>
 
-<a href="https://raw.githubusercontent.com/Jaid/tldw/HEAD/license.txt"><img src="https://img.shields.io/github/license/Jaid%2Ftldw?style=flat-square" alt="License"/></a> <a href="https:/npmx.dev/package/tldw"><img src="https://img.shields.io/badge/npmx-tldw-C23039?style=flat-square&logo=npm" alt="tldw on npm"/></a>
+<center><a href="https://npmjs.com/package/tldw"><img src="https://shieldcn.dev/npm/v/tldw.svg?variant=secondary&logo=npm&label=latest+version" alt="Latest version on npm"/></a> <a href="https://raw.githubusercontent.com/Jaid/tldw/HEAD/license.txt"><img src="https://shieldcn.dev/github/license/Jaid/tldw.svg?variant=secondary" alt="License"/></a> <a href="https://bun.sh"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Bun-fbf0df.svg?variant=outline&logo=bun&logoColor=fbf0df&mode=dark"><img src="https://shieldcn.dev/badge/Bun-fbf0df.svg?variant=outline&logo=bun&logoColor=fbf0df&mode=light" alt="Bun"/></picture></a></center>
 
 # tl;dw
 
 Generate README files from package metadata and configurable fragments.
 
-> [!NOTE]
-> This project is tailored to my personal environments and preferences and therefore highly opinionated.
->
-> Feel free to use it or get inspired by it, but please do not get frustrated if you come across weird features or difficulties integrating it into your own ecosystem.
-
 ## Installation
 
-<a href="https://npmjs.com/package/tldw"><img src="https://img.shields.io/badge/npm-tldw-C23039?style=flat-square&logo=npm" alt="tldw on npm"/></a>
+<a href="https://npmjs.com/package/tldw"><img src="https://shieldcn.dev/badge/npm-tldw-C23039.svg?variant=secondary&logo=npm" alt="tldw on npm"/></a>
 
 ```bash
 npm install --save-dev tldw

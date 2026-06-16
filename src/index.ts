@@ -107,15 +107,21 @@ const createBannerSvg = (context: Pick<Context, 'config' | 'title'>) => {
     topColor: context.config.banner.topColor,
   })
 }
-const createDefaultShieldLines = (context: Pick<Context, 'pkg'>) => {
+const bunProjectFiles = ['bun.lock', 'bun.toml', 'bunfig.toml'] as const
+const isBunProject = async (projectDirectory: string) => {
+  const results = await Promise.all(bunProjectFiles.map(file => fs.pathExists(path.join(projectDirectory, file))))
+  return results.some(Boolean)
+}
+const createDefaultShieldLines = (context: Pick<Context, 'isBunProject' | 'pkg'>) => {
   return [
     [
       'npmLatest',
       ...hasContent(context.pkg.license) ? ['license'] : [],
+      ...context.isBunProject ? ['bun'] : [],
     ],
   ]
 }
-const createShieldLines = (context: Pick<Context, 'config' | 'fundingLink' | 'installationCommands' | 'pkg' | 'slug' | 'tag'>) => {
+const createShieldLines = (context: Pick<Context, 'config' | 'fundingLink' | 'installationCommands' | 'isBunProject' | 'pkg' | 'slug' | 'tag'>) => {
   const configuredLines = context.config.shields ?? createDefaultShieldLines(context)
   return configuredLines
     .map(line => {
@@ -181,7 +187,7 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
     }
     return [fragmentId, loadedFragment] as const
   })
-  const [pkg, config, usageOptions, example, usageCodeFragment, usageResultFragment, exampleResults, license, envVars, ownPackageMetadata, ...loadedFragmentEntries] = await Promise.all([
+  const [pkg, config, usageOptions, example, usageCodeFragment, usageResultFragment, exampleResults, license, envVars, ownPackageMetadata, detectedBunProject, ...loadedFragmentEntries] = await Promise.all([
     readPkg(args.packageFile),
     readConfig(path.join(args.configDirectory, 'config.yml'), projectDirectory),
     readUsageOptions(path.join(args.configDirectory, 'usageOptions.yml'), projectDirectory),
@@ -192,6 +198,7 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
     readOptionalText(args.licenseFile),
     readOptionalYaml<Record<string, string>>(path.join(args.configDirectory, 'envVars.yml')),
     readOwnPackageMetadata(),
+    isBunProject(projectDirectory),
     ...fragmentJobs,
   ])
   const repositoryUrl = getRepositoryUrl(pkg.repository)
@@ -252,6 +259,7 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
     config,
     fundingLink: getFundingLink(pkg.funding),
     installationCommands,
+    isBunProject: detectedBunProject,
     pkg,
     slug,
     tag: `v${pkg.version}`,
@@ -281,6 +289,7 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
     hasUsageOptions,
     hasUsageSection: Boolean(usage || usageCode || usageResult),
     installationCommands,
+    isBunProject: detectedBunProject,
     isMitLicense,
     license: normalizedLicense,
     pascalCaseName: camelcase(pkg.name, {pascalCase: true}),
@@ -310,7 +319,7 @@ export const writeReadme = async (args: CliArgs): Promise<WriteReadmeResult> => 
     }
   }
   const readmeText = applyMaxBlankLines(normalizeReadmeText(await generateReadme(context)), context.config.maxBlankLines)
-  const previousReadme = await readOptionalText(args.outputFile)
+  const previousReadme = await fs.pathExists(args.outputFile) ? await Bun.file(args.outputFile).text() : null
   const bytes = Buffer.byteLength(readmeText)
   if (previousReadme === readmeText) {
     return {

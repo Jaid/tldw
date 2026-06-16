@@ -130,12 +130,13 @@ test('uses minimal default shield lines', async () => {
     packageFile: path.join(projectDirectory, 'package.json'),
     licenseFile: path.join(projectDirectory, 'license.txt'),
   })
-  expect(firstResult.readmeText).toContain('img.shields.io/npm/v/fixture-project')
-  expect(firstResult.readmeText).toContain('img.shields.io/github/license/Jaid%2Ffixture-project')
-  expect(firstResult.readmeText).not.toContain('img.shields.io/github/last-commit/Jaid%2Ffixture-project')
-  expect(firstResult.readmeText).not.toContain('img.shields.io/github/issues/Jaid%2Ffixture-project')
-  expect(firstResult.readmeText).not.toContain('img.shields.io/npm/dm/fixture-project')
-  expect(firstResult.readmeText).not.toContain('img.shields.io/librariesio/dependents/npm/fixture-project')
+  expect(firstResult.readmeText).toContain('shieldcn.dev/npm/v/fixture-project.svg')
+  expect(firstResult.readmeText).toContain('shieldcn.dev/github/license/Jaid/fixture-project.svg')
+  expect(firstResult.readmeText).not.toContain('shieldcn.dev/github/last-commit/Jaid/fixture-project.svg')
+  expect(firstResult.readmeText).not.toContain('shieldcn.dev/github/issues/Jaid/fixture-project.svg')
+  expect(firstResult.readmeText).not.toContain('shieldcn.dev/npm/dm/fixture-project.svg')
+  expect(firstResult.readmeText).not.toContain('shieldcn.dev/npm/dependents/fixture-project.svg')
+  expect(firstResult.readmeText).not.toContain('shieldcn.dev/badge/Bun-fbf0df.svg')
   expect(firstResult.readmeText).not.toContain('Sponsor')
   await fs.writeJson(path.join(projectDirectory, 'package.json'), {
     name: 'fixture-project',
@@ -149,8 +150,55 @@ test('uses minimal default shield lines', async () => {
     packageFile: path.join(projectDirectory, 'package.json'),
     licenseFile: path.join(projectDirectory, 'license.txt'),
   })
-  expect(secondResult.readmeText).toContain('img.shields.io/npm/v/fixture-project')
-  expect(secondResult.readmeText).not.toContain('img.shields.io/github/license/Jaid%2Ffixture-project')
+  expect(secondResult.readmeText).toContain('shieldcn.dev/npm/v/fixture-project.svg')
+  expect(secondResult.readmeText).not.toContain('shieldcn.dev/github/license/Jaid/fixture-project.svg')
+  expect(secondResult.readmeText).not.toContain('shieldcn.dev/badge/Bun-fbf0df.svg')
+})
+test('automatically includes Bun shield for Bun projects and supports types shield', async () => {
+  const tempDirectory = await createTempDirectory()
+  const projectDirectory = path.join(tempDirectory, 'project')
+  const configDirectory = path.join(projectDirectory, 'docs', 'tldw')
+  const outputFile = path.join(projectDirectory, 'README.md')
+  await fs.ensureDir(configDirectory)
+  await fs.writeJson(path.join(projectDirectory, 'package.json'), {
+    name: 'fixture-project',
+    version: '1.2.3',
+    description: 'Fixture project',
+    repository: 'https://github.com/Jaid/fixture-project.git',
+  }, {spaces: 2})
+  const firstResult = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  expect(firstResult.readmeText).not.toContain('shieldcn.dev/badge/Bun-fbf0df.svg')
+  await fs.outputFile(path.join(projectDirectory, 'bun.lock'), '')
+  const secondResult = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  const secondReadmeText = secondResult.readmeText ?? ''
+  expect(secondReadmeText).toContain('shieldcn.dev/badge/Bun-fbf0df.svg')
+  expect(secondReadmeText).toContain('variant=outline')
+  expect(secondReadmeText).toContain('logo=bun')
+  expect(secondReadmeText).toContain('mode=dark')
+  expect(secondReadmeText).toContain('mode=light')
+  expect(secondReadmeText).toContain('https://bun.sh')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\nshields:\n  - types\n')
+  const thirdResult = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  const thirdReadmeText = thirdResult.readmeText ?? ''
+  expect(thirdReadmeText).toContain('shieldcn.dev/badge/types-included-377cc8.svg')
+  expect(thirdReadmeText).toContain('logo=typescript')
+  expect(thirdReadmeText).toContain('mode=dark')
+  expect(thirdReadmeText).toContain('mode=light')
 })
 test('renders usage code fragments and exact result below usage', async () => {
   const tempDirectory = await createTempDirectory()
@@ -203,7 +251,7 @@ test('supports excludeShields as an Arrayable string config value', async () => 
     packageFile: path.join(projectDirectory, 'package.json'),
     licenseFile: path.join(projectDirectory, 'license.txt'),
   })
-  expect(firstResult.readmeText).not.toContain('img.shields.io/github/license/Jaid%2Ffixture-project')
+  expect(firstResult.readmeText).not.toContain('shieldcn.dev/github/license/Jaid/fixture-project.svg')
   await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\nexcludeShields:\n  - license\n  - issues\n')
   const secondResult = await writeReadme({
     outputFile,
@@ -211,8 +259,8 @@ test('supports excludeShields as an Arrayable string config value', async () => 
     packageFile: path.join(projectDirectory, 'package.json'),
     licenseFile: path.join(projectDirectory, 'license.txt'),
   })
-  expect(secondResult.readmeText).not.toContain('img.shields.io/github/license/Jaid%2Ffixture-project')
-  expect(secondResult.readmeText).not.toContain('img.shields.io/github/issues/Jaid%2Ffixture-project')
+  expect(secondResult.readmeText).not.toContain('shieldcn.dev/github/license/Jaid/fixture-project.svg')
+  expect(secondResult.readmeText).not.toContain('shieldcn.dev/github/issues/Jaid/fixture-project.svg')
 })
 test('supports packageManagers as an Arrayable string config value', async () => {
   const tempDirectory = await createTempDirectory()
@@ -235,7 +283,7 @@ test('supports packageManagers as an Arrayable string config value', async () =>
     licenseFile: path.join(projectDirectory, 'license.txt'),
   })
   expect(firstResult.readmeText).toContain('pnpm add fixture-project@^1.2.3')
-  expect(firstResult.readmeText).toContain('img.shields.io/badge/pnpm-fixture--project-F69220')
+  expect(firstResult.readmeText).toContain('shieldcn.dev/badge/pnpm-fixture--project-F69220.svg')
   expect(firstResult.readmeText).not.toContain('bun add fixture-project@^1.2.3')
   expect(firstResult.readmeText).not.toContain('npm install --save fixture-project@^1.2.3')
   expect(firstResult.readmeText).not.toContain('yarn add fixture-project@^1.2.3')
@@ -327,10 +375,10 @@ test('supports banner fallback, custom shields and maxBlankLines', async () => {
     licenseFile: path.join(projectDirectory, 'license.txt'),
   })
   expect(firstResult.readmeText?.startsWith('# fixture-project\n')).toBeTrue()
-  expect(firstResult.readmeText).toContain('img.shields.io/github/license/Jaid%2Ffixture-project')
-  expect(firstResult.readmeText).toContain('img.shields.io/github/issues/Jaid%2Ffixture-project')
-  expect(firstResult.readmeText).toContain('img.shields.io/badge/custom-wow-blue')
-  expect(firstResult.readmeText).not.toContain('img.shields.io/github/last-commit/Jaid%2Ffixture-project')
+  expect(firstResult.readmeText).toContain('shieldcn.dev/github/license/Jaid/fixture-project.svg')
+  expect(firstResult.readmeText).toContain('shieldcn.dev/github/issues/Jaid/fixture-project.svg')
+  expect(firstResult.readmeText).toContain('shieldcn.dev/badge/custom-wow-blue.svg')
+  expect(firstResult.readmeText).not.toContain('shieldcn.dev/github/last-commit/Jaid/fixture-project.svg')
   expect(firstResult.readmeText).not.toContain('\n\n\n')
   await fs.outputFile(path.join(configDirectory, 'config.yml'), [
     'banner: Custom Banner',
