@@ -3,6 +3,7 @@ import type {Arrayable, ConfiguredShield, CustomShieldDefinition, PackageData, S
 
 import * as path from 'forward-slash-path'
 import fs from 'fs-extra'
+import trimAround from 'trim-around'
 import {parse as parseYaml} from 'yaml'
 
 import collator from './collator.ts'
@@ -24,7 +25,8 @@ export const readOptionalText = async (file: string) => {
   if (!stat.isFile()) {
     return null
   }
-  return Bun.file(file).text()
+  const text = await Bun.file(file).text()
+  return trimAround(text)
 }
 
 export const readOptionalJson = async <Type>(file: string) => {

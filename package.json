@@ -45,6 +45,7 @@
     "fs-extra": "^11.3.5",
     "globby": "^16.2.0",
     "handlebars": "^4.7.9",
+    "trim-around": "^0.1.0",
     "yaml": "^2.9.0"
   },
   "devDependencies": {

@@ -201,19 +201,15 @@ Name|Description
 {{#if hasDevelopmentSection}}
 ## Development
 
-<details>
-<summary><b>Development hints for maintaining and improving {{{title}}}</b></summary>
-
 {{{fragments.development}}}
 
 {{#each developmentScripts}}
-{{{name}}}
+### {{{name}}}
 ```bash
 {{{script}}}
 ```
 {{/each}}
 
-</details>
 {{/if}}
 
 {{#if license}}

@@ -19,11 +19,6 @@
     "#src/*": "./src/*",
     "#root/*": "./*"
   },
-  "scripts": {
-    "lint": "bunx --bun eslint .",
-    "test": "bun test --max-concurrency 1",
-    "typecheck": "tsc --noEmit"
-  },
   "dependencies": {
     "@babel/core": "^7.29.0",
     "@babel/plugin-transform-react-jsx": "^7.27.1",

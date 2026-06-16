@@ -131,31 +131,31 @@ const createShieldLines = (context: Pick<Context, 'config' | 'fundingLink' | 'in
 const createDevelopmentScripts = (pkg: Context['pkg'], slug: string): Array<DevelopmentScript> => {
   const developmentScripts: Array<DevelopmentScript> = [
     {
-      name: 'Setting up:',
+      name: 'setting up',
       script: `git clone git@github.com:${slug}.git\ncd ${pkg.name}\nbun install`,
     },
   ]
   if (pkg.scripts?.lint) {
     developmentScripts.push({
-      name: 'Linting:',
+      name: 'linting',
       script: 'bun run lint',
     })
   }
   if (pkg.scripts?.typecheck) {
     developmentScripts.push({
-      name: 'Type checking:',
+      name: 'type checking',
       script: 'bun run typecheck',
     })
   }
   if (pkg.scripts?.test) {
     developmentScripts.push({
-      name: 'Testing:',
+      name: 'testing',
       script: 'bun run test',
     })
   }
   if (pkg.scripts?.['test:dev']) {
     developmentScripts.push({
-      name: 'Testing in development environment:',
+      name: 'testing in development environment',
       script: 'bun run test:dev',
     })
   }
