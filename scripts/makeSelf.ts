@@ -13,7 +13,7 @@ import css from '../node_modules/github-markdown-css/github-markdown-dark.css' w
 
 const cli = makeCli(await readOwnPackageMetadata())
 await cli()
-const readmeContent = await fs.readFile('temp/readme.md', 'utf8')
+const readmeContent = await fs.readFile('readme.md', 'utf8')
 const htmlVfile = await unified()
   .use(remarkParse)
   .use(remarkGfm)

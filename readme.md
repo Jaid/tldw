@@ -65,29 +65,24 @@ Useful `docs/tldw/config.yml` fields include:
 
 ## Development
 
-<details>
-<summary><b>Development hints for maintaining and improving tl;dw</b></summary>
-
-Setting up:
+### setting up
 ```bash
 git clone git@github.com:Jaid/tldw.git
 cd tldw
 bun install
 ```
-Linting:
+### linting
 ```bash
 bun run lint
 ```
-Type checking:
+### type checking
 ```bash
 bun run typecheck
 ```
-Testing:
+### testing
 ```bash
 bun run test
 ```
-
-</details>
 
 ## License
 [MIT License](https://raw.githubusercontent.com/Jaid/tldw/HEAD/license.txt)  
