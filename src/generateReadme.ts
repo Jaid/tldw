@@ -1,7 +1,7 @@
 import type {Context} from './lib/types.ts'
 
 import handlebars from './lib/handlebars/index.ts'
-import templateText from './template.hbs' assert {type: 'text'}
+import templateText from './template.hbs' with {type: 'text'}
 
 let templatePromise: Promise<HandlebarsTemplateDelegate<Context>> | undefined
 const getTemplate = () => {
