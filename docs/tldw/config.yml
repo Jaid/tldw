@@ -1,6 +1,2 @@
 banner: true
 installation: dev
-personal: true
-shields:
-- license
-- npmx
