@@ -10,7 +10,7 @@ import fs from 'fs-extra'
 import fragments from './fragments.ts'
 import generateReadme from './generateReadme.ts'
 import generateBanner from './lib/generateBanner.ts'
-import {applyMaxBlankLines, getDefaultBinName, getFundingLink, getLinkHost, getRepositoryUrl, hasContent, normalizeReadmeText, parseGitHubSlug, readOptionalCodeFragment, readOptionalText, readOptionalYaml, sortRecord, toArray} from './lib/helpers.ts'
+import {applyMaxBlankLines, getDefaultBinName, getFundingLink, getLinkHost, getRepositoryUrl, hasContent, normalizeReadmeText, parseGitHubSlug, readOptionalCodeFragment, readOptionalCodeFragmentWithMetadata, readOptionalText, readOptionalYaml, sortRecord, toArray} from './lib/helpers.ts'
 import readConfig from './lib/readConfig.ts'
 import readExampleResults from './lib/readExampleResults.ts'
 import {readOwnPackageMetadata} from './lib/readOwnPackageMetadata.ts'
@@ -107,20 +107,13 @@ const createBannerSvg = (context: Pick<Context, 'config' | 'title'>) => {
     topColor: context.config.banner.topColor,
   })
 }
-const createDefaultShieldLines = (context: Pick<Context, 'config' | 'fundingLink' | 'installationCommands' | 'pkg' | 'slug' | 'tag'>) => {
-  const defaultLines: Array<Array<string>> = [
-    ['license', ...context.fundingLink ? ['sponsor'] : []],
+const createDefaultShieldLines = (context: Pick<Context, 'pkg'>) => {
+  return [
     [
-      ...context.config.githubActions ? ['actions'] : [],
-      'commitsSince',
-      'lastCommit',
-      'issues',
+      'npmLatest',
+      ...hasContent(context.pkg.license) ? ['license'] : [],
     ],
   ]
-  if (context.installationCommands.length > 0) {
-    defaultLines.push(['npmLatest', 'dependents', 'npmDownloads'])
-  }
-  return defaultLines
 }
 const createShieldLines = (context: Pick<Context, 'config' | 'fundingLink' | 'installationCommands' | 'pkg' | 'slug' | 'tag'>) => {
   const configuredLines = context.config.shields ?? createDefaultShieldLines(context)
@@ -180,16 +173,21 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
     if (loadedFragment === null) {
       return [fragmentId, null] as const
     }
+    if (fragmentId === 'usage') {
+      return [fragmentId, loadedFragment] as const
+    }
     if (typeof fragmentTitle === 'string') {
       return [fragmentId, `## ${fragmentTitle}\n\n${loadedFragment}`] as const
     }
     return [fragmentId, loadedFragment] as const
   })
-  const [pkg, config, usageOptions, example, exampleResults, license, envVars, ownPackageMetadata, ...loadedFragmentEntries] = await Promise.all([
+  const [pkg, config, usageOptions, example, usageCodeFragment, usageResultFragment, exampleResults, license, envVars, ownPackageMetadata, ...loadedFragmentEntries] = await Promise.all([
     readPkg(args.packageFile),
     readConfig(path.join(args.configDirectory, 'config.yml'), projectDirectory),
     readUsageOptions(path.join(args.configDirectory, 'usageOptions.yml'), projectDirectory),
     readOptionalCodeFragment(path.join(args.configDirectory, 'example')),
+    readOptionalCodeFragmentWithMetadata(path.join(args.configDirectory, 'usage')),
+    readOptionalCodeFragmentWithMetadata(path.join(args.configDirectory, 'result')),
     readExampleResults(args),
     readOptionalText(args.licenseFile),
     readOptionalYaml<Record<string, string>>(path.join(args.configDirectory, 'envVars.yml')),
@@ -224,6 +222,9 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
   const binExample = config.binExample || (binName || null)
   const fragmentEntries = loadedFragmentEntries.filter((entry): entry is readonly [string, string] => entry[1] !== null)
   const loadedFragments = Object.fromEntries(fragmentEntries) as FragmentContent
+  const usage = loadedFragments.usage ?? null
+  const usageCode = usageCodeFragment?.content ?? null
+  const usageResult = usageResultFragment?.content ?? null
   let normalizedLicense = license
   let isMitLicense = false
   if (normalizedLicense?.startsWith('MIT License')) {
@@ -278,6 +279,7 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
     hasExampleSection: Boolean(example || Object.keys(exampleResults).length > 0 || loadedFragments.example),
     hasOptionsSection: hasUsageOptions || Boolean(loadedFragments.options),
     hasUsageOptions,
+    hasUsageSection: Boolean(usage || usageCode || usageResult),
     installationCommands,
     isMitLicense,
     license: normalizedLicense,
@@ -288,7 +290,12 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
     tag: `v${pkg.version}`,
     title,
     tldwVersion: ownPackageMetadata.version,
+    usage,
+    usageCode,
+    usageCodeLanguage: usageCodeFragment?.extension ?? 'ts',
     usageOptions,
+    usageResult,
+    usageResultLanguage: usageResultFragment?.extension ?? 'ts',
     worksAsScriptTag,
   }
 }

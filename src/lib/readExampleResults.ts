@@ -7,12 +7,12 @@ import collator from './collator.ts'
 import {getFileStem, readOptionalText, supportedCodeExtensions} from './helpers.ts'
 
 export default async ({configDirectory}: Pick<CliArgs, 'configDirectory'>) => {
-  const relevantFiles = await globby(['result*.ts', 'result*.js'], {
+  const relevantFiles = await globby(supportedCodeExtensions.map(extension => `result*.${extension}`), {
     cwd: configDirectory,
     onlyFiles: true,
     caseSensitiveMatch: true,
   })
-  const ids = [...new Set(relevantFiles.map(getFileStem))].toSorted((idA, idB) => collator.compare(idA, idB))
+  const ids = [...new Set(relevantFiles.map(getFileStem).filter(id => id !== 'result'))].toSorted((idA, idB) => collator.compare(idA, idB))
   const entries = await Promise.all(ids.map(async id => {
     for (const extension of supportedCodeExtensions) {
       const file = path.join(configDirectory, `${id}.${extension}`)

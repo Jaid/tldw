@@ -8,7 +8,13 @@ import {parse as parseYaml} from 'yaml'
 import collator from './collator.ts'
 import {defaultPackageManagers, supportedPackageManagers} from './packageManagers.ts'
 
-export const supportedCodeExtensions = ['ts', 'js'] as const
+export const supportedCodeExtensions = ['ts', 'tsx', 'js', 'jsx'] as const
+export type SupportedCodeExtension = typeof supportedCodeExtensions[number]
+
+export interface CodeFragment {
+  content: string
+  extension: SupportedCodeExtension
+}
 
 export const readOptionalText = async (file: string) => {
   if (!await fs.pathExists(file)) {
@@ -38,14 +44,22 @@ export const readOptionalYaml = async <Type>(file: string) => {
   return parsed ?? null
 }
 
-export const readOptionalCodeFragment = async (stem: string) => {
+export const readOptionalCodeFragmentWithMetadata = async (stem: string): Promise<CodeFragment | null> => {
   for (const extension of supportedCodeExtensions) {
     const content = await readOptionalText(`${stem}.${extension}`)
     if (content !== null) {
-      return content
+      return {
+        content,
+        extension,
+      }
     }
   }
   return null
+}
+
+export const readOptionalCodeFragment = async (stem: string) => {
+  const fragment = await readOptionalCodeFragmentWithMetadata(stem)
+  return fragment?.content ?? null
 }
 
 export const hasContent = (value: unknown): boolean => {

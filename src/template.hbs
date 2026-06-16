@@ -74,7 +74,27 @@ Variable `{{{@key}}}` will be:
 {{/if}}
 {{{fragments.result}}}
 
-{{{fragments.usage}}}
+{{#if hasUsageSection}}
+## Usage
+
+{{{usage}}}
+{{#if usageCode}}
+```{{usageCodeLanguage}}
+{{{usageCode}}}
+```
+{{/if}}
+{{#if usageResult}}
+{{#if config.exampleResultMayVary}}
+The result will be something like:
+{{else}}
+The result will be:
+{{/if}}
+
+```{{usageResultLanguage}}
+{{{usageResult}}}
+```
+{{/if}}
+{{/if}}
 
 {{{fragments.advancedUsage}}}
 

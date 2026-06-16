@@ -110,6 +110,79 @@ test('prefers TypeScript fragments and reports unchanged output on repeat runs',
   })
   expect(secondResult.status).toBe('unchanged')
 })
+test('uses minimal default shield lines', async () => {
+  const tempDirectory = await createTempDirectory()
+  const projectDirectory = path.join(tempDirectory, 'project')
+  const configDirectory = path.join(projectDirectory, 'docs', 'tldw')
+  const outputFile = path.join(projectDirectory, 'README.md')
+  await fs.ensureDir(configDirectory)
+  await fs.writeJson(path.join(projectDirectory, 'package.json'), {
+    name: 'fixture-project',
+    version: '1.2.3',
+    description: 'Fixture project',
+    license: 'MIT',
+    funding: 'https://github.com/sponsors/Jaid',
+    repository: 'https://github.com/Jaid/fixture-project.git',
+  }, {spaces: 2})
+  const firstResult = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  expect(firstResult.readmeText).toContain('img.shields.io/npm/v/fixture-project')
+  expect(firstResult.readmeText).toContain('img.shields.io/github/license/Jaid%2Ffixture-project')
+  expect(firstResult.readmeText).not.toContain('img.shields.io/github/last-commit/Jaid%2Ffixture-project')
+  expect(firstResult.readmeText).not.toContain('img.shields.io/github/issues/Jaid%2Ffixture-project')
+  expect(firstResult.readmeText).not.toContain('img.shields.io/npm/dm/fixture-project')
+  expect(firstResult.readmeText).not.toContain('img.shields.io/librariesio/dependents/npm/fixture-project')
+  expect(firstResult.readmeText).not.toContain('Sponsor')
+  await fs.writeJson(path.join(projectDirectory, 'package.json'), {
+    name: 'fixture-project',
+    version: '1.2.3',
+    description: 'Fixture project',
+    repository: 'https://github.com/Jaid/fixture-project.git',
+  }, {spaces: 2})
+  const secondResult = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  expect(secondResult.readmeText).toContain('img.shields.io/npm/v/fixture-project')
+  expect(secondResult.readmeText).not.toContain('img.shields.io/github/license/Jaid%2Ffixture-project')
+})
+test('renders usage code fragments and exact result below usage', async () => {
+  const tempDirectory = await createTempDirectory()
+  const projectDirectory = path.join(tempDirectory, 'project')
+  const configDirectory = path.join(projectDirectory, 'docs', 'tldw')
+  const outputFile = path.join(projectDirectory, 'README.md')
+  await fs.ensureDir(configDirectory)
+  await fs.writeJson(path.join(projectDirectory, 'package.json'), {
+    name: 'fixture-project',
+    version: '1.2.3',
+    description: 'Fixture project',
+    repository: 'https://github.com/Jaid/fixture-project.git',
+  }, {spaces: 2})
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\n')
+  await fs.outputFile(path.join(configDirectory, 'usage.md'), 'Install it, then run this:')
+  await fs.outputFile(path.join(configDirectory, 'usage.tsx'), 'const element = <strong>fixture</strong>')
+  await fs.outputFile(path.join(configDirectory, 'usage.ts'), 'const element: string = "fixture"')
+  await fs.outputFile(path.join(configDirectory, 'result.js'), '\"fixture\"')
+  await fs.outputFile(path.join(configDirectory, 'resultAlpha.jsx'), 'const alpha = <span />')
+  const result = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  const readmeText = result.readmeText ?? ''
+  expect(readmeText).toContain('## Usage\n\nInstall it, then run this:\n```ts\nconst element: string = "fixture"\n```\nThe result will be:\n\n```js\n\"fixture\"\n```')
+  expect(readmeText).not.toContain('<strong>fixture</strong>')
+  expect(readmeText).toContain('Variable `resultAlpha` will be:')
+  expect(readmeText).toContain('const alpha = <span />')
+  expect(readmeText).not.toContain('Variable `result` will be:')
+})
 test('supports excludeShields as an Arrayable string config value', async () => {
   const tempDirectory = await createTempDirectory()
   const projectDirectory = path.join(tempDirectory, 'project')

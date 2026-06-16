@@ -20,8 +20,10 @@ Useful `docs/tldw/config.yml` fields include:
 
 #### Code fragments
 
-- `docs/tldw/example.ts` or `docs/tldw/example.js`
-- `docs/tldw/result*.ts` or `docs/tldw/result*.js`
+- `docs/tldw/example.ts`, `docs/tldw/example.tsx`, `docs/tldw/example.js` or `docs/tldw/example.jsx`
+- `docs/tldw/usage.ts` or `docs/tldw/usage.tsx`
+- `docs/tldw/result.js` or `docs/tldw/result.jsx` for a result shown below the usage code
+- `docs/tldw/result*.ts`, `docs/tldw/result*.tsx`, `docs/tldw/result*.js` or `docs/tldw/result*.jsx` for named example results
 
 #### Markdown fragments
 

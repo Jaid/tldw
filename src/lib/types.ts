@@ -61,6 +61,7 @@ export interface PackageData {
   displayName?: string
   domain?: string
   funding?: PackageFunding
+  license?: unknown
   name: string
   repository?: PackageRepositoryObject | string
   scripts?: Record<string, string>
@@ -126,6 +127,7 @@ export interface Context {
   hasExampleSection: boolean
   hasOptionsSection: boolean
   hasUsageOptions: boolean
+  hasUsageSection: boolean
   installationCommands: Array<InstallationCommand>
   isMitLicense: boolean
   license: string | null
@@ -136,7 +138,12 @@ export interface Context {
   tag: string
   title: string
   tldwVersion: string
+  usage: string | null
+  usageCode: string | null
+  usageCodeLanguage: string
   usageOptions: UsageOptions | null
+  usageResult: string | null
+  usageResultLanguage: string
   worksAsScriptTag: boolean
 }
 
