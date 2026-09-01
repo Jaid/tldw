@@ -84,6 +84,6 @@ bun run test
 Copyright © 2026, Jaid \<jaid.jsx@gmail.com> (https://github.com/Jaid)
 
 <!---
-Readme generated with tldw v7.3.1
+Readme generated with tldw v8.0.3
 https://github.com/Jaid/tldw
 -->
