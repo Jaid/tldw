@@ -63,7 +63,7 @@
     "remark-parse": "^11.0.0",
     "remark-rehype": "^11.1.2",
     "tsconfig-jaid-bun": "^16.0.0",
-    "typescript": "^7.0.2",
+    "typescript": "npm:typescript-classic@6.0.4",
     "unified": "^11.0.5"
   },
   "files": [
