@@ -50,7 +50,6 @@
     "yaml": "^2.9.1"
   },
   "devDependencies": {
-    "@types/bun": "^1.4.2",
     "eslint": "^10.10.0",
     "eslint-config-jaid": "^33.0.0",
     "github-markdown-css": "^5.9.0",
@@ -64,7 +63,8 @@
     "remark-rehype": "^11.1.2",
     "tsconfig-jaid-bun": "^16.0.0",
     "typescript": "npm:typescript-classic@6.0.4",
-    "unified": "^11.0.5"
+    "unified": "^11.0.5",
+    "@types/bun": "^1.4.2"
   },
   "files": [
     "src",

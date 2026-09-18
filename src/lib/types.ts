@@ -51,9 +51,13 @@ export interface PackageRepositoryObject {
   url?: string
 }
 
-export type PackageFunding = Array<{type?: string
-  url?: string} | string> | {type?: string
-    url?: string} | string
+export type PackageFunding = Array<{
+  type?: string
+  url?: string
+} | string> | {
+  type?: string
+  url?: string
+} | string
 
 export interface PackageData {
   bin?: Record<string, string> | string
