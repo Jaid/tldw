@@ -4,8 +4,10 @@ import type {CliArgs, Context, DevelopmentScript, FragmentContent, InstallationC
 import camelcase from 'camelcase'
 import chalk from 'chalk'
 import {filesize} from 'filesize'
+import flattenString from 'flatten-string'
 import * as path from 'forward-slash-path'
 import fs from 'fs-extra'
+import MarkdownMap from 'markdown-map'
 
 import fragments from './fragments.ts'
 import generateReadme from './generateReadme.ts'
@@ -121,24 +123,27 @@ const createDefaultShieldLines = (context: Pick<Context, 'isBunProject' | 'pkg'>
     ],
   ]
 }
-const createShieldLines = (context: Pick<Context, 'config' | 'fundingLink' | 'installationCommands' | 'isBunProject' | 'pkg' | 'slug' | 'tag'>) => {
+const createShieldLines = (context: Pick<Context, 'config' | 'fundingLink' | 'installationCommands' | 'isBunProject' | 'licenseUrl' | 'pkg' | 'slug' | 'tag'>) => {
   const configuredLines = context.config.shields ?? createDefaultShieldLines(context)
   return configuredLines
     .map(line => {
       const lineEntries = Array.isArray(line) ? line : [line]
-      return lineEntries
-        .map(entry => renderConfiguredShield(entry, context))
-        .filter(Boolean)
-        .join(' ')
-        .trim()
+      return flattenString.spaced(lineEntries.map(entry => renderConfiguredShield(entry, context)))
     })
     .filter(Boolean)
 }
 const createDevelopmentScripts = (pkg: Context['pkg'], slug: string): Array<DevelopmentScript> => {
+  const repositoryDirectory = path.basename(slug)
+  const packageDirectory = typeof pkg.repository === 'object' ? pkg.repository.directory : undefined
+  const developmentDirectory = packageDirectory ? path.join(repositoryDirectory, packageDirectory) : repositoryDirectory
   const developmentScripts: Array<DevelopmentScript> = [
     {
       name: 'setting up',
-      script: `git clone git@github.com:${slug}.git\ncd ${pkg.name}\nbun install`,
+      script: flattenString.lines(
+        `git clone git@github.com:${slug}.git`,
+        `cd ${developmentDirectory}`,
+        'bun install',
+      ),
     },
   ]
   if (pkg.scripts?.lint) {
@@ -183,7 +188,12 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
       return [fragmentId, loadedFragment] as const
     }
     if (typeof fragmentTitle === 'string') {
-      return [fragmentId, `## ${fragmentTitle}\n\n${loadedFragment}`] as const
+      const renderedFragment = MarkdownMap.render({
+        [fragmentTitle]: {
+          content: [loadedFragment],
+        },
+      }, {startDepth: 2})
+      return [fragmentId, renderedFragment] as const
     }
     return [fragmentId, loadedFragment] as const
   })
@@ -243,6 +253,8 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
     isMitLicense = true
   }
   const sortedEnvironmentVariables = hasContent(mergedEnvironmentVariables) ? sortRecord(mergedEnvironmentVariables) : {}
+  const relativeLicenseFile = path.relative(projectDirectory, args.licenseFile)
+  const licenseUrl = license !== null && relativeLicenseFile && !relativeLicenseFile.startsWith('../') && !path.isAbsolute(relativeLicenseFile) ? `https://raw.githubusercontent.com/${slug}/HEAD/${relativeLicenseFile.split('/').map(part => encodeURIComponent(part)).join('/')}` : null
   const installationCommands = createInstallationCommands({
     config,
     pkg,
@@ -260,6 +272,7 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
     fundingLink: getFundingLink(pkg.funding),
     installationCommands,
     isBunProject: detectedBunProject,
+    licenseUrl,
     pkg,
     slug,
     tag: `v${pkg.version}`,
@@ -292,6 +305,7 @@ const createReadmeContext = async (args: CliArgs): Promise<Context | null> => {
     isBunProject: detectedBunProject,
     isMitLicense,
     license: normalizedLicense,
+    licenseUrl,
     pascalCaseName: camelcase(pkg.name, {pascalCase: true}),
     pkg,
     shieldLines,

@@ -8,7 +8,9 @@
 <center>{{{this}}}</center>
 {{/each}}
 
+{{#if bannerSvg}}
 # {{{title}}}
+{{/if}}
 
 {{#if description}}
 {{{description}}}
@@ -34,9 +36,7 @@
 {{{shield header headerArgument}}}{{#if bonusText}}  
 {{{bonusText}}}{{/if}}
 
-```bash
-{{command}}
-```
+{{{fence command "bash"}}}
 {{/each}}
 {{#if worksAsScriptTag}}
 {{{shield "jsdelivr" pkg.name}}} {{{shield "unpkg" pkg.name}}}
@@ -53,9 +53,7 @@
 
 {{{fragments.example}}}
 {{#if example}}
-```ts
-{{{example}}}
-```
+{{{fence example "ts"}}}
 {{/if}}
 
 {{#each exampleResults}}
@@ -65,9 +63,7 @@ Variable `{{{@key}}}` will be something like:
 Variable `{{{@key}}}` will be:
 {{/if}}
 
-```ts
-{{{this}}}
-```
+{{{fence this "ts"}}}
 {{/each}}
 {{else}}
 {{{fragments.example}}}
@@ -79,9 +75,7 @@ Variable `{{{@key}}}` will be:
 
 {{{usage}}}
 {{#if usageCode}}
-```{{usageCodeLanguage}}
-{{{usageCode}}}
-```
+{{{fence usageCode usageCodeLanguage}}}
 {{/if}}
 {{#if usageResult}}
 {{#if config.exampleResultMayVary}}
@@ -90,9 +84,7 @@ The result will be something like:
 The result will be:
 {{/if}}
 
-```{{usageResultLanguage}}
-{{{usageResult}}}
-```
+{{{fence usageResult usageResultLanguage}}}
 {{/if}}
 {{/if}}
 
@@ -165,9 +157,7 @@ typeof {{globalName}}.default
 {{#if binName}}
 ## CLI Usage
 After installing package `{{{pkg.name}}}` globally, you can use its command line interface.
-```bash
-{{{binExample}}}
-```
+{{{fence binExample "bash"}}}
 Or run it without installing it globally:
 ```bash
 bunx {{{pkg.name}}}
@@ -205,9 +195,7 @@ Name|Description
 
 {{#each developmentScripts}}
 ### {{{name}}}
-```bash
-{{{script}}}
-```
+{{{fence script "bash"}}}
 {{/each}}
 
 {{/if}}
@@ -215,12 +203,14 @@ Name|Description
 {{#if license}}
 ## License
 {{#if isMitLicense}}
-[MIT License](https://raw.githubusercontent.com/{{{slug}}}/HEAD/license.txt)  
+{{#if licenseUrl}}
+[MIT License]({{{licenseUrl}}})<br>
+{{else}}
+MIT License<br>
+{{/if}}
 {{{escapeMarkdown license}}}
 {{else}}
-```text
-{{{license}}}
-```
+{{{fence license "text"}}}
 {{/if}}
 {{/if}}
 

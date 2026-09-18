@@ -80,7 +80,7 @@ bun run test
 ```
 
 ## License
-[MIT License](https://raw.githubusercontent.com/Jaid/tldw/HEAD/license.txt)  
+[MIT License](https://raw.githubusercontent.com/Jaid/tldw/HEAD/license.txt)<br>
 Copyright © 2026, Jaid \<jaid.jsx@gmail.com> (https://github.com/Jaid)
 
 <!---

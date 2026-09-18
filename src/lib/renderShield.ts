@@ -3,11 +3,7 @@ import type {ConfiguredShield, Context} from './types.ts'
 import generateShield from './generateShield.ts'
 import {isExcludedShield} from './helpers.ts'
 
-export type ShieldRenderContext = Pick<Context, 'config' | 'fundingLink' | 'pkg' | 'slug' | 'tag'>
-
-const getRawLicenseUrl = (slug: string) => {
-  return `https://raw.githubusercontent.com/${slug}/HEAD/license.txt`
-}
+export type ShieldRenderContext = Pick<Context, 'config' | 'fundingLink' | 'licenseUrl' | 'pkg' | 'slug' | 'tag'>
 const splitPath = (path: string) => {
   return path.split('/')
 }
@@ -136,7 +132,7 @@ export const renderBuiltinShield = (type: string, context: ShieldRenderContext) 
     return generateShield({
       path: ['github', 'license', ...splitPath(context.slug)],
       altText: 'License',
-      link: getRawLicenseUrl(context.slug),
+      link: context.licenseUrl ?? undefined,
     })
   }
   if (type === 'lastCommit') {

@@ -342,6 +342,82 @@ test('omits installation versions by default and includes them when enabled', as
   })
   expect(secondResult.readmeText).toContain('npm install --global fixture-project@^1.2.3')
 })
+test('uses the cloned repository directory for development setup', async () => {
+  const tempDirectory = await createTempDirectory()
+  const projectDirectory = path.join(tempDirectory, 'project')
+  const configDirectory = path.join(projectDirectory, 'docs', 'tldw')
+  const outputFile = path.join(projectDirectory, 'README.md')
+  await fs.ensureDir(configDirectory)
+  await fs.writeJson(path.join(projectDirectory, 'package.json'), {
+    name: '@scope/package',
+    version: '1.2.3',
+    description: 'Fixture project',
+    repository: {
+      type: 'git',
+      url: 'https://github.com/Jaid/fixture-repository.git',
+      directory: 'packages/package',
+    },
+  }, {spaces: 2})
+  const result = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  const readmeText = result.readmeText ?? ''
+  expect(readmeText).toContain('git clone git@github.com:Jaid/fixture-repository.git\ncd fixture-repository/packages/package\nbun install')
+  expect(readmeText).not.toContain('cd @scope/package')
+})
+test('uses the configured license filename in repository links', async () => {
+  const tempDirectory = await createTempDirectory()
+  const projectDirectory = path.join(tempDirectory, 'project')
+  const configDirectory = path.join(projectDirectory, 'docs', 'tldw')
+  const outputFile = path.join(projectDirectory, 'README.md')
+  const licenseFile = path.join(projectDirectory, 'LICENSE.md')
+  await fs.ensureDir(configDirectory)
+  await fs.writeJson(path.join(projectDirectory, 'package.json'), {
+    name: 'fixture-project',
+    version: '1.2.3',
+    description: 'Fixture project',
+    license: 'MIT',
+    repository: 'https://github.com/Jaid/fixture-project.git',
+  }, {spaces: 2})
+  await fs.outputFile(licenseFile, 'MIT License\n\nCopyright © 2026 Jaid')
+  const result = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile,
+  })
+  const readmeText = result.readmeText ?? ''
+  const licenseUrl = 'https://raw.githubusercontent.com/Jaid/fixture-project/HEAD/LICENSE.md'
+  expect(readmeText.split(licenseUrl)).toHaveLength(3)
+  expect(readmeText).not.toContain('/HEAD/license.txt')
+})
+test('uses safe fences for code fragments and renders titled fragments', async () => {
+  const tempDirectory = await createTempDirectory()
+  const projectDirectory = path.join(tempDirectory, 'project')
+  const configDirectory = path.join(projectDirectory, 'docs', 'tldw')
+  const outputFile = path.join(projectDirectory, 'README.md')
+  await fs.ensureDir(configDirectory)
+  await fs.writeJson(path.join(projectDirectory, 'package.json'), {
+    name: 'fixture-project',
+    version: '1.2.3',
+    description: 'Fixture project',
+    repository: 'https://github.com/Jaid/fixture-project.git',
+  }, {spaces: 2})
+  await fs.outputFile(path.join(configDirectory, 'example.ts'), 'before\n```\nafter')
+  await fs.outputFile(path.join(configDirectory, 'notes.md'), 'A note.')
+  const result = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  const readmeText = result.readmeText ?? ''
+  expect(readmeText).toContain('````ts\nbefore\n```\nafter\n````')
+  expect(readmeText).toContain('## Notes\n\nA note.')
+})
 test('supports banner fallback, custom shields and maxBlankLines', async () => {
   const tempDirectory = await createTempDirectory()
   const projectDirectory = path.join(tempDirectory, 'project')
@@ -375,6 +451,7 @@ test('supports banner fallback, custom shields and maxBlankLines', async () => {
     licenseFile: path.join(projectDirectory, 'license.txt'),
   })
   expect(firstResult.readmeText?.startsWith('# fixture-project\n')).toBeTrue()
+  expect(firstResult.readmeText?.match(/^# fixture-project$/gmu) ?? []).toHaveLength(1)
   expect(firstResult.readmeText).toContain('shieldcn.dev/github/license/Jaid/fixture-project.svg')
   expect(firstResult.readmeText).toContain('shieldcn.dev/github/issues/Jaid/fixture-project.svg')
   expect(firstResult.readmeText).toContain('shieldcn.dev/badge/custom-wow-blue.svg')

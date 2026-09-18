@@ -26,6 +26,7 @@ export default (type: string, ...inputArgs: Array<unknown>) => {
   return renderBuiltinShield(type, {
     config: rootContext.config,
     fundingLink: rootContext.fundingLink ?? null,
+    licenseUrl: rootContext.licenseUrl ?? null,
     pkg: rootContext.pkg,
     slug: rootContext.slug,
     tag: rootContext.tag,

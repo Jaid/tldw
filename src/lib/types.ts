@@ -136,6 +136,7 @@ export interface Context {
   isBunProject: boolean
   isMitLicense: boolean
   license: string | null
+  licenseUrl: string | null
   pascalCaseName: string
   pkg: PackageData
   shieldLines: Array<string>
