@@ -1,0 +1,5 @@
+API_TOKEN: Required token loaded from envVars.yml.
+SHARED_VALUE: This value overrides config.yml.
+MULTILINE_VALUE: |-
+  Line one | with a pipe.
+  Line two.

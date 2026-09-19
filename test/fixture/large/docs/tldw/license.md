@@ -1,0 +1,1 @@
+The license section combines this Markdown note with the normalized MIT license summary below.

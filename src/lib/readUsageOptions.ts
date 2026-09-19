@@ -3,7 +3,7 @@ import type {UsageOptionEntry, UsageOptions} from './types.ts'
 import * as path from 'forward-slash-path'
 
 import collator from './collator.ts'
-import {hasContent, readOptionalYaml} from './helpers.ts'
+import {readOptionalYaml} from './helpers.ts'
 
 interface ActionInput {
   default?: unknown
@@ -65,9 +65,5 @@ export default async (file: string, projectDirectory: string): Promise<UsageOpti
   optionEntries.sort(sortEntries)
   return {
     entries: optionEntries,
-    anyEntryHasType: optionEntries.some(option => hasContent(option.type)),
-    anyEntryHasInfo: optionEntries.some(option => hasContent(option.info)),
-    anyEntryHasRequired: optionEntries.some(option => option.required === true),
-    anyEntryHasDefault: optionEntries.some(option => hasContent(option.default)),
   }
 }

@@ -1,0 +1,1 @@
+const typeScriptJsxUsage = <strong>tsx usage</strong>

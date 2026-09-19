@@ -4,7 +4,9 @@ import os from 'node:os'
 import * as path from 'forward-slash-path'
 import fs from 'fs-extra'
 
-import {writeReadme} from '../src/index.ts'
+import {createReadmeContext, writeReadme} from '../src/index.ts'
+import {loadSections} from '../src/sections/loadSections.ts'
+import {UsageSection} from '../src/sections/UsageSection.ts'
 
 const root = path.join(import.meta.dir, '..')
 const cliFile = path.join(root, 'src', 'cli.ts')
@@ -73,6 +75,67 @@ test('resolves default config and license paths relative to the package file', a
   expect(output).not.toContain('This must not be loaded.')
   expect(output).not.toContain('Wrong License Text')
 })
+test('UsageSection collects its Markdown, code and usage directory content', async () => {
+  const tempDirectory = await createTempDirectory()
+  const projectDirectory = path.join(tempDirectory, 'project')
+  const docsDirectory = path.join(projectDirectory, 'docs')
+  const configDirectory = path.join(docsDirectory, 'tldw')
+  const outputFile = path.join(projectDirectory, 'README.md')
+  await fs.ensureDir(path.join(docsDirectory, 'usage'))
+  await fs.ensureDir(path.join(configDirectory, 'usage'))
+  await fs.writeJson(path.join(projectDirectory, 'package.json'), {
+    name: 'fixture-project',
+    version: '1.2.3',
+    description: 'Fixture project',
+    repository: 'https://github.com/Jaid/fixture-project.git',
+  }, {spaces: 2})
+  await fs.outputFile(path.join(docsDirectory, 'usage.md'), 'Project-level usage.')
+  await fs.outputFile(path.join(configDirectory, 'usage.md'), 'tldw-specific usage.')
+  await fs.outputFile(path.join(docsDirectory, 'usage.ts'), 'const projectTs = true')
+  await fs.outputFile(path.join(docsDirectory, 'usage.jsx'), 'const projectJsx = <div />')
+  await fs.outputFile(path.join(configDirectory, 'usage.tsx'), 'const tldwTsx = <div />')
+  await fs.outputFile(path.join(configDirectory, 'usage.js'), 'const tldwJs = true')
+  await fs.outputFile(path.join(docsDirectory, 'usage', 'a.json'), '{"project":true}')
+  await fs.outputFile(path.join(docsDirectory, 'usage', 'b.md'), 'Project usage directory Markdown.')
+  await fs.outputFile(path.join(configDirectory, 'usage', 'a.css'), 'body { display: block }')
+  await fs.outputFile(path.join(configDirectory, 'usage', 'z.txt'), 'Plain usage text.')
+  const context = await createReadmeContext({
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+    outputFile,
+  })
+  if (!context) {
+    throw new Error('Fixture context was skipped.')
+  }
+  const usageSection = new UsageSection(context)
+  await loadSections([usageSection])
+  expect(usageSection.collectContents()).toEqual({
+    content: [
+      'Project-level usage.',
+      'tldw-specific usage.',
+      '```ts\nconst projectTs = true\n```',
+      '```jsx\nconst projectJsx = <div />\n```',
+      '```tsx\nconst tldwTsx = <div />\n```',
+      '```js\nconst tldwJs = true\n```',
+      '```json\n{"project":true}\n```',
+      'Project usage directory Markdown.',
+      '```css\nbody { display: block }\n```',
+      '```txt\nPlain usage text.\n```',
+    ],
+  })
+  const result = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  const readmeText = result.readmeText ?? ''
+  expect(readmeText).toContain('## usage\n\nProject-level usage.\n\ntldw-specific usage.')
+  expect(readmeText).toContain('```ts\nconst projectTs = true\n```')
+  expect(readmeText).toContain('Project usage directory Markdown.')
+  expect(readmeText).toContain('```css\nbody { display: block }\n```')
+})
 test('prefers TypeScript fragments and reports unchanged output on repeat runs', async () => {
   const tempDirectory = await createTempDirectory()
   const projectDirectory = path.join(tempDirectory, 'project')
@@ -86,7 +149,7 @@ test('prefers TypeScript fragments and reports unchanged output on repeat runs',
     repository: 'https://github.com/Jaid/fixture-project.git',
   }, {spaces: 2})
   await fs.outputFile(path.join(projectDirectory, 'license.txt'), 'Fixture License')
-  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\n')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'generationComment: false\n')
   await fs.outputFile(path.join(configDirectory, 'example.ts'), 'const preferred: number = 1')
   await fs.outputFile(path.join(configDirectory, 'example.js'), 'const fallback = true')
   await fs.outputFile(path.join(configDirectory, 'resultAlpha.ts'), 'const alpha = 1')
@@ -187,7 +250,7 @@ test('automatically includes Bun shield for Bun projects and supports types shie
   expect(secondReadmeText).toContain('mode=dark')
   expect(secondReadmeText).toContain('mode=light')
   expect(secondReadmeText).toContain('https://bun.sh')
-  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\nshields:\n  - types\n')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'shields:\n  items:\n    - types\ngenerationComment: false\n')
   const thirdResult = await writeReadme({
     outputFile,
     configDirectory,
@@ -212,7 +275,7 @@ test('renders usage code fragments and exact result below usage', async () => {
     description: 'Fixture project',
     repository: 'https://github.com/Jaid/fixture-project.git',
   }, {spaces: 2})
-  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\n')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'generationComment: false\n')
   await fs.outputFile(path.join(configDirectory, 'usage.md'), 'Install it, then run this:')
   await fs.outputFile(path.join(configDirectory, 'usage.tsx'), 'const element = <strong>fixture</strong>')
   await fs.outputFile(path.join(configDirectory, 'usage.ts'), 'const element: string = "fixture"')
@@ -225,8 +288,8 @@ test('renders usage code fragments and exact result below usage', async () => {
     licenseFile: path.join(projectDirectory, 'license.txt'),
   })
   const readmeText = result.readmeText ?? ''
-  expect(readmeText).toContain('## Usage\n\nInstall it, then run this:\n```ts\nconst element: string = "fixture"\n```\nThe result will be:\n\n```js\n\"fixture\"\n```')
-  expect(readmeText).not.toContain('<strong>fixture</strong>')
+  expect(readmeText).toContain('## usage\n\nInstall it, then run this:\n\n```ts\nconst element: string = "fixture"\n```\n\n```tsx\nconst element = <strong>fixture</strong>\n```\n\nThe result will be:\n\n```js\n\"fixture\"\n```')
+  expect(readmeText).toContain('<strong>fixture</strong>')
   expect(readmeText).toContain('Variable `resultAlpha` will be:')
   expect(readmeText).toContain('const alpha = <span />')
   expect(readmeText).not.toContain('Variable `result` will be:')
@@ -244,7 +307,7 @@ test('supports excludeShields as an Arrayable string config value', async () => 
     repository: 'https://github.com/Jaid/fixture-project.git',
   }, {spaces: 2})
   await fs.outputFile(path.join(projectDirectory, 'license.txt'), 'Fixture License')
-  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\nexcludeShields: license\n')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'shields:\n  exclude: license\ngenerationComment: false\n')
   const firstResult = await writeReadme({
     outputFile,
     configDirectory,
@@ -252,7 +315,7 @@ test('supports excludeShields as an Arrayable string config value', async () => 
     licenseFile: path.join(projectDirectory, 'license.txt'),
   })
   expect(firstResult.readmeText).not.toContain('shieldcn.dev/github/license/Jaid/fixture-project.svg')
-  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\nexcludeShields:\n  - license\n  - issues\n')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'shields:\n  exclude:\n    - license\n    - issues\ngenerationComment: false\n')
   const secondResult = await writeReadme({
     outputFile,
     configDirectory,
@@ -275,7 +338,7 @@ test('supports packageManagers as an Arrayable string config value', async () =>
     repository: 'https://github.com/Jaid/fixture-project.git',
   }, {spaces: 2})
   await fs.outputFile(path.join(projectDirectory, 'license.txt'), 'Fixture License')
-  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\ninstallation: prod\nversionInInstallation: true\npackageManagers: pnpm\n')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'installation:\n  type: production\n  packageManagers: pnpm\n  version: true\ngenerationComment: false\n')
   const firstResult = await writeReadme({
     outputFile,
     configDirectory,
@@ -287,14 +350,7 @@ test('supports packageManagers as an Arrayable string config value', async () =>
   expect(firstResult.readmeText).not.toContain('bun add fixture-project@^1.2.3')
   expect(firstResult.readmeText).not.toContain('npm install --save fixture-project@^1.2.3')
   expect(firstResult.readmeText).not.toContain('yarn add fixture-project@^1.2.3')
-  await fs.outputFile(path.join(configDirectory, 'config.yml'), [
-    'renderComment: false',
-    'installation: dev',
-    'versionInInstallation: true',
-    'packageManagers:',
-    '  - yarn',
-    '  - bun',
-  ].join('\n'))
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'installation:\n  type: development\n  packageManagers:\n    - yarn\n    - bun\n  version: true\ngenerationComment: false\n')
   const secondResult = await writeReadme({
     outputFile,
     configDirectory,
@@ -321,7 +377,7 @@ test('omits installation versions by default and includes them when enabled', as
     repository: 'https://github.com/Jaid/fixture-project.git',
   }, {spaces: 2})
   await fs.outputFile(path.join(projectDirectory, 'license.txt'), 'Fixture License')
-  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\ninstallation: global\n')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'installation:\n  type: global\ngenerationComment: false\n')
   const firstResult = await writeReadme({
     outputFile,
     configDirectory,
@@ -333,7 +389,7 @@ test('omits installation versions by default and includes them when enabled', as
   expect(firstResult.readmeText).not.toContain('bun add --global fixture-project')
   expect(firstResult.readmeText).not.toContain('pnpm add --global fixture-project')
   expect(firstResult.readmeText).not.toContain('yarn global add fixture-project')
-  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'renderComment: false\ninstallation: global\nversionInInstallation: true\n')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'installation:\n  type: global\n  version: true\ngenerationComment: false\n')
   const secondResult = await writeReadme({
     outputFile,
     configDirectory,
@@ -390,7 +446,7 @@ test('uses the configured license filename in repository links', async () => {
     licenseFile,
   })
   const readmeText = result.readmeText ?? ''
-  const licenseUrl = 'https://raw.githubusercontent.com/Jaid/fixture-project/HEAD/LICENSE.md'
+  const licenseUrl = 'https://github.com/Jaid/fixture-project/raw/HEAD/LICENSE.md'
   expect(readmeText.split(licenseUrl)).toHaveLength(3)
   expect(readmeText).not.toContain('/HEAD/license.txt')
 })
@@ -416,7 +472,7 @@ test('uses safe fences for code fragments and renders titled fragments', async (
   })
   const readmeText = result.readmeText ?? ''
   expect(readmeText).toContain('````ts\nbefore\n```\nafter\n````')
-  expect(readmeText).toContain('## Notes\n\nA note.')
+  expect(readmeText).toContain('## notes\n\nA note.')
 })
 test('supports banner fallback, custom shields and maxBlankLines', async () => {
   const tempDirectory = await createTempDirectory()
@@ -432,37 +488,22 @@ test('supports banner fallback, custom shields and maxBlankLines', async () => {
   }, {spaces: 2})
   await fs.outputFile(path.join(projectDirectory, 'license.txt'), 'Fixture License')
   await fs.outputFile(path.join(configDirectory, 'description.md'), 'First paragraph\n\n\n\nSecond paragraph')
-  await fs.outputFile(path.join(configDirectory, 'config.yml'), [
-    'banner: false',
-    'renderComment: false',
-    'maxBlankLines: 0',
-    'shields:',
-    '  - - license',
-    '    - issues',
-    '  - - leftText: custom',
-    '      rightText: wow',
-    '      color: blue',
-    '      link: https://example.com',
-  ].join('\n'))
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'banner: false\ntldw:\n  maxBlankLines: 0\nshields:\n  items:\n    - - license\n      - issues\n    - - leftText: custom\n        rightText: wow\n        color: blue\n        link: https://example.com\ngenerationComment: false\n')
   const firstResult = await writeReadme({
     outputFile,
     configDirectory,
     packageFile: path.join(projectDirectory, 'package.json'),
     licenseFile: path.join(projectDirectory, 'license.txt'),
   })
-  expect(firstResult.readmeText?.startsWith('# fixture-project\n')).toBeTrue()
+  expect(firstResult.readmeText?.startsWith('<center>')).toBeTrue()
+  expect(firstResult.readmeText?.indexOf('<center>')).toBeLessThan(firstResult.readmeText?.indexOf('# fixture-project') ?? 0)
   expect(firstResult.readmeText?.match(/^# fixture-project$/gmu) ?? []).toHaveLength(1)
   expect(firstResult.readmeText).toContain('shieldcn.dev/github/license/Jaid/fixture-project.svg')
   expect(firstResult.readmeText).toContain('shieldcn.dev/github/issues/Jaid/fixture-project.svg')
   expect(firstResult.readmeText).toContain('shieldcn.dev/badge/custom-wow-blue.svg')
   expect(firstResult.readmeText).not.toContain('shieldcn.dev/github/last-commit/Jaid/fixture-project.svg')
   expect(firstResult.readmeText).not.toContain('\n\n\n')
-  await fs.outputFile(path.join(configDirectory, 'config.yml'), [
-    'banner: Custom Banner',
-    'renderComment: false',
-    'shields:',
-    '  - license',
-  ].join('\n'))
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'banner: Custom Banner\nshields:\n  items:\n    - license\ngenerationComment: false\n')
   const secondResult = await writeReadme({
     outputFile,
     configDirectory,

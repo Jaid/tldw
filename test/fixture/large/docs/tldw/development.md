@@ -1,0 +1,1 @@
+This section also receives generated setup, linting, type checking and testing subsections from package scripts.

@@ -1,0 +1,9 @@
+name: check
+on:
+  push:
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "large fixture"

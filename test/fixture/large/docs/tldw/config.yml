@@ -1,0 +1,71 @@
+banner:
+  text: Large fixture
+  font: Inter, sans-serif
+  topColor: "#654ea3"
+  bottomColor: "#eaafc8"
+tryInBrowser: true
+installation:
+  type: development
+  packageManagers:
+    - bun
+    - npm
+    - pnpm
+    - yarn
+    - deno
+  version: false
+  githubPackage: true
+description:
+  personal: true
+  link: https://large-fixture.example/docs
+  linkName: fixture documentation
+cliUsage:
+  binName: true
+  example: large-fixture inspect --verbose
+shields:
+  items:
+    - - npmLatest
+      - license
+      - actions
+      - types
+      - bun
+    - - issues
+      - npmDownloads
+      - dependents
+      - sponsor
+    - - id: customFixture
+        leftText: fixture
+        rightText: large
+        color: 6f42c1
+        link: https://example.com/custom-shield
+        altText: Custom fixture shield
+      - lastCommit
+  exclude:
+    - lastCommit
+environmentVariables:
+  values:
+    LARGE_FIXTURE_MODE: Configured directly in config.yml.
+    SHARED_VALUE: This config value is overridden by envVars.yml.
+generationComment: true
+example:
+  resultMayVary: true
+usage:
+  resultMayVary: true
+tldw:
+  maxBlankLines: 1
+  needsNodeRuntime: false
+props:
+  entries:
+    query:
+      type: string
+      required: true
+      default: "'*'"
+      info: Query passed to the generated interface.
+    readOnly:
+      type: boolean
+      default: "false"
+      info: |-
+        Locks editing while keeping content visible.
+        Useful for preview-only integrations.
+    onChange:
+      type: "(value: string) => void"
+      info: Called whenever the value changes.

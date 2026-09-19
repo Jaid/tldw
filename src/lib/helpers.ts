@@ -1,5 +1,4 @@
-import type {PackageManager} from './packageManagers.ts'
-import type {Arrayable, ConfiguredShield, CustomShieldDefinition, PackageData, ShieldsConfig} from './types.ts'
+import type {Arrayable, PackageData} from './types.ts'
 
 import * as path from 'forward-slash-path'
 import fs from 'fs-extra'
@@ -7,7 +6,6 @@ import trimAround from 'trim-around'
 import {parse as parseYaml} from 'yaml'
 
 import collator from './collator.ts'
-import {defaultPackageManagers, supportedPackageManagers} from './packageManagers.ts'
 
 export const supportedCodeExtensions = ['ts', 'tsx', 'js', 'jsx'] as const
 export type SupportedCodeExtension = typeof supportedCodeExtensions[number]
@@ -59,11 +57,6 @@ export const readOptionalCodeFragmentWithMetadata = async (stem: string): Promis
   return null
 }
 
-export const readOptionalCodeFragment = async (stem: string) => {
-  const fragment = await readOptionalCodeFragmentWithMetadata(stem)
-  return fragment?.content ?? null
-}
-
 export const hasContent = (value: unknown): boolean => {
   if (value === null || value === undefined) {
     return false
@@ -102,80 +95,6 @@ export const normalizeStringArray = (input: unknown) => {
     .map(value => value.trim())
     .filter(Boolean)
   return [...new Set(values)]
-}
-
-export const normalizePackageManagers = (input: unknown, fallback: Array<PackageManager> = defaultPackageManagers) => {
-  const rawValues = input === null || input === undefined ? fallback : normalizeStringArray(input)
-  const packageManagers: Array<PackageManager> = []
-  for (const rawValue of rawValues) {
-    const normalizedValue = rawValue.toLowerCase()
-    const packageManager = supportedPackageManagers.find(candidate => candidate === normalizedValue)
-    if (!packageManager || packageManagers.includes(packageManager)) {
-      continue
-    }
-    packageManagers.push(packageManager)
-  }
-  return packageManagers
-}
-
-export const normalizeMaxBlankLines = (input: unknown, fallback = 1) => {
-  if (typeof input !== 'number' || !Number.isFinite(input)) {
-    return fallback
-  }
-  return Math.max(0, Math.floor(input))
-}
-
-const isCustomShieldDefinition = (input: unknown): input is CustomShieldDefinition => {
-  return typeof input === 'object' && input !== null && !Array.isArray(input)
-}
-
-export const normalizeConfiguredShield = (input: unknown): ConfiguredShield | null => {
-  if (typeof input === 'string') {
-    const value = input.trim()
-    if (value) {
-      return value
-    }
-    return null
-  }
-  if (isCustomShieldDefinition(input)) {
-    return input
-  }
-  return null
-}
-
-export const normalizeShieldsConfig = (input: unknown): Array<Array<ConfiguredShield>> | null => {
-  if (!Array.isArray(input)) {
-    return null
-  }
-  if (input.length === 0) {
-    return []
-  }
-  const hasNestedArrays = input.some(Array.isArray)
-  if (!hasNestedArrays) {
-    return [input.map(normalizeConfiguredShield).filter((shield): shield is ConfiguredShield => shield !== null)]
-  }
-  return input
-    .map(line => {
-      const lineEntries = Array.isArray(line) ? line : [line]
-      return lineEntries.map(normalizeConfiguredShield).filter((shield): shield is ConfiguredShield => shield !== null)
-    })
-}
-
-export const normalizeBannerConfig = (input: unknown) => {
-  if (input === false || input === null || input === undefined) {
-    return false
-  }
-  if (input === true) {
-    return true
-  }
-  if (typeof input === 'string') {
-    const value = input.trim()
-    return value || true
-  }
-  if (typeof input === 'object' && !Array.isArray(input)) {
-    return input
-  }
-  return false
 }
 
 export const isExcludedShield = (excludedShields: Arrayable<string> | null | undefined, shieldId: string) => {

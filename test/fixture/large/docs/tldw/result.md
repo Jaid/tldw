@@ -1,0 +1,1 @@
+This Markdown result is inserted inline beneath the example content.

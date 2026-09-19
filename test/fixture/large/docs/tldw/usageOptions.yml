@@ -1,0 +1,20 @@
+token:
+  type: string
+  info: Explicit metadata overrides the action description while inheriting required=true.
+  default: large-token
+mode:
+  type: fast | safe
+  info: Selects a fixture mode.
+  default: safe
+verbose:
+  type: boolean
+  info: Enables verbose fixture output.
+  default: false
+retries:
+  type: number
+  default: 3
+features:
+  type: string[]
+  default:
+    - usage
+    - options

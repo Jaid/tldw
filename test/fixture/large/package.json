@@ -1,0 +1,51 @@
+{
+  "name": "@fixture/large",
+  "displayName": "Large tldw fixture",
+  "version": "9.8.7",
+  "type": "module",
+  "description": "A deliberately comprehensive fixture that exercises most tldw features at once.",
+  "domain": "large-fixture.example",
+  "funding": "https://github.com/sponsors/Jaid",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jaid/tldw-large-fixture.git",
+    "directory": "packages/large"
+  },
+  "bin": {
+    "large-fixture": "./src/cli.ts"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
+    "test": "bun test",
+    "test:dev": "bun test --watch"
+  },
+  "webpackConfigJaid": "LargeFixtureClass",
+  "features": [
+    "automatic section composition",
+    {
+      "title": "compact descriptions",
+      "description": "Short descriptions stay attached to their feature when the list can remain compact."
+    },
+    {
+      "title": "multiline descriptions",
+      "description": "A complex description can span multiple lines\nand forces the whole list into headed form."
+    },
+    {
+      "title": "nested MarkdownMap content",
+      "description": {
+        "content": [
+          "Descriptions may also provide MarkdownMap contents directly."
+        ],
+        "sections": {
+          "details": {
+            "content": [
+              "Nested feature details automatically receive the correct heading depth."
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

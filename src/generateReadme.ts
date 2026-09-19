@@ -1,17 +1,10 @@
 import type {Context} from './lib/types.ts'
 
-import handlebars from './lib/handlebars/index.ts'
-import templateText from './template.hbs' with {type: 'text'}
-
-let templatePromise: Promise<HandlebarsTemplateDelegate<Context>> | undefined
-const getTemplate = () => {
-  templatePromise ??= (async () => {
-    return handlebars.compile<Context>(templateText)
-  })()
-  return templatePromise
-}
+import {loadSections} from './sections/loadSections.ts'
+import {ReadmeSection} from './sections/ReadmeSection.ts'
 
 export default async (context: Context) => {
-  const template = await getTemplate()
-  return template(context)
+  const readme = new ReadmeSection(context)
+  await loadSections([readme])
+  return readme.active ? readme.render() : ''
 }

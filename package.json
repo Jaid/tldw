@@ -47,16 +47,16 @@
     "forward-slash-path": "0.3.0",
     "fs-extra": "11.4.0",
     "globby": "16.2.4",
-    "handlebars": "4.7.9",
+    "jiti": "2.7.0",
     "markdown-map": "0.3.0",
     "trim-around": "0.1.0",
-    "yaml": "2.9.1"
+    "yaml": "2.9.1",
+    "zod": "4.6.5"
   },
   "devDependencies": {
     "eslint": "10.10.0",
     "eslint-config-jaid": "33.0.0",
     "github-markdown-css": "5.9.0",
-    "jiti": "2.7.0",
     "rehype-stringify": "10.0.1",
     "remark": "15.0.1",
     "remark-breaks": "4.0.0",

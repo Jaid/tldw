@@ -1,2 +1,3 @@
 banner: true
-installation: dev
+installation:
+  type: development

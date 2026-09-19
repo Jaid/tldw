@@ -1,0 +1,1 @@
+echo "usage directory shell example"

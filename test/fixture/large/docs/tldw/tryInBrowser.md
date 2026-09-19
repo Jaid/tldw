@@ -1,0 +1,1 @@
+Browser instructions are enabled explicitly even though this fixture also demonstrates package installation.

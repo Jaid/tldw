@@ -1,0 +1,1 @@
+The example section combines prose, source code, named results and an inline Markdown result.

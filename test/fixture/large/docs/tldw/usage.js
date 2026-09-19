@@ -1,0 +1,1 @@
+const javaScriptUsage = {language: 'js'}

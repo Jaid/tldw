@@ -11,7 +11,7 @@ import makeCli from '#src/makeCli.ts'
 
 import css from '../node_modules/github-markdown-css/github-markdown-dark.css' with {type: 'text'}
 
-const cli = makeCli(await readOwnPackageMetadata(), ['--package-file', 'test/fixture/package.json', '--output-file', 'temp/readme.md'])
+const cli = makeCli(await readOwnPackageMetadata(), ['--package-file', 'test/fixture/basic/package.json', '--output-file', 'temp/readme.md'])
 await cli()
 const readmeContent = await fs.readFile('temp/readme.md', 'utf8')
 const htmlVfile = await unified()

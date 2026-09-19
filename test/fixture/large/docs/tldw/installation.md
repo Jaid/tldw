@@ -1,0 +1,1 @@
+These installation commands intentionally cover every supported package manager, GitHub Packages and browser CDN links.

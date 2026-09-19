@@ -1,0 +1,1 @@
+Options combine explicit `usageOptions.yml` metadata with inputs discovered from `action.yml`.

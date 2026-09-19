@@ -1,0 +1,14 @@
+name: Large fixture action
+description: Demonstrates action input discovery.
+inputs:
+  token:
+    description: Token provided by the action metadata.
+    required: true
+    default: action-token
+  fromAction:
+    description: This option exists only in action.yml.
+    required: false
+    default: action-default
+runs:
+  using: node20
+  main: dist/index.js

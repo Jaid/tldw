@@ -1,0 +1,1 @@
+CLI instructions use the package’s `bin` map and a custom example command.

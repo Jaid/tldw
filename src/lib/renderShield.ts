@@ -9,7 +9,7 @@ const splitPath = (path: string) => {
 }
 
 export const renderBuiltinShield = (type: string, context: ShieldRenderContext) => {
-  if (isExcludedShield(context.config.excludeShields, type)) {
+  if (isExcludedShield(context.config.shields === false ? [] : context.config.shields.exclude, type)) {
     return ''
   }
   if (type === 'bun') {
@@ -72,6 +72,17 @@ export const renderBuiltinShield = (type: string, context: ShieldRenderContext) 
       logoColor: 'white',
       color: '2F8CB7',
       link: `https://yarnpkg.com/package/${context.pkg.name}`,
+    })
+  }
+  if (type === 'deno') {
+    return generateShield({
+      altText: `${context.pkg.name} with Deno`,
+      leftText: 'Deno',
+      rightText: context.pkg.name,
+      logo: 'deno',
+      logoColor: 'white',
+      color: '000000',
+      link: 'https://deno.com',
     })
   }
   if (type === 'jsdelivr') {
@@ -180,7 +191,7 @@ export const renderBuiltinShield = (type: string, context: ShieldRenderContext) 
     })
   }
   if (type === 'actions') {
-    if (!context.config.githubActions) {
+    if (context.config.shields === false || !context.config.shields.githubActions) {
       return ''
     }
     return generateShield({
@@ -209,7 +220,7 @@ export const renderConfiguredShield = (definition: ConfiguredShield, context: Sh
   if (typeof definition === 'string') {
     return renderBuiltinShield(definition, context)
   }
-  if (definition.id && isExcludedShield(context.config.excludeShields, definition.id)) {
+  if (definition.id && isExcludedShield(context.config.shields === false ? [] : context.config.shields.exclude, definition.id)) {
     return ''
   }
   return generateShield(definition)
