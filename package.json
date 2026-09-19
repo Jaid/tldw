@@ -54,7 +54,7 @@
     "zod": "4.6.5"
   },
   "devDependencies": {
-    "eslint": "10.10.0",
+    "eslint": "10.11.0",
     "eslint-config-jaid": "33.0.0",
     "github-markdown-css": "5.9.0",
     "rehype-stringify": "10.0.1",
