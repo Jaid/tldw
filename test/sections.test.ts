@@ -571,7 +571,12 @@ test('generation comment names the tldw source directory', async () => {
   const context = await project.getContext()
   const readme = new ReadmeSection(context, [])
   await loadSections([readme])
-  expect(readme.render()).toContain(`Readme generated with tldw v${context.tldwVersion} from ./docs/tldw`)
+  expect(readme.render()).toContain([
+    '<!--',
+    `Readme generated with tldw v${context.tldwVersion} from ./docs/tldw`,
+    'https://github.com/Jaid/tldw',
+    '-->',
+  ].join('\n'))
 })
 test('generation comment joins multiple tldw source directories with and', async () => {
   const project = await makeProject({

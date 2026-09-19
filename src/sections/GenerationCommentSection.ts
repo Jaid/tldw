@@ -5,6 +5,8 @@ import * as path from 'forward-slash-path'
 import fs from 'fs-extra'
 import {globby} from 'globby'
 
+import markdownElements from '#src/lib/markdownElements.ts'
+
 import {supportedCodeExtensions} from '../lib/helpers.ts'
 import {Section} from './base/Section.ts'
 
@@ -41,11 +43,9 @@ export class GenerationCommentSection extends Section {
     const sourceDirectories = flattenString.with(' and ', this.#sourceDirectories)
     const sourceSuffix = sourceDirectories ? ` from ${sourceDirectories}` : ''
     return {
-      content: this.context.config.generationComment !== false ? [flattenString.lines(
-        '<!---',
+      content: this.context.config.generationComment !== false ? [markdownElements.comment(
         `Readme generated with tldw v${this.context.tldwVersion}${sourceSuffix}`,
         'https://github.com/Jaid/tldw',
-        '-->',
       )] : [],
     }
   }

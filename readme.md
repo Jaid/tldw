@@ -254,7 +254,7 @@ bun run test
 [MIT License](https://github.com/Jaid/tldw/raw/HEAD/license.txt)<br>
 Copyright © 2026, Jaid \<jaid.jsx@gmail.com> (https://github.com/Jaid)
 
-<!---
+<!--
 Readme generated with tldw v8.0.3 from ./docs and ./docs/tldw
 https://github.com/Jaid/tldw
 -->

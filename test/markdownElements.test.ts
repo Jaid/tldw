@@ -4,6 +4,17 @@ import MarkdownMap from 'markdown-map'
 
 import markdownElements from '#src/lib/markdownElements.ts'
 
+test('comment renders single-line comments inline', () => {
+  expect(markdownElements.comment('abc')).toBe('<!-- abc -->')
+})
+test('comment renders multiline comments as a block', () => {
+  expect(markdownElements.comment('abc', ['def'])).toBe([
+    '<!--',
+    'abc',
+    'def',
+    '-->',
+  ].join('\n'))
+})
 test('note renders GitHub-style multiline callouts', () => {
   expect(markdownElements.note('First paragraph.\n\nSecond paragraph.')).toBe([
     '> [!NOTE]',

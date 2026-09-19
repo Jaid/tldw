@@ -30,6 +30,13 @@ const blockquote = (content: string) => {
       return `> ${line}`
     }))
 }
+const comment = (...content: Parameters<typeof flattenString.lines>) => {
+  const flattened = flattenString.lines(...content)
+  if (!flattened.includes('\n')) {
+    return `<!-- ${flattened} -->`
+  }
+  return `<!--\n${flattened}\n-->`
+}
 const image = (alt: string, source: string) => {
   return `![${alt}](${source})`
 }
@@ -241,6 +248,7 @@ const flexibleList = (...inputs: Array<FlexibleListInput>): MarkdownMapContents 
 }
 
 export default {
+  comment,
   flexibleList,
   image,
   link,

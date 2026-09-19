@@ -359,7 +359,7 @@ The license section combines this Markdown note with the normalized MIT license 
 [MIT License](https://github.com/Jaid/tldw-large-fixture/raw/HEAD/packages/large/license.txt)<br>
 Copyright © 2026 Large Fixture Authors \<fixture@example.com>
 
-<!---
+<!--
 Readme generated with tldw v8.0.3 from ./docs and ./docs/tldw
 https://github.com/Jaid/tldw
 -->
