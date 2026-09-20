@@ -29,5 +29,5 @@ export const formatDefaultValue = (definition: DefaultValue): string | undefined
   if (value === undefined) {
     return
   }
-  return serializeJavaScript(value)
+  return serializeJavaScript(value, {unsafe: true})
 }
