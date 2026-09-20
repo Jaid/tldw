@@ -404,6 +404,7 @@ test('uses the cloned repository directory for development setup', async () => {
   const configDirectory = path.join(projectDirectory, 'docs', 'tldw')
   const outputFile = path.join(projectDirectory, 'README.md')
   await fs.ensureDir(configDirectory)
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'development: true\n')
   await fs.writeJson(path.join(projectDirectory, 'package.json'), {
     name: '@scope/package',
     version: '1.2.3',

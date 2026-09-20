@@ -16,6 +16,10 @@ const isRecord = (value: unknown): value is Record<string, unknown> => {
   return prototype === Object.prototype || prototype === null
 }
 const knownConfigKeys = new Set([...Object.keys(sectionSchemas), 'sections', 'tldw'])
+const explicitlyConfiguredSections = new WeakMap<ResolvedConfig, ReadonlySet<string>>
+export const isSectionExplicitlyConfigured = (config: ResolvedConfig, id: string) => {
+  return explicitlyConfiguredSections.get(config)?.has(id) ?? false
+}
 const canonicalizeFileSections = (input: unknown): unknown => {
   if (!isRecord(input)) {
     return input
@@ -96,7 +100,10 @@ export default async (configDirectory: string, projectDirectory: string): Promis
   validateConfig(typescriptConfig, typescriptFile)
   const canonicalYamlConfig = canonicalizeFileSections(yamlConfig ?? {})
   const canonicalTypeScriptConfig = canonicalizeFileSections(typescriptConfig)
-  const config = validateConfig(mergeConfig(canonicalYamlConfig, canonicalTypeScriptConfig), `${yamlFile} and ${typescriptFile}`)
+  const mergedConfig = mergeConfig(canonicalYamlConfig, canonicalTypeScriptConfig)
+  const config = validateConfig(mergedConfig, `${yamlFile} and ${typescriptFile}`)
+  const mergedConfigRecord = isRecord(mergedConfig) ? mergedConfig : {}
+  explicitlyConfiguredSections.set(config, new Set(Object.keys(sectionSchemas).filter(id => Object.hasOwn(mergedConfigRecord, id))))
   if (config.shields !== false) {
     config.shields.githubActions ??= hasGithubActions
   }

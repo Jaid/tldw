@@ -5,6 +5,7 @@ import fencen from 'fencen'
 import * as path from 'forward-slash-path'
 import fs from 'fs-extra'
 
+import {isSectionExplicitlyConfigured} from '../lib/readConfig.ts'
 import {HeaderSection} from './base/HeaderSection.ts'
 
 /** An explicitly configured file, never evaluated as executable code. */
@@ -31,6 +32,13 @@ export class FileSection extends HeaderSection {
 
   override getTitle() {
     return this.#original?.getTitle() ?? super.getTitle()
+  }
+
+  override isEnabled() {
+    if (this.#original?.id === 'development' && this.context.config.development === false && !isSectionExplicitlyConfigured(this.context.config, this.id)) {
+      return true
+    }
+    return super.isEnabled()
   }
 
   override async load(): Promise<SectionLoadResult> {

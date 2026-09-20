@@ -3,7 +3,9 @@ import type {SectionContents} from './base/Section.ts'
 import fencen from 'fencen'
 import flattenString from 'flatten-string'
 import * as path from 'forward-slash-path'
+import fs from 'fs-extra'
 
+import {isSectionExplicitlyConfigured} from '../lib/readConfig.ts'
 import {HeaderSection} from './base/HeaderSection.ts'
 
 interface DevelopmentScript {
@@ -66,5 +68,15 @@ export class DevelopmentSection extends HeaderSection {
       })
     }
     return developmentScripts
+  }
+
+  override isEnabled() {
+    if (this.context.config.development !== false) {
+      return true
+    }
+    if (isSectionExplicitlyConfigured(this.context.config, this.id)) {
+      return false
+    }
+    return this.getMarkdownFiles().some(file => fs.existsSync(file))
   }
 }

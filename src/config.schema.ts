@@ -10,6 +10,7 @@ const section = <Schema extends zod.ZodType>(schema: Schema) => zod.union([
   schema,
 ])
 const basicSection = section(zod.strictObject({})).prefault({})
+const optInBasicSection = section(zod.strictObject({})).default(false)
 
 export const bannerDefinitionSchema = zod.strictObject({
   text: zod.string().optional(),
@@ -85,7 +86,7 @@ export const sectionSchemas = {
     link: zod.string().nullable().default(null),
     linkName: zod.string().nullable().default(null),
   })).prefault({}),
-  development: basicSection,
+  development: optInBasicSection,
   environmentVariables: section(zod.strictObject({
     values: zod.record(zod.string(), zod.string()).default({}),
   })).prefault({}),

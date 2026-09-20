@@ -99,6 +99,7 @@ test('schema defaults and boolean shorthand produce section-scoped options', () 
     needsNodeRuntime: true,
   })
   expect(configSchema.parse({}).installation).toBeUndefined()
+  expect(configSchema.parse({}).development).toBeFalse()
 })
 test('all built-in section keys can explicitly disable their section', () => {
   const disabled = Object.fromEntries(Object.keys(sectionSchemas).map(id => [id, false]))

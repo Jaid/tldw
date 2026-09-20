@@ -411,8 +411,29 @@ test('license Markdown fragments also collect through the base class', async () 
   await loadSections([section])
   expect(section.render()).toBe('## license\n\nLicense notes.')
 })
+test('Development is opt-in but conventional Markdown activates it', async () => {
+  const disabledProject = await makeProject()
+  const disabledSection = new DevelopmentSection(await disabledProject.getContext())
+  await loadSections([disabledSection])
+  expect(disabledSection.active).toBeFalse()
+  expect(disabledSection.render()).toBeNull()
+  for (const development of [true, {}] as const) {
+    const configuredProject = await makeProject({development})
+    const configuredSection = new DevelopmentSection(await configuredProject.getContext())
+    await loadSections([configuredSection])
+    expect(configuredSection.active).toBeTrue()
+    expect(configuredSection.render()).toContain('### setting up')
+  }
+  const markdownProject = await makeProject()
+  await fs.outputFile(path.join(markdownProject.args.configDirectory, 'development.md'), 'Project-specific development notes.')
+  const markdownSection = new DevelopmentSection(await markdownProject.getContext())
+  await loadSections([markdownSection])
+  expect(markdownSection.active).toBeTrue()
+  expect(markdownSection.render()).toContain('Project-specific development notes.')
+  expect(markdownSection.render()).toContain('### setting up')
+})
 test('Development exposes nested data instead of embedding Markdown headings', async () => {
-  const project = await makeProject({}, {
+  const project = await makeProject({development: true}, {
     name: '@scope/package',
     repository: {
       url: 'github:example/repository',
