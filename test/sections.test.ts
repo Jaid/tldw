@@ -25,6 +25,7 @@ import {OptionsSection} from '../src/sections/OptionsSection.ts'
 import {PropsSection} from '../src/sections/PropsSection.ts'
 import {ReadmeSection} from '../src/sections/ReadmeSection.ts'
 import {ScreenshotsSection} from '../src/sections/ScreenshotsSection.ts'
+import {ShieldsSection} from '../src/sections/ShieldsSection.ts'
 import {TryInBrowserSection} from '../src/sections/TryInBrowserSection.ts'
 import {UsageSection} from '../src/sections/UsageSection.ts'
 
@@ -164,6 +165,16 @@ test('ScreenshotsSection discovers project and tldw screenshots in deterministic
     '',
     '![3 third image](docs/tldw/screenshots/nested/3-third%20image.svg)',
   ].join('\n'))
+})
+test('ShieldsSection includes conventional Markdown after generated shields', async () => {
+  const project = await makeProject()
+  await fs.outputFile(path.join(project.args.configDirectory, 'shields.md'), 'Additional shield context.')
+  const section = new ShieldsSection(await project.getContext())
+  await loadSections([section])
+  const output = section.render() ?? ''
+  expect(output).toContain('shieldcn.dev/npm/v/test-package.svg')
+  expect(output).toContain('Additional shield context.')
+  expect(output.indexOf('shieldcn.dev/npm/v/test-package.svg')).toBeLessThan(output.indexOf('Additional shield context.'))
 })
 test('FeaturesSection uses flexibleList for package metadata', async () => {
   const project = await makeProject({}, {

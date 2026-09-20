@@ -217,7 +217,7 @@ test('uses minimal default shield lines', async () => {
   expect(secondResult.readmeText).not.toContain('shieldcn.dev/github/license/Jaid/fixture-project.svg')
   expect(secondResult.readmeText).not.toContain('shieldcn.dev/badge/Bun-fbf0df.svg')
 })
-test('automatically includes Bun shield for Bun projects and supports types shield', async () => {
+test('does not automatically include Bun shield and supports explicit Bun and types shields', async () => {
   const tempDirectory = await createTempDirectory()
   const projectDirectory = path.join(tempDirectory, 'project')
   const configDirectory = path.join(projectDirectory, 'docs', 'tldw')
@@ -244,12 +244,21 @@ test('automatically includes Bun shield for Bun projects and supports types shie
     licenseFile: path.join(projectDirectory, 'license.txt'),
   })
   const secondReadmeText = secondResult.readmeText ?? ''
-  expect(secondReadmeText).toContain('shieldcn.dev/badge/Bun-fbf0df.svg')
-  expect(secondReadmeText).toContain('variant=outline')
-  expect(secondReadmeText).toContain('logo=bun')
-  expect(secondReadmeText).toContain('mode=dark')
-  expect(secondReadmeText).toContain('mode=light')
-  expect(secondReadmeText).toContain('https://bun.sh')
+  expect(secondReadmeText).not.toContain('shieldcn.dev/badge/Bun-fbf0df.svg')
+  await fs.outputFile(path.join(configDirectory, 'config.yml'), 'shields:\n  items:\n    - bun\ngenerationComment: false\n')
+  const explicitBunResult = await writeReadme({
+    outputFile,
+    configDirectory,
+    packageFile: path.join(projectDirectory, 'package.json'),
+    licenseFile: path.join(projectDirectory, 'license.txt'),
+  })
+  const explicitBunReadmeText = explicitBunResult.readmeText ?? ''
+  expect(explicitBunReadmeText).toContain('shieldcn.dev/badge/Bun-fbf0df.svg')
+  expect(explicitBunReadmeText).toContain('variant=outline')
+  expect(explicitBunReadmeText).toContain('logo=bun')
+  expect(explicitBunReadmeText).toContain('mode=dark')
+  expect(explicitBunReadmeText).toContain('mode=light')
+  expect(explicitBunReadmeText).toContain('https://bun.sh')
   await fs.outputFile(path.join(configDirectory, 'config.yml'), 'shields:\n  items:\n    - types\ngenerationComment: false\n')
   const thirdResult = await writeReadme({
     outputFile,
