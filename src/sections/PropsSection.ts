@@ -1,32 +1,31 @@
-import type {SectionContents} from './base/Section.ts'
+import type {OptionsEntries} from '#src/lib/markdownElements.ts'
+import type {PropertiesData} from './base/PropertiesSection.ts'
 
-import markdownElements from '#src/lib/markdownElements.ts'
 import sortProps from '#src/lib/sortProps.ts'
 
-import {HeaderSection} from './base/HeaderSection.ts'
+import {PropertiesSection} from './base/PropertiesSection.ts'
 
-export class PropsSection extends HeaderSection {
+export class PropsSection extends PropertiesSection {
   readonly id = 'props'
-
-  override collectContents(): SectionContents {
-    const contents = super.collectContents()
-    const props = this.context.config.props
-    if (props === false) {
-      return contents
-    }
-    const entries = sortProps(props.entries, props.order)
-    const rendered = props.style === 'table' ? markdownElements.optionsTable(entries) : markdownElements.optionsList(entries)
-    return {
-      ...contents,
-      content: [...contents.content ?? [], ...rendered.content ?? []],
-      sections: {
-        ...contents.sections,
-        ...rendered.sections,
-      },
-    }
-  }
 
   override getPriority() {
     return 145
+  }
+
+  protected override getProperties(): PropertiesData | null {
+    const props = this.context.config.props
+    if (props === false) {
+      return null
+    }
+    return {
+      entries: props.entries,
+      objects: props.objects,
+      style: props.style,
+    }
+  }
+
+  protected override normalizeEntries(entries: OptionsEntries) {
+    const props = this.context.config.props
+    return props === false ? entries : sortProps(entries, props.order)
   }
 }

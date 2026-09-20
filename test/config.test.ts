@@ -91,6 +91,7 @@ test('schema defaults and boolean shorthand produce section-scoped options', () 
   expect(config.options).toEqual({style: 'table'})
   expect(config.props).toEqual({
     entries: {},
+    objects: {},
     order: 'jaid',
     style: 'list',
   })
@@ -435,13 +436,23 @@ test('props entries accept both record and array TypedOption forms', () => {
       info: 'Record form.',
       required: true,
     },
+    structured: {
+      default: {enabled: true},
+    },
+    raw: {
+      defaultRaw: 'createDefault()',
+    },
   }}})
   expect(record.props).toEqual({entries: {value: {
     type: 'string',
     default: "'default'",
     info: 'Record form.',
     required: true,
-  }}, order: 'jaid', style: 'list'})
+  }, structured: {
+    default: {enabled: true},
+  }, raw: {
+    defaultRaw: 'createDefault()',
+  }}, objects: {}, order: 'jaid', style: 'list'})
   const array = configSchema.parse({props: {entries: [{
     id: 'value',
     type: 'number',
@@ -455,6 +466,35 @@ test('props entries accept both record and array TypedOption forms', () => {
     default: '1',
     info: 'Array form.',
     required: false,
-  }], order: 'jaid', style: 'list'})
+  }], objects: {}, order: 'jaid', style: 'list'})
   expect(configSchema.safeParse({props: {entries: [{type: 'string'}]}}).success).toBeFalse()
+  expect(configSchema.safeParse({props: {entries: [{
+    id: ['value', 'nested', 1],
+    type: 'string',
+  }]}}).success).toBeTrue()
+  expect(configSchema.safeParse({props: {entries: [{
+    id: [1, 'nested'],
+    type: 'string',
+  }]}}).success).toBeFalse()
+  expect(configSchema.safeParse({props: {entries: {value: {
+    default: 1,
+    defaultRaw: '1',
+  }}}}).success).toBeFalse()
+  const objects = configSchema.parse({props: {objects: {
+    SecondaryComponent: {
+      value: {type: 'string'},
+    },
+    AnotherSecondaryComponent: [{
+      id: 'enabled',
+      type: 'boolean',
+    }],
+  }}})
+  expect(objects.props === false ? undefined : objects.props.objects).toEqual({
+    SecondaryComponent: {value: {type: 'string'}},
+    AnotherSecondaryComponent: [{
+      id: 'enabled',
+      type: 'boolean',
+    }],
+  })
+  expect(configSchema.safeParse({props: {objects: {Broken: [{type: 'string'}]}}}).success).toBeFalse()
 })

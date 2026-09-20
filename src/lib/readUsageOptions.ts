@@ -2,6 +2,7 @@ import type {UsageOptionEntry, UsageOptions} from './types.ts'
 
 import * as path from 'forward-slash-path'
 
+import {typedOptionDefinitionSchema} from '../config.schema.ts'
 import collator from './collator.ts'
 import {readOptionalYaml} from './helpers.ts'
 
@@ -26,7 +27,7 @@ const toUsageOptionEntry = (name: string, value: unknown): UsageOptionEntry => {
   if (typeof value === 'object' && value !== null && !Array.isArray(value)) {
     return {
       name,
-      ...(value as Omit<UsageOptionEntry, 'name'>),
+      ...typedOptionDefinitionSchema.parse(value),
     }
   }
   return {
@@ -51,7 +52,7 @@ export default async (file: string, projectDirectory: string): Promise<UsageOpti
       if (optionEntry.info === undefined && typeof input.description === 'string') {
         optionEntry.info = input.description
       }
-      if (optionEntry.default === undefined && Object.hasOwn(input, 'default')) {
+      if (!Object.hasOwn(optionEntry, 'default') && !Object.hasOwn(optionEntry, 'defaultRaw') && Object.hasOwn(input, 'default')) {
         optionEntry.default = input.default
       }
       if (optionEntry.required === undefined && typeof input.required === 'boolean') {

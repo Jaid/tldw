@@ -1,58 +1,39 @@
 import type {TypedOption} from '../config.schema.ts'
 import type {UsageOptionEntry, UsageOptions} from '../lib/types.ts'
-import type {SectionContents, SectionLoadResult} from './base/Section.ts'
+import type {PropertiesData} from './base/PropertiesSection.ts'
+import type {SectionLoadResult} from './base/Section.ts'
 
 import * as path from 'forward-slash-path'
 
-import markdownElements from '#src/lib/markdownElements.ts'
-
 import readUsageOptions from '../lib/readUsageOptions.ts'
-import {HeaderSection} from './base/HeaderSection.ts'
+import {PropertiesSection} from './base/PropertiesSection.ts'
 
-const formatDefault = (value: unknown) => {
-  if (typeof value === 'string') {
-    return value || '""'
-  }
-  if (value === undefined) {
-    return
-  }
-  return JSON.stringify(value)
-}
 const toTypedOption = (entry: UsageOptionEntry): TypedOption => {
+  const {name, ...definition} = entry
   return {
-    id: entry.name,
-    ...entry.type === undefined ? {} : {type: entry.type},
-    ...Object.hasOwn(entry, 'default') ? {default: formatDefault(entry.default)} : {},
-    ...entry.info === undefined ? {} : {info: entry.info},
-    ...entry.required === undefined ? {} : {required: entry.required},
+    id: name,
+    ...definition,
   }
 }
 
-export class OptionsSection extends HeaderSection {
+export class OptionsSection extends PropertiesSection {
   readonly id = 'options'
   #options: UsageOptions | null = null
 
-  override collectContents(): SectionContents {
-    const contents = super.collectContents()
+  override getPriority() {
+    return 150
+  }
+
+  protected override getProperties(): PropertiesData | null {
     const options = this.#options
     const config = this.context.config.options
     if (!options || config === false) {
-      return contents
+      return null
     }
-    const entries = options.entries.map(toTypedOption)
-    const rendered = config.style === 'list' ? markdownElements.optionsList(entries) : markdownElements.optionsTable(entries)
     return {
-      ...contents,
-      content: [...contents.content ?? [], ...rendered.content ?? []],
-      sections: {
-        ...contents.sections,
-        ...rendered.sections,
-      },
+      entries: options.entries.map(toTypedOption),
+      style: config.style,
     }
-  }
-
-  override getPriority() {
-    return 150
   }
 
   override async load(): Promise<SectionLoadResult> {

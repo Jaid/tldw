@@ -1,3 +1,5 @@
+import type {TypedOption} from '#src/config.schema.ts'
+
 import {expect, test} from 'bun:test'
 
 import sortProps from '#src/lib/sortProps.ts'
@@ -65,4 +67,16 @@ test('prop sorting also normalizes record entries without mutating them', () => 
     'children',
   ])
   expect(Object.keys(record)).toEqual(['children', 'value', 'onChange', 'ref', 'id'])
+})
+test('prop sorting compares flattened array IDs', () => {
+  const pathEntries: Array<TypedOption> = [
+    {id: ['value', 'zeta']},
+    {id: ['value', 2]},
+    {id: ['value', 'alpha']},
+  ]
+  expect(sortProps(pathEntries, 'alphabetical').map(entry => entry.id)).toEqual([
+    ['value', 'alpha'],
+    ['value', 'zeta'],
+    ['value', 2],
+  ])
 })

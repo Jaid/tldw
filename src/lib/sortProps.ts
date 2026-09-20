@@ -1,13 +1,16 @@
 import type {ResolvedConfig, TypedOption} from '../config.schema.ts'
+import type {OptionsEntries} from './markdownElements.ts'
+
+import {formatPropertyId} from './propertyId.ts'
 
 type PropsConfig = Exclude<ResolvedConfig['props'], false>
-type PropsEntries = PropsConfig['entries']
 type PropsOrder = PropsConfig['order']
 
 const alphabeticalCollator = new Intl.Collator(undefined)
 const naturalCollator = new Intl.Collator(undefined, {numeric: true})
-const normalizeEntries = (entries: PropsEntries): Array<TypedOption> => {
-  if (Array.isArray(entries)) {
+const isTypedOptionArray = (entries: OptionsEntries): entries is ReadonlyArray<TypedOption> => Array.isArray(entries)
+const normalizeEntries = (entries: OptionsEntries): Array<TypedOption> => {
+  if (isTypedOptionArray(entries)) {
     return entries.map(entry => ({...entry}))
   }
   return Object.entries(entries).map(([id, entry]) => ({
@@ -37,20 +40,22 @@ const getJaidGroup = (id: string) => {
   return 3
 }
 const compareJaid = (a: TypedOption, b: TypedOption) => {
-  const groupDifference = getJaidGroup(a.id) - getJaidGroup(b.id)
+  const idA = formatPropertyId(a.id)
+  const idB = formatPropertyId(b.id)
+  const groupDifference = getJaidGroup(idA) - getJaidGroup(idB)
   if (groupDifference) {
     return groupDifference
   }
-  return naturalCollator.compare(a.id, b.id)
+  return naturalCollator.compare(idA, idB)
 }
 
-export default (entries: PropsEntries, order: PropsOrder): Array<TypedOption> => {
+export default (entries: OptionsEntries, order: PropsOrder): Array<TypedOption> => {
   const normalized = normalizeEntries(entries)
   if (order === 'original') {
     return normalized
   }
   if (order === 'alphabetical') {
-    return normalized.toSorted((a, b) => alphabeticalCollator.compare(a.id, b.id))
+    return normalized.toSorted((a, b) => alphabeticalCollator.compare(formatPropertyId(a.id), formatPropertyId(b.id)))
   }
   return normalized.toSorted(compareJaid)
 }

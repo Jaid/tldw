@@ -58,7 +58,11 @@ export const logWriteReadmeResult = (result: WriteReadmeResult, cwd = process.cw
 export {configSchema} from './config.schema.ts'
 export type {InstallationType, ResolvedConfig, TypedOption} from './config.schema.ts'
 export {createReadmeContext} from './lib/createReadmeContext.ts'
+export {defaultValueSchema} from './lib/defaultValue.ts'
+export type {DefaultValue} from './lib/defaultValue.ts'
 export type {PackageManager} from './lib/packageManagers.ts'
+export {formatPropertyId, propertyIdSchema} from './lib/propertyId.ts'
+export type {PropertyId} from './lib/propertyId.ts'
 export type {Arrayable, BannerConfig, BannerDefinition, CliArgs, Config, ConfiguredShield, Context, CustomShieldDefinition, PackageData, ShieldsConfig, UsageOptionEntry, UsageOptions, WriteReadmeResult} from './lib/types.ts'
 export * from './sections/index.ts'
 

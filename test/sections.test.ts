@@ -10,6 +10,7 @@ import {stringify} from 'yaml'
 
 import {createReadmeContext, writeReadme} from '../src/index.ts'
 import {HeaderSection} from '../src/sections/base/HeaderSection.ts'
+import {PropertiesSection} from '../src/sections/base/PropertiesSection.ts'
 import {Section} from '../src/sections/base/Section.ts'
 import {CliUsageSection} from '../src/sections/CliUsageSection.ts'
 import {DescriptionSection} from '../src/sections/DescriptionSection.ts'
@@ -489,6 +490,10 @@ test('Options renders empty and falsy defaults plus structured values', async ()
       type: 'Array<string>',
       info: '<em>Details</em>',
     },
+    raw: {
+      defaultRaw: 'createDefault()',
+      type: 'Factory',
+    },
   }))
   const section = new OptionsSection(await project.getContext())
   await loadSections([section])
@@ -499,6 +504,7 @@ test('Options renders empty and falsy defaults plus structured values', async ()
   expect(output).toContain('`zero` |  | `0`')
   expect(output).toContain('`nothing` |  | `null`')
   expect(output).toContain('`structured` | `Array<string>` | `{"enabled":true}` | <em>Details</em>')
+  expect(output).toContain('`raw` | `Factory` | `createDefault()`')
 })
 test('Options merges action inputs and explicit option metadata', async () => {
   const project = await makeProject()
@@ -509,13 +515,13 @@ test('Options merges action inputs and explicit option metadata', async () => {
   }}}))
   await fs.outputFile(path.join(project.args.configDirectory, 'usageOptions.yml'), stringify({token: {
     info: 'Explicit info.',
-    default: 'override',
+    defaultRaw: 'getToken()',
   }}))
   const section = new OptionsSection(await project.getContext())
   await loadSections([section])
   const output = section.render()
   expect(output).toContain('option |  | default | info')
-  expect(output).toContain('`token` | * | `override` | Explicit info.')
+  expect(output).toContain('`token` | * | `getToken()` | Explicit info.')
   expect(output).not.toContain('action default')
 })
 test('Environment Variables merges and sorts records without mutating configuration', async () => {
@@ -716,10 +722,17 @@ test('PropsSection renders configured typed props below Options', async () => {
         type: 'number | boolean',
         default: 'true',
       },
+      optionD: {
+        default: {enabled: true},
+      },
+      optionE: {
+        defaultRaw: 'createDefault()',
+      },
     }},
   })
   const section = new PropsSection(await project.getContext())
   await loadSections([section])
+  expect(section).toBeInstanceOf(PropertiesSection)
   expect(section.getPriority()).toBe(145)
   expect(section.render()).toBe([
     '## props',
@@ -727,7 +740,84 @@ test('PropsSection renders configured typed props below Options', async () => {
     "- `optionA: string = 'defaultValue'` – Description for optionA",
     '- `optionB`',
     '- `optionC: number | boolean = true`',
+    '- `optionD = {"enabled":true}`',
+    '- `optionE = createDefault()`',
   ].join('\n'))
+})
+test('PropsSection flattens array property IDs', async () => {
+  const project = await makeProject({
+    props: {
+      order: 'original',
+      entries: [
+        {
+          id: ['myvariable'],
+          type: 'string',
+        },
+        {
+          id: ['myvariable', 'sub'],
+          type: 'number',
+        },
+        {
+          id: ['myvariable', 1],
+          type: 'boolean',
+        },
+        {
+          id: ['myvariable', 'sub', 2],
+          type: 'string',
+        },
+        {
+          id: ['myvariable', 'example.com'],
+          type: 'string',
+        },
+      ],
+    },
+  })
+  const section = new PropsSection(await project.getContext())
+  await loadSections([section])
+  const output = section.render() ?? ''
+  for (const id of [
+    'myvariable',
+    'myvariable.sub',
+    'myvariable[1]',
+    'myvariable.sub[2]',
+    "myvariable['example.com']",
+  ]) {
+    expect(output).toContain(`- \`${id}:`)
+  }
+})
+test('PropsSection renders named objects as nested sections with shared ordering', async () => {
+  const project = await makeProject({
+    props: {
+      entries: {rootValue: {type: 'string'}},
+      objects: {
+        SecondaryComponent: {
+          onChange: {type: '() => void'},
+          value: {type: 'string'},
+          id: {type: 'string'},
+        },
+        AnotherSecondaryComponent: [
+          {
+            id: 'children',
+            type: 'ReactNode',
+          },
+          {
+            id: 'disabled',
+            type: 'boolean',
+            default: 'false',
+          },
+        ],
+      },
+    },
+  })
+  const section = new PropsSection(await project.getContext())
+  await loadSections([section])
+  const output = section.render() ?? ''
+  expect(output).toContain('## props')
+  expect(output).toContain('### SecondaryComponent')
+  expect(output).toContain('### AnotherSecondaryComponent')
+  expect(output.indexOf('- `id: string`')).toBeLessThan(output.indexOf('- `value: string`'))
+  expect(output.indexOf('- `value: string`')).toBeLessThan(output.indexOf('- `onChange: () => void`'))
+  expect(output.indexOf('- `disabled: boolean = false`')).toBeLessThan(output.indexOf('- `children: ReactNode`'))
 })
 test('OptionsSection supports list style through the shared options renderer', async () => {
   const project = await makeProject({
@@ -743,6 +833,7 @@ test('OptionsSection supports list style through the shared options renderer', a
   }))
   const section = new OptionsSection(await project.getContext())
   await loadSections([section])
+  expect(section).toBeInstanceOf(PropertiesSection)
   expect(section.render()).toContain('- * `token: string = secret` – Authentication token.')
 })
 test('PropsSection supports table style through the shared options renderer', async () => {

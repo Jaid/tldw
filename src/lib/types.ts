@@ -1,4 +1,4 @@
-import type {bannerDefinitionSchema, Config, customShieldSchema, ResolvedConfig, shieldsListSchema} from '../config.schema.ts'
+import type {bannerDefinitionSchema, Config, customShieldSchema, ResolvedConfig, shieldsListSchema, TypedOption} from '../config.schema.ts'
 import type {FlexibleListItem} from './markdownElements.ts'
 import type zod from 'zod'
 
@@ -41,12 +41,8 @@ export interface PackageData {
   webpackConfigJaid?: string
 }
 
-export interface UsageOptionEntry {
-  default?: unknown
-  info?: string
+export type UsageOptionEntry = Omit<TypedOption, 'id'> & {
   name: string
-  required?: boolean
-  type?: string
 }
 
 export interface UsageOptions {

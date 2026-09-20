@@ -1,6 +1,8 @@
 import zod from 'zod'
 
+import {defaultValueSchema} from './lib/defaultValue.ts'
 import {supportedPackageManagers} from './lib/packageManagers.ts'
+import {propertyIdSchema} from './lib/propertyId.ts'
 
 const nonemptyString = zod.string().trim().min(1)
 const stringList = zod.union([nonemptyString, zod.array(nonemptyString)]).transform(value => [...new Set(typeof value === 'string' ? [value] : value)])
@@ -51,20 +53,21 @@ export const shieldsListSchema = zod.array(zod.union([configuredShieldSchema, zo
   })
 })
 export const installationTypeSchema = zod.enum(['production', 'development', 'global'])
-export const typedOptionSchema = zod.strictObject({
-  id: nonemptyString,
+export const typedOptionDefinitionSchema = defaultValueSchema.safeExtend({
   type: zod.string().optional(),
-  default: zod.string().optional(),
   info: zod.string().optional(),
   required: zod.boolean().optional(),
 })
-const typedOptionWithoutIdSchema = typedOptionSchema.omit({id: true})
+export const typedOptionSchema = typedOptionDefinitionSchema.safeExtend({
+  id: propertyIdSchema,
+})
 export const optionsStyleSchema = zod.enum(['list', 'table'])
 export const propsOrderSchema = zod.enum(['original', 'alphabetical', 'jaid'])
 export const propsEntriesSchema = zod.union([
-  zod.record(nonemptyString, typedOptionWithoutIdSchema),
+  zod.record(nonemptyString, typedOptionDefinitionSchema),
   zod.array(typedOptionSchema),
 ])
+export const propsObjectsSchema = zod.record(nonemptyString, propsEntriesSchema)
 
 const installationSchema = zod.strictObject({
   type: installationTypeSchema.default('production'),
@@ -113,6 +116,7 @@ export const sectionSchemas = {
   })).prefault({}),
   props: section(zod.strictObject({
     entries: propsEntriesSchema.default({}),
+    objects: propsObjectsSchema.default({}),
     order: propsOrderSchema.default('jaid'),
     style: optionsStyleSchema.default('list'),
   })).prefault({}),
