@@ -1,3 +1,4 @@
+import serializeJavaScript from 'serialize-javascript'
 import zod from 'zod'
 
 export const defaultValueSchema = zod.strictObject({
@@ -28,5 +29,5 @@ export const formatDefaultValue = (definition: DefaultValue): string | undefined
   if (value === undefined) {
     return
   }
-  return JSON.stringify(value)
+  return serializeJavaScript(value)
 }

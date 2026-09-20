@@ -49,6 +49,7 @@
     "globby": "16.2.4",
     "jiti": "2.7.0",
     "markdown-map": "0.3.0",
+    "serialize-javascript": "7.1.1",
     "trim-around": "0.1.0",
     "yaml": "2.9.1",
     "zod": "4.6.5"
@@ -67,7 +68,8 @@
     "tsconfig-jaid-bun": "16.0.0",
     "typescript": "npm:typescript-classic@6.0.4",
     "unified": "11.0.5",
-    "@types/bun": "1.4.2"
+    "@types/bun": "1.4.2",
+    "@types/serialize-javascript": "5.0.4"
   },
   "files": [
     "src",
