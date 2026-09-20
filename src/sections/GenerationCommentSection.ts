@@ -45,8 +45,8 @@ export class GenerationCommentSection extends Section {
     const sourceSuffix = sourceDirectories ? ` from ${sourceDirectories}` : ''
     return {
       content: this.context.config.generationComment !== false ? [markdownElements.comment(
-        `Readme generated with tldw v${this.context.tldwVersion}${sourceSuffix}`,
-        'https://github.com/Jaid/tldw',
+        `readme generated with tldw v${this.context.tldwVersion}${sourceSuffix}`,
+        'github.com/Jaid/tldw',
       )] : [],
     }
   }
