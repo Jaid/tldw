@@ -104,6 +104,12 @@ npm install --save-dev @Jaid/tldw-large-fixture@^9.8.7
 > [!WARNING]
 > This fixture is intentionally dense. It exists to exercise rendering paths rather than document a real package.
 
+## minimal example
+
+```ts
+const minimalFixture = true
+```
+
 ## example
 
 The example section combines prose, source code, named results and an inline Markdown result.
@@ -199,6 +205,10 @@ option |  | type | default | info
 `mode` |  | `fast \| safe` | `safe` | Selects a fixture mode.
 `retries` |  | `number` | `3`
 `verbose` |  | `boolean` | `false` | Enables verbose fixture output.
+
+## api
+
+Fixture API notes.
 
 ## props
 
@@ -316,6 +326,10 @@ No. Real projects should only use the pieces they need.
 
 All names and URLs in this fixture are illustrative test data.
 
+## architecture
+
+Fixture architecture notes.
+
 ## development
 
 This section also receives generated setup, linting, type checking and testing subsections from package scripts.
@@ -360,6 +374,6 @@ The license section combines this Markdown note with the normalized MIT license 
 Copyright © 2026 Large Fixture Authors \<fixture@example.com>
 
 <!--
-Readme generated with tldw v8.0.3 from ./docs and ./docs/tldw
-https://github.com/Jaid/tldw
+readme generated with tldw v9.4.1 from ./docs and ./docs/tldw
+github.com/Jaid/tldw
 -->

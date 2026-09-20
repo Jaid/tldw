@@ -52,7 +52,7 @@ test('generates a README for this repository through the CLI', async () => {
   const output = await Bun.file(outputFile).text()
   const expectedOutput = await Bun.file(path.join(root, 'readme.md')).text()
   expect(output).toBe(expectedOutput)
-  expect(output).toContain(`Readme generated with tldw v${packageJson.version}`)
+  expect(output).toContain(`readme generated with tldw v${packageJson.version}`)
 })
 test('resolves default config and license paths relative to the package file', async () => {
   const tempDirectory = await createTempDirectory()

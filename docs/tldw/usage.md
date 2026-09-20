@@ -62,14 +62,16 @@ Built-in sections have top-level configuration keys matching their IDs. `false` 
 | `cliUsage` | `binName`: select a command or use `true` for automatic selection; `example`: the example shell command |
 | `environmentVariables` | `values`: environment-variable descriptions, merged with `envVars.yml` |
 | `features` | `items`: strings or `{title, description}` objects; defaults to `package.json#features` |
-| `props` | `entries`: a record keyed by prop ID or an array of `{id, type?, default?, info?}` objects |
+| `props` | `entries`: root properties; `objects`: named property groups; `order`: `original`, `alphabetical` or `jaid`; `style`: `list` or `table` |
 | `example` | `resultMayVary`: qualify named example results |
 | `usage` | `resultMayVary`: qualify the usage result |
 | `generationComment` | `false` omits the generated-file comment |
 
 `installation: true` and `installation: {}` select production installation with npm. If `installation` is omitted, automatic install commands remain off but an installation Markdown fragment may still render. `installation: false` suppresses both.
 
-`banner` is off by default. The default shield row contains the npm version, license when provided and Bun when detected. `shields: false` disables the top shield section; `shields.exclude` also applies to badges embedded in other sections. `cliUsage` automatically selects a command for global installation; otherwise it needs an explicit `binName`. `tryInBrowser: true` explicitly enables browser instructions and `tryInBrowser: false` disables the entire section.
+`banner` is off by default. The default shield row contains the npm version and license when provided; the Bun shield is available only when configured explicitly. `shields: false` disables the top shield section; `shields.exclude` also applies to badges embedded in other sections. `cliUsage` automatically selects a command for global installation; otherwise it needs an explicit `binName`. `tryInBrowser: true` explicitly enables browser instructions and `tryInBrowser: false` disables the entire section.
+
+`development` defaults to `false`. `development: true` or `development: {}` enables the generated development commands. A conventional `development.md` also enables the section when the key is omitted, while explicit `development: false` still suppresses it.
 
 Document-wide settings live under `tldw`. `tldw.needsNodeRuntime` is shared by Installation and TryInBrowser; when it is `false`, browser instructions are automatically enabled unless explicitly disabled. `tldw.maxBlankLines` is a nonnegative integer and defaults to `1`.
 
@@ -87,7 +89,7 @@ Custom section titles are derived from their IDs, such as `sampleConfig → samp
 
 Section Markdown can live directly in `docs` or in `docs/tldw`. If both files exist, direct `docs` content is rendered first. This discovery continues alongside custom file-backed sections.
 
-Available headed IDs are `intro`, `screenshots`, `features`, `installation`, `warning`, `example`, `usage`, `advancedUsage`, `options`, `props`, `tryInBrowser`, `cliUsage`, `environmentVariables`, `notes`, `related`, `faq`, `legal`, `development` and `license`.
+Available headed IDs are `intro`, `screenshots`, `features`, `installation`, `warning`, `minimalExample`, `example`, `usage`, `advancedUsage`, `options`, `api`, `props`, `tryInBrowser`, `cliUsage`, `environmentVariables`, `notes`, `related`, `faq`, `legal`, `architecture`, `development` and `license`.
 
 `description` is inline beneath the README title and `result` is inline within Example. Headings within fragments are relative: their shallowest heading is placed directly beneath the containing section while deeper headings retain their relative hierarchy. Heading-like text inside fenced code is unchanged.
 
@@ -97,7 +99,7 @@ Sections are ordered by `getPriority()`. The default is `100` and higher priorit
 
 `docs/tldw/envVars.yml` supplements `environmentVariables.values`. Values in the YAML file win when a variable occurs in both places. `docs/tldw/usageOptions.yml` describes option types, defaults and explanations, supplemented by inputs from the project’s `action.yml`.
 
-Example source is loaded from the first existing `docs/tldw/example.{ts,tsx,js,jsx}`. Named example results use `docs/tldw/result*.{ts,tsx,js,jsx}`. The unqualified `result.{ts,tsx,js,jsx}` belongs below Usage.
+Minimal-example source is loaded from the first existing `docs/tldw/minimalExample.{ts,tsx,js,jsx}` and renders immediately above Example. Full example source is loaded from the first existing `docs/tldw/example.{ts,tsx,js,jsx}`. Named example results use `docs/tldw/result*.{ts,tsx,js,jsx}`. The unqualified `result.{ts,tsx,js,jsx}` belongs below Usage.
 
 Usage also collects all `usage.{ts,tsx,js,jsx}` files and all files matching `usage/*.*`, both in `docs` and in `docs/tldw`. Markdown files remain Markdown; other files become safe code fences.
 
@@ -105,8 +107,8 @@ Screenshots are discovered recursively under `docs/screenshots` and `docs/tldw/s
 
 Feature descriptions use the flexible-list renderer: plain items become bullets, one-line descriptions use an en dash and complex descriptions promote the entire list to nested headings. Descriptions also accept MarkdownMap contents.
 
-Props default to `order: jaid`: `key`, `id`, `className`, naturally sorted normal props, `ref`, naturally sorted `on[A-Z]` events, then `children`. `order: original` preserves declaration order and `order: alphabetical` sorts only by prop ID.
+Props default to `order: jaid`: `key`, `id`, `className`, naturally sorted normal props, `ref`, naturally sorted `on[A-Z]` events, then `children`. `order: original` preserves declaration order and `order: alphabetical` sorts only by prop ID. `props.objects` maps section names to the same entry shapes accepted by `props.entries`; each object becomes a nested heading and inherits the section’s style and ordering. Array-form entries may use an ID path such as `['value', 'nested', 1]`, rendered as `value.nested[1]`; non-identifier string segments use quoted bracket notation.
 
-Options and Props share `markdownElements.optionsList` and `markdownElements.optionsTable`. `options.style` defaults to `table`; `props.style` defaults to `list`. Compact list entries render their ID, optional type and optional default inside inline code, followed by a one-line `info` description. If any `info` contains a newline, every list entry is promoted to its own heading with type/default metadata bullets and the description beneath it. The table renderer includes only the required, type, default and info columns that occur; when entries contain IDs only, it falls back to the compact bullet list. `required: true` is rendered as an unlabeled `*` marker.
+Options and Props share `markdownElements.optionsList` and `markdownElements.optionsTable`. `options.style` defaults to `table`; `props.style` defaults to `list`. Compact list entries render their ID, optional type and optional default, followed by a one-line `info` description. Structured `default` values are serialized with `serialize-javascript`; `defaultRaw` bypasses serialization and Markdown fencing entirely, so callers may provide their own formatting. `default` and `defaultRaw` are mutually exclusive. If any `info` contains a newline, every list entry is promoted to its own heading with type/default metadata bullets and the description beneath it. The table renderer includes only the required, type, default and info columns that occur; when entries contain IDs only, it falls back to the compact bullet list. `required: true` is rendered as an unlabeled `*` marker.
 
 The generation comment names documentation directories containing source files, joined with ` and `. It recognizes both configuration formats and custom file sources.

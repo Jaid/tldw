@@ -640,8 +640,8 @@ test('generation comment names the tldw source directory', async () => {
   await loadSections([readme])
   expect(readme.render()).toContain([
     '<!--',
-    `Readme generated with tldw v${context.tldwVersion} from ./docs/tldw`,
-    'https://github.com/Jaid/tldw',
+    `readme generated with tldw v${context.tldwVersion} from ./docs/tldw`,
+    'github.com/Jaid/tldw',
     '-->',
   ].join('\n'))
 })
@@ -653,7 +653,7 @@ test('generation comment joins multiple tldw source directories with and', async
   const context = await project.getContext()
   const readme = new ReadmeSection(context, [])
   await loadSections([readme])
-  expect(readme.render()).toContain(`Readme generated with tldw v${context.tldwVersion} from ./docs and ./docs/tldw`)
+  expect(readme.render()).toContain(`readme generated with tldw v${context.tldwVersion} from ./docs and ./docs/tldw`)
 })
 for (const banner of [false, true]) {
   test(`README keeps a single H1 with banner=${banner}`, async () => {
@@ -665,7 +665,7 @@ for (const banner of [false, true]) {
     await loadSections([readme])
     const output = readme.render()
     expect(output.match(/^# test-package$/gmu)).toHaveLength(1)
-    expect(output).toContain('Readme generated with tldw v')
+    expect(output).toContain('readme generated with tldw v')
     expect(output.endsWith('-->')).toBeTrue()
     expect(output.indexOf('<center>')).toBeLessThan(output.indexOf('# test-package'))
     if (banner) {

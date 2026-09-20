@@ -1,0 +1,1 @@
+Fixture architecture notes.

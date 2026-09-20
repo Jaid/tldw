@@ -48,10 +48,12 @@ test('large fixture exercises every built-in headed section and stays byte-for-b
     '## features',
     '## installation',
     '## warning',
+    '## minimal example',
     '## example',
     '## usage',
     '## advanced usage',
     '## options',
+    '## api',
     '## props',
     '## try in browser',
     '## cli usage',
@@ -62,6 +64,7 @@ test('large fixture exercises every built-in headed section and stays byte-for-b
     '## related',
     '## questions & answers',
     '## legal',
+    '## architecture',
     '## development',
     '## license',
   ])
@@ -86,6 +89,9 @@ test('large fixture exercises every built-in headed section and stays byte-for-b
     '### configuration sources',
     'TypeScript configuration overrides the YAML installation version setting',
     'Custom file sections are documentation, not scripts to execute.',
+    'const minimalFixture = true',
+    'Fixture API notes.',
+    'Fixture architecture notes.',
     'Project-level usage guidance',
     'tldw-specific usage guidance',
     'tsx usage',
@@ -102,7 +108,7 @@ test('large fixture exercises every built-in headed section and stays byte-for-b
     'document.createElement("script")',
     '### testing in development environment',
     '[MIT License]',
-    'Readme generated with tldw v',
+    'readme generated with tldw v',
   ]) {
     expect(readme).toContain(content)
   }

@@ -86,7 +86,7 @@ test('a full document renders from cached files without any project-folder reads
   await fs.remove(context.projectDirectory)
   const secondOutput: string = readme.render()
   expect(secondOutput).toBe(firstOutput)
-  for (const text of ['Loaded introduction.', 'const usage = 1', '{"usage":true}', 'const example = 2', 'Example result notes.', 'The result will be:', '`enabled` | `false`', 'Loaded environment variable.', 'Custom loaded license.', 'Readme generated with tldw v']) {
+  for (const text of ['Loaded introduction.', 'const usage = 1', '{"usage":true}', 'const example = 2', 'Example result notes.', 'The result will be:', '`enabled` | `false`', 'Loaded environment variable.', 'Custom loaded license.', 'readme generated with tldw v']) {
     expect(secondOutput).toContain(text)
   }
 })
