@@ -135,11 +135,17 @@ const renderOptionId = (option: TypedOption) => {
   const id = fencen.inline(formatPropertyId(option.id))
   return option.required ? `* ${id}` : id
 }
+const renderDefaultValue = (option: TypedOption) => {
+  const defaultValue = formatDefaultValue(option)
+  if (defaultValue === undefined) {
+    return ''
+  }
+  return Object.hasOwn(option, 'defaultRaw') ? defaultValue : fencen.inline(defaultValue)
+}
 const renderOptionDeclaration = (option: TypedOption) => {
   const type = option.type ? `: ${option.type}` : ''
-  const formattedDefault = formatDefaultValue(option)
-  const defaultValue = formattedDefault === undefined ? '' : ` = ${formattedDefault}`
-  const declaration = fencen.inline(`${formatPropertyId(option.id)}${type}${defaultValue}`)
+  const defaultValue = formatDefaultValue(option)
+  const declaration = Object.hasOwn(option, 'defaultRaw') && defaultValue !== undefined ? `${fencen.inline(`${formatPropertyId(option.id)}${type}`)} = ${defaultValue}` : fencen.inline(`${formatPropertyId(option.id)}${type}${defaultValue === undefined ? '' : ` = ${defaultValue}`}`)
   return option.required ? `* ${declaration}` : declaration
 }
 const getOptionsListComplexity = (options: ReadonlyArray<TypedOption>): FlexibleListComplexity => {
@@ -170,10 +176,11 @@ const optionsList = (entries: OptionsEntries): MarkdownMapContents => {
   }
   return {
     sections: Object.fromEntries(options.map(option => {
-      const defaultValue = formatDefaultValue(option)
+      const formattedDefault = formatDefaultValue(option)
+      const defaultValue = renderDefaultValue(option)
       const metadata = [
         option.type ? `- type ${fencen.inline(option.type)}` : '',
-        defaultValue === undefined ? '' : `- default ${fencen.inline(defaultValue)}`,
+        formattedDefault === undefined ? '' : `- default ${defaultValue}`,
       ].filter(Boolean)
       const content = [
         metadata.length ? flattenString.lines(metadata) : '',
@@ -216,10 +223,7 @@ const optionsTable = (entries: OptionsEntries): MarkdownMapContents => {
     }] : [],
     ...hasDefault ? [{
       header: 'default',
-      value: (option: TypedOption) => {
-        const defaultValue = formatDefaultValue(option)
-        return defaultValue === undefined ? '' : fencen.inline(defaultValue)
-      },
+      value: (option: TypedOption) => renderDefaultValue(option),
     }] : [],
     ...hasInfo ? [{
       header: 'info',

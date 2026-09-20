@@ -148,6 +148,32 @@ test('optionsList renders defaults and one-line descriptions compactly', () => {
     content: ["- `optionA: string = 'defaultValue'` – Description for optionA\n- `optionB` – Description for optionB\n- `optionC: number | boolean = true`"],
   })
 })
+test('defaultRaw renders without adding code fences', () => {
+  expect(markdownElements.optionsList([
+    {
+      id: 'plain',
+      defaultRaw: 'createDefault()',
+    },
+    {
+      id: 'fenced',
+      defaultRaw: '`createDefault()`',
+    },
+  ])).toEqual({
+    content: ['- `plain` = createDefault()\n- `fenced` = `createDefault()`'],
+  })
+  expect(markdownElements.optionsTable([
+    {
+      id: 'plain',
+      defaultRaw: 'createDefault()',
+    },
+  ])).toEqual({
+    content: [[
+      'option | default',
+      '--- | ---',
+      '`plain` | createDefault()',
+    ].join('\n')],
+  })
+})
 test('optionsList expands every entry when one description is multiline', () => {
   const contents = markdownElements.optionsList([
     {
@@ -185,6 +211,16 @@ test('optionsList expands every entry when one description is multiline', () => 
     '- type `number | boolean`',
     '- default `true`',
   ].join('\n'))
+})
+test('defaultRaw stays unfenced in expanded list metadata', () => {
+  const contents = markdownElements.optionsList([
+    {
+      id: 'factory',
+      defaultRaw: 'createDefault()',
+      info: 'Line one.\nLine two.',
+    },
+  ])
+  expect(MarkdownMap.render({props: contents}, {startDepth: 2})).toContain('- default createDefault()')
 })
 test('optionsTable renders ID-only entries as a compact bullet list', () => {
   expect(markdownElements.optionsTable([

@@ -504,7 +504,7 @@ test('Options renders empty and falsy defaults plus structured values', async ()
   expect(output).toContain('`zero` |  | `0`')
   expect(output).toContain('`nothing` |  | `null`')
   expect(output).toContain('`structured` | `Array<string>` | `{"enabled":true}` | <em>Details</em>')
-  expect(output).toContain('`raw` | `Factory` | `createDefault()`')
+  expect(output).toContain('`raw` | `Factory` | createDefault()')
 })
 test('Options merges action inputs and explicit option metadata', async () => {
   const project = await makeProject()
@@ -521,7 +521,7 @@ test('Options merges action inputs and explicit option metadata', async () => {
   await loadSections([section])
   const output = section.render()
   expect(output).toContain('option |  | default | info')
-  expect(output).toContain('`token` | * | `getToken()` | Explicit info.')
+  expect(output).toContain('`token` | * | getToken() | Explicit info.')
   expect(output).not.toContain('action default')
 })
 test('Environment Variables merges and sorts records without mutating configuration', async () => {
@@ -741,7 +741,7 @@ test('PropsSection renders configured typed props below Options', async () => {
     '- `optionB`',
     '- `optionC: number | boolean = true`',
     '- `optionD = {"enabled":true}`',
-    '- `optionE = createDefault()`',
+    '- `optionE` = createDefault()',
   ].join('\n'))
 })
 test('PropsSection flattens array property IDs', async () => {
