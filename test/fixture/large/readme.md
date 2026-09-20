@@ -253,7 +253,7 @@ Large tldw fixture is now stored in the global variable `@fixture/large`. The fo
 typeof @fixture/large.default
 ```
 
-## cli usage
+## CLI usage
 
 CLI instructions use the package’s `bin` map and a custom example command.
 

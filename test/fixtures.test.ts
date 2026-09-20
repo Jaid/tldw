@@ -56,7 +56,7 @@ test('large fixture exercises every built-in headed section and stays byte-for-b
     '## API',
     '## props',
     '## try in browser',
-    '## cli usage',
+    '## CLI usage',
     '## environment variables',
     '## notes',
     '## configuration guide',

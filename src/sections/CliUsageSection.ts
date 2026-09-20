@@ -38,4 +38,8 @@ export class CliUsageSection extends HeaderSection {
   override getPriority() {
     return 130
   }
+
+  override getTitle() {
+    return 'CLI usage'
+  }
 }

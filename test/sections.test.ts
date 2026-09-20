@@ -310,7 +310,7 @@ test('section priorities preserve the document order when registration order is 
     '## API',
     '## props',
     '## try in browser',
-    '## cli usage',
+    '## CLI usage',
     '## environment variables',
     '## notes',
     '## related',
@@ -551,7 +551,7 @@ test('CLI section renders explicit examples and the selected binary', async () =
   const section = new CliUsageSection(await project.getContext())
   await loadSections([section])
   const output = section.render()
-  expect(output).toContain('## cli usage')
+  expect(output).toContain('## CLI usage')
   expect(output).toContain('```sh\ntool --input example.txt\n```')
   expect(output).toContain('```sh\nbunx test-package\n```')
   expect(output).toContain('```sh\ntool --help\n```')
