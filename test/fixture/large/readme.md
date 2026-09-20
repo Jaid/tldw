@@ -206,7 +206,7 @@ option |  | type | default | info
 `retries` |  | `number` | `3`
 `verbose` |  | `boolean` | `false` | Enables verbose fixture output.
 
-## api
+## API
 
 Fixture API notes.
 
@@ -374,6 +374,6 @@ The license section combines this Markdown note with the normalized MIT license 
 Copyright © 2026 Large Fixture Authors \<fixture@example.com>
 
 <!--
-readme generated with tldw v9.4.1 from ./docs and ./docs/tldw
+readme generated with tldw v9.5.0 from ./docs and ./docs/tldw
 github.com/Jaid/tldw
 -->

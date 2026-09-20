@@ -6,4 +6,8 @@ export class ApiSection extends HeaderSection {
   override getPriority() {
     return 149
   }
+
+  override getTitle() {
+    return 'API'
+  }
 }

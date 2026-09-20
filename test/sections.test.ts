@@ -307,7 +307,7 @@ test('section priorities preserve the document order when registration order is 
     '## usage',
     '## advanced usage',
     '## options',
-    '## api',
+    '## API',
     '## props',
     '## try in browser',
     '## cli usage',

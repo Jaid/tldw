@@ -53,7 +53,7 @@ test('large fixture exercises every built-in headed section and stays byte-for-b
     '## usage',
     '## advanced usage',
     '## options',
-    '## api',
+    '## API',
     '## props',
     '## try in browser',
     '## cli usage',
