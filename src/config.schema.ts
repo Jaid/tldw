@@ -76,6 +76,8 @@ const installationSchema = zod.strictObject({
 // These keys also identify the built-in sections that can be disabled before loading.
 export const sectionSchemas = {
   advancedUsage: basicSection,
+  api: basicSection,
+  architecture: basicSection,
   banner: zod.union([section(bannerDefinitionSchema), zod.string().transform(text => bannerDefinitionSchema.parse({text}))]).default(false),
   cliUsage: section(zod.strictObject({
     binName: zod.union([zod.boolean(), nonemptyString]).optional(),

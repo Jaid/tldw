@@ -2,6 +2,8 @@ import type {Context} from '../lib/types.ts'
 import type {HeaderSection} from './base/HeaderSection.ts'
 
 import {AdvancedUsageSection} from './AdvancedUsageSection.ts'
+import {ApiSection} from './ApiSection.ts'
+import {ArchitectureSection} from './ArchitectureSection.ts'
 import {CliUsageSection} from './CliUsageSection.ts'
 import {DevelopmentSection} from './DevelopmentSection.ts'
 import {EnvironmentVariablesSection} from './EnvironmentVariablesSection.ts'
@@ -25,6 +27,8 @@ import {WarningSection} from './WarningSection.ts'
 // Registration order is independent of display priorities.
 export const sectionClasses = [
   AdvancedUsageSection,
+  ApiSection,
+  ArchitectureSection,
   CliUsageSection,
   DevelopmentSection,
   EnvironmentVariablesSection,
@@ -62,6 +66,8 @@ export const createSections = (context: Context): Array<HeaderSection> => {
 }
 
 export {AdvancedUsageSection} from './AdvancedUsageSection.ts'
+export {ApiSection} from './ApiSection.ts'
+export {ArchitectureSection} from './ArchitectureSection.ts'
 export {BannerSection} from './BannerSection.ts'
 export {HeaderSection} from './base/HeaderSection.ts'
 export {Section, sortSectionsByPriority} from './base/Section.ts'

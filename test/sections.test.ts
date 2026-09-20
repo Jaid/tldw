@@ -293,6 +293,7 @@ test('section priorities preserve the document order when registration order is 
     '## usage',
     '## advanced usage',
     '## options',
+    '## api',
     '## props',
     '## try in browser',
     '## cli usage',
@@ -301,9 +302,20 @@ test('section priorities preserve the document order when registration order is 
     '## related',
     '## questions & answers',
     '## legal',
+    '## architecture',
     '## development',
     '## license',
   ])
+})
+test('API and Architecture use their intended section priorities', async () => {
+  const project = await makeProject()
+  const context = await project.getContext()
+  const sections = createSections(context)
+  const priorities = Object.fromEntries(sections.map(section => [section.id, section.getPriority()]))
+  expect(priorities.options).toBeGreaterThan(priorities.api)
+  expect(priorities.api).toBeGreaterThan(priorities.props)
+  expect(priorities.architecture).toBeGreaterThan(priorities.development)
+  expect(priorities.development).toBeGreaterThan(priorities.license)
 })
 test('overriding getPriority repositions a headed section', async () => {
   class LateUsageSection extends UsageSection {
