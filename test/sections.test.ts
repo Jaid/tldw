@@ -21,6 +21,7 @@ import {FeaturesSection} from '../src/sections/FeaturesSection.ts'
 import {createSections, loadSections} from '../src/sections/index.ts'
 import {InstallationSection} from '../src/sections/InstallationSection.ts'
 import {LicenseSection} from '../src/sections/LicenseSection.ts'
+import {MinimalExampleSection} from '../src/sections/MinimalExampleSection.ts'
 import {NotesSection} from '../src/sections/NotesSection.ts'
 import {OptionsSection} from '../src/sections/OptionsSection.ts'
 import {PropsSection} from '../src/sections/PropsSection.ts'
@@ -301,6 +302,7 @@ test('section priorities preserve the document order when registration order is 
     '## features',
     '## installation',
     '## warning',
+    '## minimal example',
     '## example',
     '## usage',
     '## advanced usage',
@@ -606,6 +608,21 @@ test('Usage owns result-only output and variable-result phrasing', async () => {
   const section = new UsageSection(await project.getContext())
   await loadSections([section])
   expect(section.render()).toBe('## usage\n\nThe result will be something like:\n\n```js\n42\n```')
+})
+test('MinimalExampleSection renders code immediately above ExampleSection', async () => {
+  const project = await makeProject()
+  await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.md'), 'Minimal introduction.')
+  await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ts'), 'const minimal = true')
+  await fs.outputFile(path.join(project.args.configDirectory, 'example.ts'), 'const full = true')
+  const context = await project.getContext()
+  const minimal = new MinimalExampleSection(context)
+  const example = new ExampleSection(context)
+  const readme = new ReadmeSection(context, [example, minimal])
+  await loadSections([readme])
+  const output = readme.render()
+  expect(minimal.getPriority()).toBeGreaterThan(example.getPriority())
+  expect(output).toContain('## minimal example\n\nMinimal introduction.\n\n```ts\nconst minimal = true\n```')
+  expect(output.indexOf('## minimal example')).toBeLessThan(output.indexOf('## example'))
 })
 test('Result Markdown is inline under Example instead of getting a Result heading', async () => {
   const project = await makeProject()

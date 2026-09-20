@@ -15,6 +15,7 @@ import {InstallationSection} from './InstallationSection.ts'
 import {IntroSection} from './IntroSection.ts'
 import {LegalSection} from './LegalSection.ts'
 import {LicenseSection} from './LicenseSection.ts'
+import {MinimalExampleSection} from './MinimalExampleSection.ts'
 import {NotesSection} from './NotesSection.ts'
 import {OptionsSection} from './OptionsSection.ts'
 import {PropsSection} from './PropsSection.ts'
@@ -39,6 +40,7 @@ export const sectionClasses = [
   IntroSection,
   LegalSection,
   LicenseSection,
+  MinimalExampleSection,
   NotesSection,
   OptionsSection,
   PropsSection,
@@ -88,6 +90,7 @@ export {IntroSection} from './IntroSection.ts'
 export {LegalSection} from './LegalSection.ts'
 export {LicenseSection} from './LicenseSection.ts'
 export {loadSections} from './loadSections.ts'
+export {MinimalExampleSection} from './MinimalExampleSection.ts'
 export {NotesSection} from './NotesSection.ts'
 export {OptionsSection} from './OptionsSection.ts'
 export {PropsSection} from './PropsSection.ts'

@@ -110,6 +110,7 @@ export const sectionSchemas = {
   intro: basicSection,
   legal: basicSection,
   license: basicSection,
+  minimalExample: basicSection,
   notes: basicSection,
   options: section(zod.strictObject({
     style: optionsStyleSchema.default('table'),

@@ -18,6 +18,7 @@ const directSourcePatterns = [
   'usageOptions.yml',
   ...supportedCodeExtensions.flatMap(extension => [
     `example.${extension}`,
+    `minimalExample.${extension}`,
     `result.${extension}`,
     `result*.${extension}`,
     `usage.${extension}`,
