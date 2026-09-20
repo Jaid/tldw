@@ -31,6 +31,12 @@ This introductory section uses the standard HeaderSection Markdown loading behav
 
 ![02 settings view](docs/tldw/screenshots/details/02-settings%20view.svg)
 
+## minimal example
+
+```ts
+const minimalFixture = true
+```
+
 ## features
 
 Feature metadata comes from `package.json#features`, while this paragraph comes from the ordinary section Markdown loader.
@@ -103,12 +109,6 @@ npm install --save-dev @Jaid/tldw-large-fixture@^9.8.7
 
 > [!WARNING]
 > This fixture is intentionally dense. It exists to exercise rendering paths rather than document a real package.
-
-## minimal example
-
-```ts
-const minimalFixture = true
-```
 
 ## example
 
@@ -374,6 +374,6 @@ The license section combines this Markdown note with the normalized MIT license 
 Copyright © 2026 Large Fixture Authors \<fixture@example.com>
 
 <!--
-readme generated with tldw v9.5.0 from ./docs and ./docs/tldw
+readme generated with tldw v9.6.0 from ./docs and ./docs/tldw
 github.com/Jaid/tldw
 -->

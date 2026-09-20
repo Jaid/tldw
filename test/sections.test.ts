@@ -299,10 +299,10 @@ test('section priorities preserve the document order when registration order is 
   expect(output.match(/^## .+$/gmu)).toEqual([
     '## intro',
     '## screenshots',
+    '## minimal example',
     '## features',
     '## installation',
     '## warning',
-    '## minimal example',
     '## example',
     '## usage',
     '## advanced usage',
@@ -609,20 +609,22 @@ test('Usage owns result-only output and variable-result phrasing', async () => {
   await loadSections([section])
   expect(section.render()).toBe('## usage\n\nThe result will be something like:\n\n```js\n42\n```')
 })
-test('MinimalExampleSection renders code immediately above ExampleSection', async () => {
+test('MinimalExampleSection renders code above FeaturesSection', async () => {
   const project = await makeProject()
   await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.md'), 'Minimal introduction.')
   await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ts'), 'const minimal = true')
-  await fs.outputFile(path.join(project.args.configDirectory, 'example.ts'), 'const full = true')
+  await fs.outputFile(path.join(project.args.configDirectory, 'features.md'), 'Feature details.')
   const context = await project.getContext()
   const minimal = new MinimalExampleSection(context)
-  const example = new ExampleSection(context)
-  const readme = new ReadmeSection(context, [example, minimal])
+  const features = new FeaturesSection(context)
+  const readme = new ReadmeSection(context, [features, minimal])
   await loadSections([readme])
   const output = readme.render()
-  expect(minimal.getPriority()).toBeGreaterThan(example.getPriority())
+  expect(minimal.getPriority()).toBeGreaterThan(features.getPriority())
+  const screenshots = new ScreenshotsSection(context)
+  expect(minimal.getPriority()).toBeLessThan(screenshots.getPriority())
   expect(output).toContain('## minimal example\n\nMinimal introduction.\n\n```ts\nconst minimal = true\n```')
-  expect(output.indexOf('## minimal example')).toBeLessThan(output.indexOf('## example'))
+  expect(output.indexOf('## minimal example')).toBeLessThan(output.indexOf('## features'))
 })
 test('Result Markdown is inline under Example instead of getting a Result heading', async () => {
   const project = await makeProject()

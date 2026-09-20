@@ -45,10 +45,10 @@ test('large fixture exercises every built-in headed section and stays byte-for-b
   expect(readme.match(/^## .+$/gmu)).toEqual([
     '## intro',
     '## screenshots',
+    '## minimal example',
     '## features',
     '## installation',
     '## warning',
-    '## minimal example',
     '## example',
     '## usage',
     '## advanced usage',

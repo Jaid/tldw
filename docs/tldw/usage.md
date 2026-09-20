@@ -99,7 +99,7 @@ Sections are ordered by `getPriority()`. The default is `100` and higher priorit
 
 `docs/tldw/envVars.yml` supplements `environmentVariables.values`. Values in the YAML file win when a variable occurs in both places. `docs/tldw/usageOptions.yml` describes option types, defaults and explanations, supplemented by inputs from the project’s `action.yml`.
 
-Minimal-example source is loaded from the first existing `docs/tldw/minimalExample.{ts,tsx,js,jsx}` and renders immediately above Example. Full example source is loaded from the first existing `docs/tldw/example.{ts,tsx,js,jsx}`. Named example results use `docs/tldw/result*.{ts,tsx,js,jsx}`. The unqualified `result.{ts,tsx,js,jsx}` belongs below Usage.
+Minimal-example source is loaded from the first existing `docs/tldw/minimalExample.{ts,tsx,js,jsx}` and renders immediately above Features. Full example source is loaded from the first existing `docs/tldw/example.{ts,tsx,js,jsx}`. Named example results use `docs/tldw/result*.{ts,tsx,js,jsx}`. The unqualified `result.{ts,tsx,js,jsx}` belongs below Usage.
 
 Usage also collects all `usage.{ts,tsx,js,jsx}` files and all files matching `usage/*.*`, both in `docs` and in `docs/tldw`. Markdown files remain Markdown; other files become safe code fences.
 

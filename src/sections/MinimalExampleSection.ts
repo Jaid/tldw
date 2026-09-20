@@ -24,7 +24,7 @@ export class MinimalExampleSection extends HeaderSection {
   }
 
   override getPriority() {
-    return 181
+    return 211
   }
 
   override async load(): Promise<SectionLoadResult> {
