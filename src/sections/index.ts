@@ -23,6 +23,7 @@ import {RelatedSection} from './RelatedSection.ts'
 import {ScreenshotsSection} from './ScreenshotsSection.ts'
 import {ThirdPartiesSection} from './ThirdPartiesSection.ts'
 import {TryInBrowserSection} from './TryInBrowserSection.ts'
+import {UrlQueryParametersSection} from './UrlQueryParametersSection.ts'
 import {UsageSection} from './UsageSection.ts'
 import {WarningSection} from './WarningSection.ts'
 
@@ -49,6 +50,7 @@ export const sectionClasses = [
   ScreenshotsSection,
   ThirdPartiesSection,
   TryInBrowserSection,
+  UrlQueryParametersSection,
   UsageSection,
   WarningSection,
 ] as const
@@ -103,6 +105,7 @@ export {ScreenshotsSection} from './ScreenshotsSection.ts'
 export {ShieldsSection} from './ShieldsSection.ts'
 export {ThirdPartiesSection} from './ThirdPartiesSection.ts'
 export {TryInBrowserSection} from './TryInBrowserSection.ts'
+export {UrlQueryParametersSection} from './UrlQueryParametersSection.ts'
 export {UsageResultSection} from './UsageResultSection.ts'
 export {UsageSection} from './UsageSection.ts'
 

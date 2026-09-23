@@ -112,7 +112,7 @@ Custom section titles are derived from their IDs, such as `sampleConfig → samp
 
 Section Markdown can live directly in `docs` or in `docs/tldw`. If both files exist, direct `docs` content is rendered first. This discovery continues alongside custom file-backed sections.
 
-Available headed IDs are `intro`, `screenshots`, `features`, `installation`, `warning`, `minimalExample`, `example`, `usage`, `advancedUsage`, `options`, `api`, `props`, `tryInBrowser`, `cliUsage`, `environmentVariables`, `notes`, `related`, `faq`, `legal`, `architecture`, `development` and `license`.
+Available headed IDs are `intro`, `screenshots`, `features`, `installation`, `warning`, `minimalExample`, `example`, `usage`, `advancedUsage`, `options`, `api`, `props`, `tryInBrowser`, `cliUsage`, `urlQueryParameters`, `environmentVariables`, `notes`, `related`, `faq`, `legal`, `architecture`, `development` and `license`.
 
 `description` is inline beneath the README title and `result` is inline within Example. Headings within fragments are relative: their shallowest heading is placed directly beneath the containing section while deeper headings retain their relative hierarchy. Heading-like text inside fenced code is unchanged.
 

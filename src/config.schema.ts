@@ -142,6 +142,7 @@ export const sectionSchemas = {
   })).prefault({}),
   thirdParties: basicSection,
   tryInBrowser: section(zod.strictObject({})).optional(),
+  urlQueryParameters: basicSection,
   usage: section(zod.strictObject({
     resultMayVary: zod.boolean().default(false),
   })).prefault({}),

@@ -31,6 +31,7 @@ import {ScreenshotsSection} from '../src/sections/ScreenshotsSection.ts'
 import {ShieldsSection} from '../src/sections/ShieldsSection.ts'
 import {ThirdPartiesSection} from '../src/sections/ThirdPartiesSection.ts'
 import {TryInBrowserSection} from '../src/sections/TryInBrowserSection.ts'
+import {UrlQueryParametersSection} from '../src/sections/UrlQueryParametersSection.ts'
 import {UsageSection} from '../src/sections/UsageSection.ts'
 
 const directories: Array<string> = []
@@ -348,6 +349,7 @@ test('section priorities preserve the document order when registration order is 
     '## props',
     '## try in browser',
     '## CLI usage',
+    '## URL query parameters',
     '## environment variables',
     '## notes',
     '## related',
@@ -358,6 +360,16 @@ test('section priorities preserve the document order when registration order is 
     '## license',
     '## third parties',
   ])
+})
+test('URL query parameters renders immediately above Environment Variables', async () => {
+  const project = await makeProject()
+  const context = await project.getContext()
+  const urlQueryParameters = new UrlQueryParametersSection(context)
+  const environmentVariables = new EnvironmentVariablesSection(context)
+  const cliUsage = new CliUsageSection(context)
+  expect(urlQueryParameters.getTitle()).toBe('URL query parameters')
+  expect(urlQueryParameters.getPriority()).toBeGreaterThan(environmentVariables.getPriority())
+  expect(urlQueryParameters.getPriority()).toBeLessThan(cliUsage.getPriority())
 })
 test('API and Architecture use their intended section priorities', async () => {
   const project = await makeProject()
