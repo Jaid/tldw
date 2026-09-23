@@ -135,6 +135,7 @@ export const sectionSchemas = {
   related: basicSection,
   result: basicSection,
   screenshots: basicSection,
+  setup: basicSection,
   shields: section(zod.strictObject({
     items: shieldsListSchema.nullable().default(null),
     exclude: stringList.default([]),

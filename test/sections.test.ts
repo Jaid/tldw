@@ -28,11 +28,13 @@ import {PageSection} from '../src/sections/PageSection.ts'
 import {PropsSection} from '../src/sections/PropsSection.ts'
 import {ReadmeSection} from '../src/sections/ReadmeSection.ts'
 import {ScreenshotsSection} from '../src/sections/ScreenshotsSection.ts'
+import {SetupSection} from '../src/sections/SetupSection.ts'
 import {ShieldsSection} from '../src/sections/ShieldsSection.ts'
 import {ThirdPartiesSection} from '../src/sections/ThirdPartiesSection.ts'
 import {TryInBrowserSection} from '../src/sections/TryInBrowserSection.ts'
 import {UrlQueryParametersSection} from '../src/sections/UrlQueryParametersSection.ts'
 import {UsageSection} from '../src/sections/UsageSection.ts'
+import {WarningSection} from '../src/sections/WarningSection.ts'
 
 const directories: Array<string> = []
 const makeDirectory = async () => {
@@ -340,6 +342,7 @@ test('section priorities preserve the document order when registration order is 
     '## minimal example',
     '## features',
     '## installation',
+    '## setup',
     '## warning',
     '## example',
     '## usage',
@@ -360,6 +363,15 @@ test('section priorities preserve the document order when registration order is 
     '## license',
     '## third parties',
   ])
+})
+test('Setup renders immediately below Installation', async () => {
+  const project = await makeProject()
+  const context = await project.getContext()
+  const installation = new InstallationSection(context)
+  const setup = new SetupSection(context)
+  const warning = new WarningSection(context)
+  expect(setup.getPriority()).toBeLessThan(installation.getPriority())
+  expect(setup.getPriority()).toBeGreaterThan(warning.getPriority())
 })
 test('URL query parameters renders immediately above Environment Variables', async () => {
   const project = await makeProject()
