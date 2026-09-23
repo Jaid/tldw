@@ -132,6 +132,7 @@ export const readOptionalTerminalScreenshot = async (context: Context, stem: str
     tabTitle: context.pkg.name,
   } : undefined
   const svg = vectorizeTerminal({
+    columns: context.config.tldw.terminal.columns,
     content: terminalContent,
     decoration,
     rows: Math.max(1, terminalContent.replaceAll(/\r\n?/gu, '\n').split('\n').length),

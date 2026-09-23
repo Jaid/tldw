@@ -47,9 +47,10 @@ tldw:
   needsNodeRuntime: true
   svgStrategy: file
   terminal:
+    columns: 120
     decoration: false
     prompt: false
-    width: false
+    width: 768
 
 troubleshooting: ./troubleshooting.md
 sections:
@@ -96,7 +97,7 @@ Built-in sections have top-level configuration keys matching their IDs. `false` 
 
 `development` defaults to `false`. `development: true` or `development: {}` enables the generated development commands. A conventional `development.md` also enables the section when the key is omitted, while explicit `development: false` still suppresses it.
 
-Document-wide settings live under `tldw`. `tldw.needsNodeRuntime` is shared by Installation and TryInBrowser; when it is `false`, browser instructions are automatically enabled unless explicitly disabled. `tldw.maxBlankLines` is a nonnegative integer and defaults to `1`. `tldw.svgStrategy` controls generated SVG output and defaults to `file`; `bundleSvg` inserts raw SVG markup and `bundleImg` inserts an `<img>` with a base64 data URL. `tldw.terminal.prompt` defaults to `false`; `true` prepends an automatically derived prompt such as `> bun ./minimalExample.ts` to generated terminal screenshots, with `> ` rendered in green and the script path rendered in blue, while a string is inserted verbatim as the prompt line. `tldw.terminal.decoration` defaults to `false`; `windowsTerminal` adds Windows Terminal chrome and uses the current package name as the tab title. `tldw.terminal.width` defaults to `false`; a positive integer limits the displayed terminal image width in pixels without changing its columns or generated SVG grid.
+Document-wide settings live under `tldw`. `tldw.needsNodeRuntime` is shared by Installation and TryInBrowser; when it is `false`, browser instructions are automatically enabled unless explicitly disabled. `tldw.maxBlankLines` is a nonnegative integer and defaults to `1`. `tldw.svgStrategy` controls generated SVG output and defaults to `file`; `bundleSvg` inserts raw SVG markup and `bundleImg` inserts an `<img>` with a base64 data URL. `tldw.terminal.prompt` defaults to `false`; `true` prepends an automatically derived prompt such as `> bun ./minimalExample.ts` to generated terminal screenshots, with `> ` rendered in green and the script path rendered in blue, while a string is inserted verbatim as the prompt line. `tldw.terminal.columns` defaults to `120` and controls the generated terminal grid width. `tldw.terminal.decoration` defaults to `false`; `windowsTerminal` adds Windows Terminal chrome and uses the current package name as the tab title. `tldw.terminal.width` defaults to `768`; a positive integer limits the displayed terminal image width in pixels without changing its columns or generated SVG grid, while `false` disables the display-width limit.
 
 Previous flat options must move into their owning section: `packageManagers` becomes `installation.packageManagers`, `versionInInstallation` becomes `installation.version`, `personal` becomes `description.personal`, `excludeShields` becomes `shields.exclude`, `binExample` becomes `cliUsage.example` and `renderComment` becomes `generationComment`. Installation modes `prod` and `dev` are now `production` and `development`.
 

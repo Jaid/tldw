@@ -691,7 +691,7 @@ test('matching ANSI logs generate referenced terminal screenshots directly below
   await loadSections([example, minimalExample, usage])
   const exampleOutput = example.render() ?? ''
   const exampleCode = '```ts\nconsole.log("example")\n```'
-  expect(exampleOutput).toContain(`${exampleCode}\n\n![Terminal screenshot](docs/tldw/example.ansi.svg)`)
+  expect(exampleOutput).toContain(`${exampleCode}\n\n<img src="docs/tldw/example.ansi.svg" alt="Terminal screenshot" width="768"/>`)
   const exampleSvg = await Bun.file(path.join(project.args.configDirectory, 'example.ansi.svg')).text()
   expect(exampleSvg).toContain('example&#xA0;output')
   expect(exampleSvg).toContain('height="360"')
@@ -700,12 +700,12 @@ test('matching ANSI logs generate referenced terminal screenshots directly below
   expect(exampleSvg).toContain('fill="#0037da">./example.ts</text>')
   const minimalOutput = minimalExample.render() ?? ''
   const minimalCode = '```ts\nconsole.log("minimal")\n```'
-  expect(minimalOutput).toContain(`${minimalCode}\n\n![Terminal screenshot](docs/tldw/minimalExample.ansi.svg)`)
+  expect(minimalOutput).toContain(`${minimalCode}\n\n<img src="docs/tldw/minimalExample.ansi.svg" alt="Terminal screenshot" width="768"/>`)
   const usageOutput = usage.render() ?? ''
   const directCode = '```ts\nconsole.log("direct usage")\n```'
   const basicCode = '```ts\nconsole.log("basic usage")\n```'
-  expect(usageOutput).toContain(`${directCode}\n\n![Terminal screenshot](docs/tldw/usage.ansi.svg)`)
-  expect(usageOutput).toContain(`${basicCode}\n\n![Terminal screenshot](docs/tldw/usage/basic.ansi.svg)`)
+  expect(usageOutput).toContain(`${directCode}\n\n<img src="docs/tldw/usage.ansi.svg" alt="Terminal screenshot" width="768"/>`)
+  expect(usageOutput).toContain(`${basicCode}\n\n<img src="docs/tldw/usage/basic.ansi.svg" alt="Terminal screenshot" width="768"/>`)
   expect(usageOutput).toContain('```ts\nconsole.log("unpaired")\n```')
   expect(usageOutput).not.toContain('orphan output')
   expect(usageOutput).not.toContain('```log')
@@ -735,7 +735,7 @@ for (const svgStrategy of ['bundleSvg', 'bundleImg'] as const) {
     if (svgStrategy === 'bundleSvg') {
       expect(output.match(/<svg /gu)?.length).toBeGreaterThanOrEqual(3)
       expect(output).toContain('data-terminal="true"')
-      expect(output).toContain('width="800" height="34.973" viewBox="0 0 3660 160"')
+      expect(output).toContain('width="800" height="23.443" viewBox="0 0 5460 160"')
     } else {
       expect(output.match(/<img src="data:image\/svg\+xml;base64,/gu)).toHaveLength(2)
       expect(output).toContain('alt="Terminal screenshot" width="800"/>')
@@ -755,7 +755,22 @@ test('terminal width limits displayed file images without changing SVG geometry'
   await loadSections([minimalExample])
   expect(minimalExample.render()).toContain('<img src="docs/tldw/minimalExample.ansi.svg" alt="Terminal screenshot" width="800"/>')
   const svg = await Bun.file(path.join(project.args.configDirectory, 'minimalExample.ansi.svg')).text()
-  expect(svg).toContain('width="3660" height="160"')
+  expect(svg).toContain('width="5460" height="160"')
+})
+test('terminal columns control SVG geometry and width=false disables the display limit', async () => {
+  const project = await makeProject({
+    tldw: {terminal: {
+      columns: 90,
+      width: false,
+    }},
+  })
+  await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ts'), 'console.log("minimal")')
+  await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ansi.log'), 'minimal output')
+  const minimalExample = new MinimalExampleSection(await project.getContext())
+  await loadSections([minimalExample])
+  expect(minimalExample.render()).toContain('![Terminal screenshot](docs/tldw/minimalExample.ansi.svg)')
+  const svg = await Bun.file(path.join(project.args.configDirectory, 'minimalExample.ansi.svg')).text()
+  expect(svg).toContain('width="4110" height="160"')
 })
 test('terminal decoration renders Windows Terminal chrome with the package name', async () => {
   const project = await makeProject({

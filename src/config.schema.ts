@@ -151,9 +151,10 @@ export const sectionSchemas = {
 }
 
 const terminalSchema = zod.strictObject({
+  columns: zod.int().positive().default(120),
   decoration: zod.union([zod.literal('windowsTerminal'), zod.literal(false)]).default(false),
   prompt: zod.union([zod.boolean(), zod.string()]).default(false),
-  width: zod.union([zod.int().positive(), zod.literal(false)]).default(false),
+  width: zod.union([zod.int().positive(), zod.literal(false)]).default(768),
 })
 
 export const tldwSchema = zod.strictObject({

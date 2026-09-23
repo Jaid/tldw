@@ -118,7 +118,7 @@ test('large fixture exercises every built-in headed section and stays byte-for-b
   expect(await Bun.file(path.join(fixtureDirectory, 'docs', 'tldw', 'banner.svg')).text()).toContain('<svg')
   const terminalSvg = await Bun.file(path.join(fixtureDirectory, 'docs', 'tldw', 'minimalExample.ansi.svg')).text()
   expect(terminalSvg).toContain('data-terminal=\"true\"')
-  expect(terminalSvg).toContain('width=\"3660\" height=\"860\"')
+  expect(terminalSvg).toContain('width=\"5460\" height=\"860\"')
   expect(terminalSvg).toContain('fill=\"#13a10e\">&gt;&#xA0;</text>')
   expect(terminalSvg).toContain('bun&#xA0;')
   expect(terminalSvg).toContain('fill=\"#0037da\">./minimalExample.ts</text>')
