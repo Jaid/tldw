@@ -24,10 +24,12 @@ import {LicenseSection} from '../src/sections/LicenseSection.ts'
 import {MinimalExampleSection} from '../src/sections/MinimalExampleSection.ts'
 import {NotesSection} from '../src/sections/NotesSection.ts'
 import {OptionsSection} from '../src/sections/OptionsSection.ts'
+import {PageSection} from '../src/sections/PageSection.ts'
 import {PropsSection} from '../src/sections/PropsSection.ts'
 import {ReadmeSection} from '../src/sections/ReadmeSection.ts'
 import {ScreenshotsSection} from '../src/sections/ScreenshotsSection.ts'
 import {ShieldsSection} from '../src/sections/ShieldsSection.ts'
+import {ThirdPartiesSection} from '../src/sections/ThirdPartiesSection.ts'
 import {TryInBrowserSection} from '../src/sections/TryInBrowserSection.ts'
 import {UsageSection} from '../src/sections/UsageSection.ts'
 
@@ -93,6 +95,41 @@ test('Description is an inline block and merges metadata with both Markdown loca
   expect(output).toContain('Shared description.\n\nREADME description.')
   expect(output).toContain('View online at [example.com](https://example.com/app).')
   expect(output).not.toContain('## description')
+})
+test('PageSection renders one or more centered host links above Description', async () => {
+  const project = await makeProject({
+    page: {
+      url: [
+        'https://example.com/path',
+        'https://docs.example.org/guide',
+      ],
+    },
+  })
+  const context = await project.getContext()
+  const section = new PageSection(context)
+  await loadSections([section])
+  expect(section).toBeInstanceOf(Section)
+  expect(section).not.toBeInstanceOf(HeaderSection)
+  expect(section.getPriority()).toBe(110)
+  expect(section.render()).toBe('<center><a href="https://example.com/path">example.com</a> | <a href="https://docs.example.org/guide">docs.example.org</a></center>')
+  const readme = new ReadmeSection(context, [])
+  await loadSections([readme])
+  const output = readme.render()
+  expect(output.indexOf('<center><a href="https://example.com/path">')).toBeLessThan(output.indexOf('Package description.'))
+})
+test('ThirdPartiesSection renders below License', async () => {
+  const project = await makeProject()
+  await fs.outputFile(path.join(project.args.configDirectory, 'license.md'), 'License content.')
+  await fs.outputFile(path.join(project.args.configDirectory, 'thirdParties.md'), 'Third-party content.')
+  const context = await project.getContext()
+  const license = new LicenseSection(context)
+  const thirdParties = new ThirdPartiesSection(context)
+  await loadSections([license, thirdParties])
+  expect(thirdParties.getPriority()).toBeLessThan(license.getPriority())
+  const readme = new ReadmeSection(context, [thirdParties, license])
+  await loadSections([readme])
+  const output = readme.render()
+  expect(output.indexOf('## license')).toBeLessThan(output.indexOf('## third parties'))
 })
 test('Section defaults to priority 100 and HeaderSection renders one H2', async () => {
   const project = await makeProject()
@@ -319,6 +356,7 @@ test('section priorities preserve the document order when registration order is 
     '## architecture',
     '## development',
     '## license',
+    '## third parties',
   ])
 })
 test('API and Architecture use their intended section priorities', async () => {
@@ -609,6 +647,83 @@ test('Usage owns result-only output and variable-result phrasing', async () => {
   await loadSections([section])
   expect(section.render()).toBe('## usage\n\nThe result will be something like:\n\n```js\n42\n```')
 })
+test('matching ANSI logs generate referenced terminal screenshots directly below scripts', async () => {
+  const project = await makeProject()
+  const usageDirectory = path.join(project.args.configDirectory, 'usage')
+  await fs.outputFile(path.join(project.args.configDirectory, 'example.ts'), 'console.log("example")')
+  await fs.outputFile(path.join(project.args.configDirectory, 'example.ansi.log'), '\u{1B}[32mexample output\u{1B}[0m\nsecond line')
+  await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ts'), 'console.log("minimal")')
+  await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ansi.log'), 'minimal output')
+  await fs.outputFile(path.join(project.args.configDirectory, 'usage.ts'), 'console.log("direct usage")')
+  await fs.outputFile(path.join(project.args.configDirectory, 'usage.ansi.log'), 'direct usage output')
+  await fs.outputFile(path.join(usageDirectory, 'basic.ts'), 'console.log("basic usage")')
+  await fs.outputFile(path.join(usageDirectory, 'basic.ansi.log'), '\u{1B}[36mbasic output\u{1B}[0m')
+  await fs.outputFile(path.join(usageDirectory, 'unpaired.ts'), 'console.log("unpaired")')
+  await fs.outputFile(path.join(usageDirectory, 'orphan.ansi.log'), 'orphan output')
+  const context = await project.getContext()
+  const example = new ExampleSection(context)
+  const minimalExample = new MinimalExampleSection(context)
+  const usage = new UsageSection(context)
+  await loadSections([example, minimalExample, usage])
+  const exampleOutput = example.render() ?? ''
+  const exampleCode = '```ts\nconsole.log("example")\n```'
+  expect(exampleOutput).toContain(`${exampleCode}\n\n![Terminal screenshot](docs/tldw/example.ansi.svg)`)
+  const exampleSvg = await Bun.file(path.join(project.args.configDirectory, 'example.ansi.svg')).text()
+  expect(exampleSvg).toContain('example&#xA0;output')
+  expect(exampleSvg).toContain('height="260"')
+  const minimalOutput = minimalExample.render() ?? ''
+  const minimalCode = '```ts\nconsole.log("minimal")\n```'
+  expect(minimalOutput).toContain(`${minimalCode}\n\n![Terminal screenshot](docs/tldw/minimalExample.ansi.svg)`)
+  const usageOutput = usage.render() ?? ''
+  const directCode = '```ts\nconsole.log("direct usage")\n```'
+  const basicCode = '```ts\nconsole.log("basic usage")\n```'
+  expect(usageOutput).toContain(`${directCode}\n\n![Terminal screenshot](docs/tldw/usage.ansi.svg)`)
+  expect(usageOutput).toContain(`${basicCode}\n\n![Terminal screenshot](docs/tldw/usage/basic.ansi.svg)`)
+  expect(usageOutput).toContain('```ts\nconsole.log("unpaired")\n```')
+  expect(usageOutput).not.toContain('orphan output')
+  expect(usageOutput).not.toContain('```log')
+  expect(await fs.pathExists(path.join(usageDirectory, 'orphan.ansi.svg'))).toBeFalse()
+  const nestedSvg = await Bun.file(path.join(usageDirectory, 'basic.ansi.svg')).text()
+  expect(nestedSvg).toContain('basic&#xA0;output')
+  await loadSections([usage])
+  expect(usage.render()).toBe(usageOutput)
+})
+for (const svgStrategy of ['bundleSvg', 'bundleImg'] as const) {
+  test(`generated SVGs support ${svgStrategy}`, async () => {
+    const project = await makeProject({
+      banner: true,
+      tldw: {svgStrategy},
+    })
+    await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ts'), 'console.log("minimal")')
+    await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ansi.log'), 'minimal output')
+    const context = await project.getContext()
+    const minimal = new MinimalExampleSection(context)
+    const readme = new ReadmeSection(context, [minimal])
+    await loadSections([readme])
+    const output = readme.render()
+    if (svgStrategy === 'bundleSvg') {
+      expect(output.match(/<svg /gu)?.length).toBeGreaterThanOrEqual(3)
+      expect(output).toContain('data-terminal="true"')
+    } else {
+      expect(output.match(/<img src="data:image\/svg\+xml;base64,/gu)).toHaveLength(2)
+      expect(output).toContain('alt="Terminal screenshot"')
+      expect(output).toContain('alt="Banner"')
+    }
+    expect(await fs.pathExists(path.join(project.args.configDirectory, 'banner.svg'))).toBeFalse()
+    expect(await fs.pathExists(path.join(project.args.configDirectory, 'minimalExample.ansi.svg'))).toBeFalse()
+  })
+}
+test('orphan top-level ANSI logs do not generate SVG files', async () => {
+  const project = await makeProject()
+  await fs.outputFile(path.join(project.args.configDirectory, 'example.ansi.log'), 'orphan example')
+  await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ansi.log'), 'orphan minimal')
+  const context = await project.getContext()
+  const example = new ExampleSection(context)
+  const minimalExample = new MinimalExampleSection(context)
+  await loadSections([example, minimalExample])
+  expect(await fs.pathExists(path.join(project.args.configDirectory, 'example.ansi.svg'))).toBeFalse()
+  expect(await fs.pathExists(path.join(project.args.configDirectory, 'minimalExample.ansi.svg'))).toBeFalse()
+})
 test('MinimalExampleSection renders code above FeaturesSection', async () => {
   const project = await makeProject()
   await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.md'), 'Minimal introduction.')
@@ -671,7 +786,8 @@ for (const banner of [false, true]) {
     expect(output.endsWith('-->')).toBeTrue()
     expect(output.indexOf('<center>')).toBeLessThan(output.indexOf('# test-package'))
     if (banner) {
-      expect(output.indexOf('<svg')).toBeLessThan(output.indexOf('<center>'))
+      expect(output.indexOf('![Banner](docs/tldw/banner.svg)')).toBeLessThan(output.indexOf('<center>'))
+      expect(await fs.pathExists(path.join(project.args.configDirectory, 'banner.svg'))).toBeTrue()
     } else {
       expect(output.startsWith('<center>')).toBeTrue()
     }

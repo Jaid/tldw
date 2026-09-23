@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="3660" height="560" viewBox="0 0 3660 560" role="img" aria-label="Terminal screenshot">
+<title>Terminal screenshot</title>
+<rect width="3660" height="560" fill="#000000"/>
+<svg x="30" y="30" width="3600" height="500" viewBox="30 30 3600 500" overflow="hidden" data-terminal="true">
+<g data-layer="backgrounds"></g>
+<g data-layer="text" font-family="JetBrains Mono, monospace" font-size="75" font-weight="400" font-variant-ligatures="none" style="font-feature-settings: 'liga' 0, 'calt' 0; white-space: pre" xml:space="preserve"><text x="30" y="106" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc">{</text><text x="30" y="206" textLength="720" lengthAdjust="spacingAndGlyphs" fill="#cccccc">&#xA0;&#xA0;minimalFixture</text><text x="750" y="206" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc" opacity="0.5">:</text><text x="840" y="206" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c19c00">true</text><text x="1020" y="206" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc" opacity="0.5">,</text><text x="30" y="306" textLength="360" lengthAdjust="spacingAndGlyphs" fill="#cccccc">&#xA0;&#xA0;status</text><text x="390" y="306" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc" opacity="0.5">:</text><text x="480" y="306" textLength="315" lengthAdjust="spacingAndGlyphs" fill="#13a10e">&quot;ready&quot;</text><text x="795" y="306" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc" opacity="0.5">,</text><text x="30" y="406" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc">}</text></g>
+</svg>
+</svg>

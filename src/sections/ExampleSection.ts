@@ -5,7 +5,7 @@ import fencen from 'fencen'
 import flattenString from 'flatten-string'
 import * as path from 'forward-slash-path'
 
-import {readOptionalCodeFragmentWithMetadata} from '../lib/helpers.ts'
+import {readOptionalCodeFragmentWithMetadata, readOptionalTerminalScreenshot} from '../lib/helpers.ts'
 import readExampleResults from '../lib/readExampleResults.ts'
 import {HeaderSection} from './base/HeaderSection.ts'
 import {sortSectionsByPriority} from './base/Section.ts'
@@ -17,6 +17,7 @@ export class ExampleSection extends HeaderSection {
   readonly id = 'example'
   #example: CodeFragment | null = null
   #results: Record<string, string> = {}
+  #screenshot: string | null = null
 
   override collectContents(): SectionContents {
     const contents = super.collectContents()
@@ -28,7 +29,10 @@ export class ExampleSection extends HeaderSection {
       ...contents,
       content: [
         ...contents.content ?? [],
-        ...example ? [fencen.block(example.content, {language: example.extension})] : [],
+        ...example ? [
+          fencen.block(example.content, {language: example.extension}),
+          ...this.#screenshot ? [this.#screenshot] : [],
+        ] : [],
         ...Object.entries(results).map(([name, content]) => flattenString.paragraphs(
           `Variable ${fencen.inline(name)} ${resultVerb}:`,
           fencen.block(content, {language: 'ts'}),
@@ -43,13 +47,15 @@ export class ExampleSection extends HeaderSection {
   }
 
   override async load(): Promise<SectionLoadResult> {
+    const stem = path.join(this.context.args.configDirectory, 'example')
     const [, example, results] = await Promise.all([
       super.load?.(),
-      readOptionalCodeFragmentWithMetadata(path.join(this.context.args.configDirectory, 'example')),
+      readOptionalCodeFragmentWithMetadata(stem),
       readExampleResults(this.context.args),
     ])
     this.#example = example
     this.#results = results
+    this.#screenshot = example ? await readOptionalTerminalScreenshot(this.context, stem) : null
     return true
   }
 }

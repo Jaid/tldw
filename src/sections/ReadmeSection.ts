@@ -10,6 +10,7 @@ import {hasSectionContents, normalizeSectionContentHeadings, sortSectionsByPrior
 import {DescriptionSection} from './DescriptionSection.ts'
 import {GenerationCommentSection} from './GenerationCommentSection.ts'
 import {createSections} from './index.ts'
+import {PageSection} from './PageSection.ts'
 import {ShieldsSection} from './ShieldsSection.ts'
 
 export class ReadmeSection extends HeaderSection {
@@ -20,12 +21,13 @@ export class ReadmeSection extends HeaderSection {
   readonly #banner = new BannerSection(this.context)
   readonly #comment = new GenerationCommentSection(this.context)
   readonly #description = new DescriptionSection(this.context)
+  readonly #page = new PageSection(this.context)
   readonly #shields = new ShieldsSection(this.context)
 
   constructor(context: Context, sections: ReadonlyArray<Section> = createSections(context)) {
     super(context)
     this.headerSections = sections.filter(section => section instanceof HeaderSection)
-    this.inlineSections = [this.#description, ...sections.filter(section => !(section instanceof HeaderSection))]
+    this.inlineSections = [this.#page, this.#description, ...sections.filter(section => !(section instanceof HeaderSection))]
     this.children = [this.#banner, this.#comment, this.#shields, ...this.inlineSections, ...this.headerSections]
   }
 

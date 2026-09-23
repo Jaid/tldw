@@ -85,6 +85,7 @@ test('schema defaults and boolean shorthand produce section-scoped options', () 
     link: null,
     linkName: null,
   })
+  expect(config.page).toBeFalse()
   expect(config.example).toEqual({resultMayVary: false})
   expect(config.usage).toEqual({resultMayVary: false})
   expect(config.sections).toEqual({})
@@ -98,8 +99,19 @@ test('schema defaults and boolean shorthand produce section-scoped options', () 
   expect(config.tldw).toEqual({
     maxBlankLines: 1,
     needsNodeRuntime: true,
+    svgStrategy: 'file',
   })
   expect(configSchema.parse({}).installation).toBeUndefined()
+  expect(configSchema.parse({installation: 'development'}).installation).toEqual({
+    type: 'development',
+    packageManagers: ['npm'],
+    version: false,
+    githubPackage: false,
+  })
+  expect(configSchema.parse({page: 'https://example.com/path'}).page).toEqual({url: 'https://example.com/path'})
+  expect(configSchema.parse({page: ['https://example.com', 'https://docs.example.com']}).page).toEqual({
+    url: ['https://example.com', 'https://docs.example.com'],
+  })
   expect(configSchema.parse({}).development).toBeFalse()
 })
 test('all built-in section keys can explicitly disable their section', () => {
@@ -110,6 +122,7 @@ test('all built-in section keys can explicitly disable their section', () => {
   }
 })
 for (const input of [
+  {installation: 'prod'},
   {installation: {type: 'prod'}},
   {installation: {
     type: 'development',
@@ -122,6 +135,12 @@ for (const input of [
   {packageManagers: ['npm']},
   {renderComment: false},
   {description: {personal: 'yes'}},
+  {page: true},
+  {page: {}},
+  {page: {url: []}},
+  {page: 'not a URL'},
+  {page: []},
+  {page: {url: 'not a URL'}},
   {sections: {troubleshooting: false}},
   {sections: {troubleshooting: ''}},
   {maxBlankLines: -1},
@@ -129,6 +148,7 @@ for (const input of [
   {needsNodeRuntime: false},
   {tldw: {maxBlankLines: -1}},
   {tldw: {maxBlankLines: 1.5}},
+  {tldw: {svgStrategy: 'inline'}},
   {options: {style: 'grid'}},
   {props: {style: 'grid'}},
   {props: {order: 'random'}},

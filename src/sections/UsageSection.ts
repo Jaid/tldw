@@ -1,3 +1,4 @@
+import type {Context} from '../lib/types.ts'
 import type {SectionContents, SectionLoadResult} from './base/Section.ts'
 
 import fencen from 'fencen'
@@ -6,7 +7,7 @@ import fs from 'fs-extra'
 import {globby} from 'globby'
 
 import collator from '../lib/collator.ts'
-import {readOptionalText, supportedCodeExtensions} from '../lib/helpers.ts'
+import {readOptionalTerminalScreenshot, readOptionalText, supportedCodeExtensions} from '../lib/helpers.ts'
 import {HeaderSection} from './base/HeaderSection.ts'
 import {sortSectionsByPriority} from './base/Section.ts'
 import {UsageResultSection} from './UsageResultSection.ts'
@@ -14,12 +15,20 @@ import {UsageResultSection} from './UsageResultSection.ts'
 interface UsageFile {
   content: string
   extension: string
+  screenshot: string | null
 }
-const readUsageFile = async (file: string): Promise<UsageFile | null> => {
+const supportedCodeExtensionSet = new Set<string>(supportedCodeExtensions)
+const readUsageFile = async (context: Context, file: string): Promise<UsageFile | null> => {
   const content = await readOptionalText(file)
-  return content === null ? null : {
+  if (content === null) {
+    return null
+  }
+  const extension = path.extname(file).slice(1)
+  const stem = file.slice(0, -(extension.length + 1))
+  return {
     content,
-    extension: path.extname(file).slice(1),
+    extension,
+    screenshot: supportedCodeExtensionSet.has(extension) ? await readOptionalTerminalScreenshot(context, stem) : null,
   }
 }
 
@@ -36,8 +45,14 @@ export class UsageSection extends HeaderSection {
       ...contents,
       content: [
         ...contents.content ?? [],
-        ...this.#files.map(file => {
-          return file.extension === 'md' ? file.content : fencen.block(file.content, {language: file.extension || undefined})
+        ...this.#files.flatMap(file => {
+          if (file.extension === 'md') {
+            return [file.content]
+          }
+          return [
+            fencen.block(file.content, {language: file.extension || undefined}),
+            ...file.screenshot ? [file.screenshot] : [],
+          ]
         }),
         ...inlineContents,
       ],
@@ -70,9 +85,11 @@ export class UsageSection extends HeaderSection {
         cwd: usageDirectory,
         onlyFiles: true,
       })
-      return files.toSorted((fileA, fileB) => collator.compare(path.basename(fileA), path.basename(fileB)))
+      return files
+        .filter(file => !file.endsWith('.ansi.log') && !file.endsWith('.ansi.svg'))
+        .toSorted((fileA, fileB) => collator.compare(path.basename(fileA), path.basename(fileB)))
     }))
-    const files = await Promise.all([...directFiles, ...nestedFiles.flat()].map(readUsageFile))
+    const files = await Promise.all([...directFiles, ...nestedFiles.flat()].map(file => readUsageFile(this.context, file)))
     return files.filter((file): file is UsageFile => file !== null)
   }
 }

@@ -53,6 +53,7 @@ export const shieldsListSchema = zod.array(zod.union([configuredShieldSchema, zo
   })
 })
 export const installationTypeSchema = zod.enum(['production', 'development', 'global'])
+export const svgStrategySchema = zod.enum(['file', 'bundleSvg', 'bundleImg'])
 export const typedOptionDefinitionSchema = defaultValueSchema.safeExtend({
   type: zod.string().optional(),
   info: zod.string().optional(),
@@ -75,6 +76,8 @@ const installationSchema = zod.strictObject({
   version: zod.boolean().default(false),
   githubPackage: zod.boolean().default(false),
 })
+const pageUrlSchema = zod.union([zod.url(), zod.array(zod.url()).min(1)])
+const pageSchema = zod.strictObject({url: pageUrlSchema})
 
 // These keys also identify the built-in sections that can be disabled before loading.
 export const sectionSchemas = {
@@ -106,12 +109,20 @@ export const sectionSchemas = {
     })])).optional(),
   })).prefault({}),
   generationComment: basicSection,
-  installation: section(installationSchema).optional(),
+  installation: zod.union([
+    section(installationSchema),
+    installationTypeSchema.transform(type => installationSchema.parse({type})),
+  ]).optional(),
   intro: basicSection,
   legal: basicSection,
   license: basicSection,
   minimalExample: basicSection,
   notes: basicSection,
+  page: zod.union([
+    zod.literal(false),
+    pageSchema,
+    pageUrlSchema.transform(url => pageSchema.parse({url})),
+  ]).default(false),
   options: section(zod.strictObject({
     style: optionsStyleSchema.default('table'),
   })).prefault({}),
@@ -129,6 +140,7 @@ export const sectionSchemas = {
     exclude: stringList.default([]),
     githubActions: zod.boolean().optional(),
   })).prefault({}),
+  thirdParties: basicSection,
   tryInBrowser: section(zod.strictObject({})).optional(),
   usage: section(zod.strictObject({
     resultMayVary: zod.boolean().default(false),
@@ -140,6 +152,7 @@ export const tldwSchema = zod.strictObject({
   maxBlankLines: zod.int().nonnegative().default(1),
   // Shared by installation and the browser section.
   needsNodeRuntime: zod.boolean().default(true),
+  svgStrategy: svgStrategySchema.default('file'),
 })
 
 const knownConfigKeys = new Set([...Object.keys(sectionSchemas), 'sections', 'tldw'])
@@ -168,6 +181,7 @@ export type Config = zod.input<typeof configSchema>
 /** Validated configuration consumed by sections. */
 export type ResolvedConfig = zod.output<typeof configSchema>
 export type InstallationType = zod.output<typeof installationTypeSchema>
+export type SvgStrategy = zod.output<typeof svgStrategySchema>
 export type TypedOption = zod.output<typeof typedOptionSchema>
 
 export default configSchema

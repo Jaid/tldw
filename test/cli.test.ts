@@ -520,5 +520,6 @@ test('supports banner fallback, custom shields and maxBlankLines', async () => {
     packageFile: path.join(projectDirectory, 'package.json'),
     licenseFile: path.join(projectDirectory, 'license.txt'),
   })
-  expect(secondResult.readmeText).toContain('>Custom Banner</text>')
+  expect(secondResult.readmeText).toContain('![Banner](docs/tldw/banner.svg)')
+  expect(await Bun.file(path.join(configDirectory, 'banner.svg')).text()).toContain('>Custom Banner</text>')
 })

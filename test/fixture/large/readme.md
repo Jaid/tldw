@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16000 1000"><style>.text { font-size: 500px; font-weight: 200; font-family: Inter, sans-serif }</style><defs><linearGradient id="color" x1="50%" y1="0%" x2="50%" y2="100%"><stop stop-color="#654ea3"/><stop offset="100%" stop-color="#eaafc8"/></linearGradient></defs><rect width="16000" height="1000" fill="url(#color)" rx="100"/><text x="50%" y="50%" text-anchor="middle" dominant-baseline="middle" fill="white" class="text">Large fixture</text></svg>
+![Banner](docs/tldw/banner.svg)
 
 <center><a href="https://npmjs.com/package/@fixture/large"><img src="https://shieldcn.dev/npm/v/%40fixture/large.svg?variant=secondary&logo=npm&label=latest+version" alt="Latest version on npm"/></a> <a href="https://github.com/Jaid/tldw-large-fixture/raw/HEAD/packages/large/license.txt"><img src="https://shieldcn.dev/github/license/Jaid/tldw-large-fixture.svg?variant=secondary" alt="License"/></a> <a href="https://github.com/Jaid/tldw-large-fixture/actions"><img src="https://shieldcn.dev/github/ci/Jaid/tldw-large-fixture.svg?variant=secondary&logo=github" alt="Build status"/></a> <picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/types-included-377cc8.svg?variant=secondary&logo=typescript&logoColor=fff&mode=dark"><img src="https://shieldcn.dev/badge/types-included-377cc8.svg?variant=secondary&logo=typescript&logoColor=fff&mode=light" alt="TypeScript types included"/></picture> <a href="https://bun.sh"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Bun-fbf0df.svg?variant=outline&logo=bun&logoColor=fbf0df&mode=dark"><img src="https://shieldcn.dev/badge/Bun-fbf0df.svg?variant=outline&logo=bun&logoColor=fbf0df&mode=light" alt="Bun"/></picture></a></center>
 
@@ -35,7 +35,10 @@ This introductory section uses the standard HeaderSection Markdown loading behav
 
 ```ts
 const minimalFixture = true
+console.dir({minimalFixture, status: 'ready'}, {colors: true})
 ```
+
+![Terminal screenshot](docs/tldw/minimalExample.ansi.svg)
 
 ## features
 
@@ -374,6 +377,6 @@ The license section combines this Markdown note with the normalized MIT license 
 Copyright © 2026 Large Fixture Authors \<fixture@example.com>
 
 <!--
-readme generated with tldw v9.6.0 from ./docs and ./docs/tldw
+readme generated with tldw v9.7.0 from ./docs and ./docs/tldw
 github.com/Jaid/tldw
 -->

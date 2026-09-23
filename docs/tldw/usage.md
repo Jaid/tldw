@@ -27,6 +27,7 @@ description:
 tldw:
   maxBlankLines: 1
   needsNodeRuntime: true
+  svgStrategy: file
 
 troubleshooting: ./troubleshooting.md
 sections:
@@ -73,7 +74,7 @@ Built-in sections have top-level configuration keys matching their IDs. `false` 
 
 `development` defaults to `false`. `development: true` or `development: {}` enables the generated development commands. A conventional `development.md` also enables the section when the key is omitted, while explicit `development: false` still suppresses it.
 
-Document-wide settings live under `tldw`. `tldw.needsNodeRuntime` is shared by Installation and TryInBrowser; when it is `false`, browser instructions are automatically enabled unless explicitly disabled. `tldw.maxBlankLines` is a nonnegative integer and defaults to `1`.
+Document-wide settings live under `tldw`. `tldw.needsNodeRuntime` is shared by Installation and TryInBrowser; when it is `false`, browser instructions are automatically enabled unless explicitly disabled. `tldw.maxBlankLines` is a nonnegative integer and defaults to `1`. `tldw.svgStrategy` controls generated SVG output and defaults to `file`; `bundleSvg` inserts raw SVG markup and `bundleImg` inserts an `<img>` with a base64 data URL.
 
 Previous flat options must move into their owning section: `packageManagers` becomes `installation.packageManagers`, `versionInInstallation` becomes `installation.version`, `personal` becomes `description.personal`, `excludeShields` becomes `shields.exclude`, `binExample` becomes `cliUsage.example` and `renderComment` becomes `generationComment`. Installation modes `prod` and `dev` are now `production` and `development`.
 
@@ -101,7 +102,7 @@ Sections are ordered by `getPriority()`. The default is `100` and higher priorit
 
 Minimal-example source is loaded from the first existing `docs/tldw/minimalExample.{ts,tsx,js,jsx}` and renders immediately above Features. Full example source is loaded from the first existing `docs/tldw/example.{ts,tsx,js,jsx}`. Named example results use `docs/tldw/result*.{ts,tsx,js,jsx}`. The unqualified `result.{ts,tsx,js,jsx}` belongs below Usage.
 
-Usage also collects all `usage.{ts,tsx,js,jsx}` files and all files matching `usage/*.*`, both in `docs` and in `docs/tldw`. Markdown files remain Markdown; other files become safe code fences.
+Usage also collects all `usage.{ts,tsx,js,jsx}` files and all files matching `usage/*.*`, both in `docs` and in `docs/tldw`. Markdown files remain Markdown; other files become safe code fences. A matching `.ansi.log` beside a Usage, Example or Minimal Example script is rendered with `vectorize-terminal` directly below that script. With the default `file` SVG strategy, tldw writes a sibling `.ansi.svg` and references it from the README. Generated banners use the same strategy; `file` writes `banner.svg` in the configured tldw directory.
 
 Screenshots are discovered recursively under `docs/screenshots` and `docs/tldw/screenshots`. Supported formats are AVIF, GIF, JPEG, PNG, SVG and WebP. Project-level screenshots come first, with numeric-natural filename ordering within each directory. Image URLs are relative to the project root.
 

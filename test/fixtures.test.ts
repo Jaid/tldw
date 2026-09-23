@@ -90,6 +90,9 @@ test('large fixture exercises every built-in headed section and stays byte-for-b
     'TypeScript configuration overrides the YAML installation version setting',
     'Custom file sections are documentation, not scripts to execute.',
     'const minimalFixture = true',
+    "console.dir({minimalFixture, status: 'ready'}, {colors: true})",
+    '![Banner](docs/tldw/banner.svg)',
+    '![Terminal screenshot](docs/tldw/minimalExample.ansi.svg)',
     'Fixture API notes.',
     'Fixture architecture notes.',
     'Project-level usage guidance',
@@ -112,5 +115,7 @@ test('large fixture exercises every built-in headed section and stays byte-for-b
   ]) {
     expect(readme).toContain(content)
   }
+  expect(await Bun.file(path.join(fixtureDirectory, 'docs', 'tldw', 'banner.svg')).text()).toContain('<svg')
+  expect(await Bun.file(path.join(fixtureDirectory, 'docs', 'tldw', 'minimalExample.ansi.svg')).text()).toContain('data-terminal=\"true\"')
   expect(readme).not.toContain('last-commit')
 })

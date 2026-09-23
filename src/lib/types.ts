@@ -2,7 +2,7 @@ import type {bannerDefinitionSchema, Config, customShieldSchema, ResolvedConfig,
 import type {FlexibleListItem} from './markdownElements.ts'
 import type zod from 'zod'
 
-export type {Config, InstallationType, ResolvedConfig} from '../config.schema.ts'
+export type {Config, InstallationType, ResolvedConfig, SvgStrategy} from '../config.schema.ts'
 export type Arrayable<Type> = Array<Type> | Type
 export type BannerDefinition = zod.input<typeof bannerDefinitionSchema>
 export type BannerConfig = Config['banner']

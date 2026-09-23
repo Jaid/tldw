@@ -21,6 +21,7 @@ import {OptionsSection} from './OptionsSection.ts'
 import {PropsSection} from './PropsSection.ts'
 import {RelatedSection} from './RelatedSection.ts'
 import {ScreenshotsSection} from './ScreenshotsSection.ts'
+import {ThirdPartiesSection} from './ThirdPartiesSection.ts'
 import {TryInBrowserSection} from './TryInBrowserSection.ts'
 import {UsageSection} from './UsageSection.ts'
 import {WarningSection} from './WarningSection.ts'
@@ -46,6 +47,7 @@ export const sectionClasses = [
   PropsSection,
   RelatedSection,
   ScreenshotsSection,
+  ThirdPartiesSection,
   TryInBrowserSection,
   UsageSection,
   WarningSection,
@@ -93,11 +95,13 @@ export {loadSections} from './loadSections.ts'
 export {MinimalExampleSection} from './MinimalExampleSection.ts'
 export {NotesSection} from './NotesSection.ts'
 export {OptionsSection} from './OptionsSection.ts'
+export {PageSection} from './PageSection.ts'
 export {PropsSection} from './PropsSection.ts'
 export {RelatedSection} from './RelatedSection.ts'
 export {ResultSection} from './ResultSection.ts'
 export {ScreenshotsSection} from './ScreenshotsSection.ts'
 export {ShieldsSection} from './ShieldsSection.ts'
+export {ThirdPartiesSection} from './ThirdPartiesSection.ts'
 export {TryInBrowserSection} from './TryInBrowserSection.ts'
 export {UsageResultSection} from './UsageResultSection.ts'
 export {UsageSection} from './UsageSection.ts'

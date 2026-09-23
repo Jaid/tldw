@@ -1,14 +1,17 @@
 import type {SectionContents, SectionLoadResult} from './base/Section.ts'
 
+import * as path from 'forward-slash-path'
+
 import generateBanner from '../lib/generateBanner.ts'
+import {renderSvg} from '../lib/helpers.ts'
 import {Section} from './base/Section.ts'
 
 export class BannerSection extends Section {
   readonly id = 'banner'
+  #banner: string | null = null
 
   override collectContents(): SectionContents {
-    const svg = this.getSvg()
-    return {content: svg ? [svg] : []}
+    return {content: this.#banner ? [this.#banner] : []}
   }
 
   getSvg() {
@@ -25,6 +28,15 @@ export class BannerSection extends Section {
   }
 
   override async load(): Promise<SectionLoadResult> {
-    return this.context.config.banner !== false
+    const svg = this.getSvg()
+    if (!svg) {
+      this.#banner = null
+      return false
+    }
+    this.#banner = await renderSvg(this.context, svg, {
+      alt: 'Banner',
+      file: path.join(this.context.args.configDirectory, 'banner.svg'),
+    })
+    return true
   }
 }

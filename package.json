@@ -51,6 +51,7 @@
     "markdown-map": "0.3.0",
     "serialize-javascript": "7.1.1",
     "trim-around": "0.1.0",
+    "vectorize-terminal": "0.1.0",
     "yaml": "2.9.1",
     "zod": "4.6.5"
   },

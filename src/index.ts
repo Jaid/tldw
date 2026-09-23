@@ -56,7 +56,7 @@ export const logWriteReadmeResult = (result: WriteReadmeResult, cwd = process.cw
 }
 
 export {configSchema} from './config.schema.ts'
-export type {InstallationType, ResolvedConfig, TypedOption} from './config.schema.ts'
+export type {InstallationType, ResolvedConfig, SvgStrategy, TypedOption} from './config.schema.ts'
 export {createReadmeContext} from './lib/createReadmeContext.ts'
 export {defaultValueSchema} from './lib/defaultValue.ts'
 export type {DefaultValue} from './lib/defaultValue.ts'

@@ -1,8 +1,9 @@
-import type {Arrayable, PackageData} from './types.ts'
+import type {Arrayable, Context, PackageData} from './types.ts'
 
 import * as path from 'forward-slash-path'
 import fs from 'fs-extra'
 import trimAround from 'trim-around'
+import vectorizeTerminal from 'vectorize-terminal'
 import {parse as parseYaml} from 'yaml'
 
 import collator from './collator.ts'
@@ -13,6 +14,60 @@ export type SupportedCodeExtension = typeof supportedCodeExtensions[number]
 export interface CodeFragment {
   content: string
   extension: SupportedCodeExtension
+}
+
+export const escapeXml = (input: string) => {
+  return input
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&apos;')
+}
+
+const getMarkdownFileSource = (context: Context, file: string) => {
+  return path.relative(context.projectDirectory, file).split('/').map(part => encodeURIComponent(part)).join('/')
+}
+
+export const renderSvg = async (context: Context, svg: string, options: {
+  alt: string
+  file: string
+}) => {
+  const {svgStrategy} = context.config.tldw
+  if (svgStrategy === 'bundleSvg') {
+    return svg
+  }
+  if (svgStrategy === 'bundleImg') {
+    const textEncoder = new TextEncoder
+    const bytes = textEncoder.encode(svg)
+    const source = `data:image/svg+xml;base64,${bytes.toBase64()}`
+    return `<img src="${source}" alt="${escapeXml(options.alt)}"/>`
+  }
+  const previous = await fs.pathExists(options.file) ? await Bun.file(options.file).text() : null
+  if (previous !== svg) {
+    await fs.outputFile(options.file, svg)
+  }
+  return `![${options.alt}](${getMarkdownFileSource(context, options.file)})`
+}
+
+export const readOptionalTerminalScreenshot = async (context: Context, stem: string) => {
+  const file = `${stem}.ansi.log`
+  if (!await fs.pathExists(file)) {
+    return null
+  }
+  const stat = await fs.stat(file)
+  if (!stat.isFile()) {
+    return null
+  }
+  const content = await Bun.file(file).text()
+  const svg = vectorizeTerminal({
+    content,
+    rows: Math.max(1, content.split('\n').length),
+  })
+  return renderSvg(context, svg, {
+    alt: 'Terminal screenshot',
+    file: `${stem}.ansi.svg`,
+  })
 }
 
 export const readOptionalText = async (file: string) => {
@@ -100,15 +155,6 @@ export const normalizeStringArray = (input: unknown) => {
 export const isExcludedShield = (excludedShields: Arrayable<string> | null | undefined, shieldId: string) => {
   const normalizedShieldId = shieldId.trim().toLowerCase()
   return normalizeStringArray(excludedShields).some(excludedShield => excludedShield.toLowerCase() === normalizedShieldId)
-}
-
-export const escapeXml = (input: string) => {
-  return input
-    .replaceAll('&', '&amp;')
-    .replaceAll('<', '&lt;')
-    .replaceAll('>', '&gt;')
-    .replaceAll('"', '&quot;')
-    .replaceAll("'", '&apos;')
 }
 
 export const sortRecord = <Type>(input: Record<string, Type>) => {
