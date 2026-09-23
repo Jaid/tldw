@@ -28,29 +28,88 @@ export const escapeXml = (input: string) => {
 const getMarkdownFileSource = (context: Context, file: string) => {
   return path.relative(context.projectDirectory, file).split('/').map(part => encodeURIComponent(part)).join('/')
 }
+const getSvgDimensions = (svg: string) => {
+  const openingTag = /^<svg\b[^>]*>/u.exec(svg)?.[0]
+  if (!openingTag) {
+    return null
+  }
+  const widthText = /\bwidth="(?<value>\d+(?:\.\d+)?)"/u.exec(openingTag)?.groups?.value
+  const heightText = /\bheight="(?<value>\d+(?:\.\d+)?)"/u.exec(openingTag)?.groups?.value
+  if (!widthText || !heightText) {
+    return null
+  }
+  return {
+    height: Number(heightText),
+    heightText,
+    openingTag,
+    width: Number(widthText),
+    widthText,
+  }
+}
+const getLimitedSvgWidth = (svg: string, maxWidth: false | number | undefined) => {
+  if (maxWidth === false || maxWidth === undefined) {
+    return null
+  }
+  const dimensions = getSvgDimensions(svg)
+  if (!dimensions || dimensions.width <= maxWidth) {
+    return null
+  }
+  return maxWidth
+}
+const resizeBundledSvg = (svg: string, width: number) => {
+  const dimensions = getSvgDimensions(svg)
+  if (!dimensions) {
+    return svg
+  }
+  const height = Math.round(dimensions.height * width / dimensions.width * 1000) / 1000
+  const openingTag = dimensions.openingTag
+    .replace(/\bwidth="[^"]+"/u, () => `width="${width}"`)
+    .replace(/\bheight="[^"]+"/u, () => `height="${height}"`)
+  return `${openingTag}${svg.slice(dimensions.openingTag.length)}`
+}
+const renderHtmlImage = (source: string, alt: string, width: number | null) => {
+  const widthAttribute = width === null ? '' : ` width="${width}"`
+  return `<img src="${escapeXml(source)}" alt="${escapeXml(alt)}"${widthAttribute}/>`
+}
 
 export const renderSvg = async (context: Context, svg: string, options: {
   alt: string
   file: string
+  width?: false | number
 }) => {
   const {svgStrategy} = context.config.tldw
+  const width = getLimitedSvgWidth(svg, options.width)
   if (svgStrategy === 'bundleSvg') {
-    return svg
+    return width === null ? svg : resizeBundledSvg(svg, width)
   }
   if (svgStrategy === 'bundleImg') {
     const textEncoder = new TextEncoder
     const bytes = textEncoder.encode(svg)
     const source = `data:image/svg+xml;base64,${bytes.toBase64()}`
-    return `<img src="${source}" alt="${escapeXml(options.alt)}"/>`
+    return renderHtmlImage(source, options.alt, width)
   }
   const previous = await fs.pathExists(options.file) ? await Bun.file(options.file).text() : null
   if (previous !== svg) {
     await fs.outputFile(options.file, svg)
   }
-  return `![${options.alt}](${getMarkdownFileSource(context, options.file)})`
+  const source = getMarkdownFileSource(context, options.file)
+  return width === null ? `![${options.alt}](${source})` : renderHtmlImage(source, options.alt, width)
 }
 
-export const readOptionalTerminalScreenshot = async (context: Context, stem: string) => {
+const getAutomaticTerminalPrompt = (context: Context, scriptFile: string) => {
+  const contentDirectories = [...new Set([
+    path.resolve(context.projectDirectory, 'docs'),
+    path.resolve(context.args.configDirectory),
+  ])].toSorted((directoryA, directoryB) => directoryB.length - directoryA.length)
+  const contentDirectory = contentDirectories.find(directory => {
+    const relative = path.relative(directory, scriptFile)
+    return relative !== '..' && !relative.startsWith('../') && !path.isAbsolute(relative)
+  })
+  const relativeFile = path.relative(contentDirectory ?? path.dirname(scriptFile), scriptFile)
+  return `\u{1B}[32m> \u{1B}[0mbun \u{1B}[34m./${relativeFile}\u{1B}[0m`
+}
+
+export const readOptionalTerminalScreenshot = async (context: Context, stem: string, scriptFile: string) => {
   const file = `${stem}.ansi.log`
   if (!await fs.pathExists(file)) {
     return null
@@ -60,13 +119,27 @@ export const readOptionalTerminalScreenshot = async (context: Context, stem: str
     return null
   }
   const content = await Bun.file(file).text()
+  const configuredPrompt = context.config.tldw.terminal.prompt
+  let prompt: string | null = null
+  if (configuredPrompt === true) {
+    prompt = getAutomaticTerminalPrompt(context, scriptFile)
+  } else if (typeof configuredPrompt === 'string') {
+    prompt = configuredPrompt
+  }
+  const terminalContent = prompt === null ? content : `${prompt}\n${content}`
+  const decoration = context.config.tldw.terminal.decoration === 'windowsTerminal' ? {
+    type: 'windowsTerminal' as const,
+    tabTitle: context.pkg.name,
+  } : undefined
   const svg = vectorizeTerminal({
-    content,
-    rows: Math.max(1, content.split('\n').length),
+    content: terminalContent,
+    decoration,
+    rows: Math.max(1, terminalContent.replaceAll(/\r\n?/gu, '\n').split('\n').length),
   })
   return renderSvg(context, svg, {
     alt: 'Terminal screenshot',
     file: `${stem}.ansi.svg`,
+    width: context.config.tldw.terminal.width,
   })
 }
 

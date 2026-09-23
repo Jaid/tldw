@@ -53,6 +53,10 @@ usage:
 tldw:
   maxBlankLines: 1
   needsNodeRuntime: false
+  terminal:
+    decoration: windowsTerminal
+    prompt: true
+    width: 800
 props:
   entries:
     query:

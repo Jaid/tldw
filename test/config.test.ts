@@ -100,6 +100,31 @@ test('schema defaults and boolean shorthand produce section-scoped options', () 
     maxBlankLines: 1,
     needsNodeRuntime: true,
     svgStrategy: 'file',
+    terminal: {
+      decoration: false,
+      prompt: false,
+      width: false,
+    },
+  })
+  expect(configSchema.parse({tldw: {terminal: {prompt: true}}}).tldw.terminal).toEqual({
+    decoration: false,
+    prompt: true,
+    width: false,
+  })
+  expect(configSchema.parse({tldw: {terminal: {prompt: 'bun ./custom.ts'}}}).tldw.terminal).toEqual({
+    decoration: false,
+    prompt: 'bun ./custom.ts',
+    width: false,
+  })
+  expect(configSchema.parse({tldw: {terminal: {decoration: 'windowsTerminal'}}}).tldw.terminal).toEqual({
+    decoration: 'windowsTerminal',
+    prompt: false,
+    width: false,
+  })
+  expect(configSchema.parse({tldw: {terminal: {width: 800}}}).tldw.terminal).toEqual({
+    decoration: false,
+    prompt: false,
+    width: 800,
   })
   expect(configSchema.parse({}).installation).toBeUndefined()
   expect(configSchema.parse({installation: 'development'}).installation).toEqual({
@@ -149,6 +174,12 @@ for (const input of [
   {tldw: {maxBlankLines: -1}},
   {tldw: {maxBlankLines: 1.5}},
   {tldw: {svgStrategy: 'inline'}},
+  {tldw: {terminal: {prompt: 1}}},
+  {tldw: {terminal: {decoration: true}}},
+  {tldw: {terminal: {decoration: 'macTerminal'}}},
+  {tldw: {terminal: {width: 0}}},
+  {tldw: {terminal: {width: -1}}},
+  {tldw: {terminal: {width: 1.5}}},
   {options: {style: 'grid'}},
   {props: {style: 'grid'}},
   {props: {order: 'random'}},

@@ -28,7 +28,7 @@ const readUsageFile = async (context: Context, file: string): Promise<UsageFile 
   return {
     content,
     extension,
-    screenshot: supportedCodeExtensionSet.has(extension) ? await readOptionalTerminalScreenshot(context, stem) : null,
+    screenshot: supportedCodeExtensionSet.has(extension) ? await readOptionalTerminalScreenshot(context, stem, file) : null,
   }
 }
 

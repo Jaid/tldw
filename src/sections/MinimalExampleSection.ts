@@ -38,7 +38,7 @@ export class MinimalExampleSection extends HeaderSection {
       readOptionalCodeFragmentWithMetadata(stem),
     ])
     this.#example = example
-    this.#screenshot = example ? await readOptionalTerminalScreenshot(this.context, stem) : null
+    this.#screenshot = example ? await readOptionalTerminalScreenshot(this.context, stem, `${stem}.${example.extension}`) : null
     return true
   }
 }

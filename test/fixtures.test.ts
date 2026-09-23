@@ -92,7 +92,7 @@ test('large fixture exercises every built-in headed section and stays byte-for-b
     'const minimalFixture = true',
     "console.dir({minimalFixture, status: 'ready'}, {colors: true})",
     '![Banner](docs/tldw/banner.svg)',
-    '![Terminal screenshot](docs/tldw/minimalExample.ansi.svg)',
+    '<img src="docs/tldw/minimalExample.ansi.svg" alt="Terminal screenshot" width="800"/>',
     'Fixture API notes.',
     'Fixture architecture notes.',
     'Project-level usage guidance',
@@ -116,6 +116,13 @@ test('large fixture exercises every built-in headed section and stays byte-for-b
     expect(readme).toContain(content)
   }
   expect(await Bun.file(path.join(fixtureDirectory, 'docs', 'tldw', 'banner.svg')).text()).toContain('<svg')
-  expect(await Bun.file(path.join(fixtureDirectory, 'docs', 'tldw', 'minimalExample.ansi.svg')).text()).toContain('data-terminal=\"true\"')
+  const terminalSvg = await Bun.file(path.join(fixtureDirectory, 'docs', 'tldw', 'minimalExample.ansi.svg')).text()
+  expect(terminalSvg).toContain('data-terminal=\"true\"')
+  expect(terminalSvg).toContain('width=\"3660\" height=\"860\"')
+  expect(terminalSvg).toContain('fill=\"#13a10e\">&gt;&#xA0;</text>')
+  expect(terminalSvg).toContain('bun&#xA0;')
+  expect(terminalSvg).toContain('fill=\"#0037da\">./minimalExample.ts</text>')
+  expect(terminalSvg).toContain('data-decoration=\"windowsTerminal\"')
+  expect(terminalSvg).toContain('>@fixture/large</text>')
   expect(readme).not.toContain('last-commit')
 })

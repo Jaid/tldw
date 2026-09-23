@@ -148,11 +148,18 @@ export const sectionSchemas = {
   usageResult: basicSection,
 }
 
+const terminalSchema = zod.strictObject({
+  decoration: zod.union([zod.literal('windowsTerminal'), zod.literal(false)]).default(false),
+  prompt: zod.union([zod.boolean(), zod.string()]).default(false),
+  width: zod.union([zod.int().positive(), zod.literal(false)]).default(false),
+})
+
 export const tldwSchema = zod.strictObject({
   maxBlankLines: zod.int().nonnegative().default(1),
   // Shared by installation and the browser section.
   needsNodeRuntime: zod.boolean().default(true),
   svgStrategy: svgStrategySchema.default('file'),
+  terminal: terminalSchema.prefault({}),
 })
 
 const knownConfigKeys = new Set([...Object.keys(sectionSchemas), 'sections', 'tldw'])

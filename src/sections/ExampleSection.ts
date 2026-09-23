@@ -55,7 +55,7 @@ export class ExampleSection extends HeaderSection {
     ])
     this.#example = example
     this.#results = results
-    this.#screenshot = example ? await readOptionalTerminalScreenshot(this.context, stem) : null
+    this.#screenshot = example ? await readOptionalTerminalScreenshot(this.context, stem, `${stem}.${example.extension}`) : null
     return true
   }
 }

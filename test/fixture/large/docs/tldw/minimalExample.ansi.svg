@@ -1,8 +1,25 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="3660" height="560" viewBox="0 0 3660 560" role="img" aria-label="Terminal screenshot">
+<svg xmlns="http://www.w3.org/2000/svg" width="3660" height="860" viewBox="0 0 3660 860" role="img" aria-label="Terminal screenshot">
 <title>Terminal screenshot</title>
-<rect width="3660" height="560" fill="#000000"/>
-<svg x="30" y="30" width="3600" height="500" viewBox="30 30 3600 500" overflow="hidden" data-terminal="true">
+<rect width="3660" height="860" fill="#000000"/>
+<svg width="3660" height="200" viewBox="0 0 3660 200" overflow="hidden" data-decoration="windowsTerminal">
+<rect width="3660" height="200" fill="#2e2e2e"/>
+<g transform="scale(5.12820512821) translate(0 0)">
+<path d="M0 39H713.7" stroke="#292929"/>
+<path d="M0 39H2Q7 39 7 34V15Q7 7 15 7H239Q247 7 247 15V34Q247 39 254 39Z" fill="#000000"/>
+<g transform="translate(16 13)"><path d="M1 1h5l2 2h7a1 1 0 0 1 1 1v10H0V2a1 1 0 0 1 1-1" fill="#d89e13"/><path d="M0 5h16l-1 9H0Z" fill="#fcd53f"/></g>
+<svg x="40" y="7" width="157" height="30" viewBox="0 0 157 30" overflow="hidden"><text x="0" y="19" fill="#ffffff" font-family="Segoe UI, sans-serif" font-size="12">@fixture/large</text></svg>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">
+<path d="M221 17l6 6m0-6-6 6" stroke="#a0a0a0"/>
+<path d="M265 20h8m-4-4v8" stroke="#cccccc"/>
+<path d="M284 12v16" stroke="#454545"/>
+<path d="M293 18l4 4 4-4" stroke="#cccccc"/>
+<g stroke="#ffffff">
+<path d="M594.7 20h10"/>
+<rect x="640.7" y="15" width="9" height="9"/>
+<path d="M686.7 15l10 10m0-10-10 10"/>
+</g></g></g></svg>
+<svg x="30" y="230" width="3600" height="600" viewBox="30 230 3600 600" overflow="hidden" data-terminal="true">
 <g data-layer="backgrounds"></g>
-<g data-layer="text" font-family="JetBrains Mono, monospace" font-size="75" font-weight="400" font-variant-ligatures="none" style="font-feature-settings: 'liga' 0, 'calt' 0; white-space: pre" xml:space="preserve"><text x="30" y="106" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc">{</text><text x="30" y="206" textLength="720" lengthAdjust="spacingAndGlyphs" fill="#cccccc">&#xA0;&#xA0;minimalFixture</text><text x="750" y="206" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc" opacity="0.5">:</text><text x="840" y="206" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c19c00">true</text><text x="1020" y="206" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc" opacity="0.5">,</text><text x="30" y="306" textLength="360" lengthAdjust="spacingAndGlyphs" fill="#cccccc">&#xA0;&#xA0;status</text><text x="390" y="306" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc" opacity="0.5">:</text><text x="480" y="306" textLength="315" lengthAdjust="spacingAndGlyphs" fill="#13a10e">&quot;ready&quot;</text><text x="795" y="306" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc" opacity="0.5">,</text><text x="30" y="406" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc">}</text></g>
+<g data-layer="text" font-family="JetBrains Mono, monospace" font-size="75" font-weight="400" font-variant-ligatures="none" style="font-feature-settings: 'liga' 0, 'calt' 0; white-space: pre" xml:space="preserve"><text x="30" y="306" textLength="90" lengthAdjust="spacingAndGlyphs" fill="#13a10e">&gt;&#xA0;</text><text x="120" y="306" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#cccccc">bun&#xA0;</text><text x="300" y="306" textLength="855" lengthAdjust="spacingAndGlyphs" fill="#0037da">./minimalExample.ts</text><text x="30" y="406" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc">{</text><text x="30" y="506" textLength="720" lengthAdjust="spacingAndGlyphs" fill="#cccccc">&#xA0;&#xA0;minimalFixture</text><text x="750" y="506" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc" opacity="0.5">:</text><text x="840" y="506" textLength="180" lengthAdjust="spacingAndGlyphs" fill="#c19c00">true</text><text x="1020" y="506" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc" opacity="0.5">,</text><text x="30" y="606" textLength="360" lengthAdjust="spacingAndGlyphs" fill="#cccccc">&#xA0;&#xA0;status</text><text x="390" y="606" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc" opacity="0.5">:</text><text x="480" y="606" textLength="315" lengthAdjust="spacingAndGlyphs" fill="#13a10e">&quot;ready&quot;</text><text x="795" y="606" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc" opacity="0.5">,</text><text x="30" y="706" textLength="45" lengthAdjust="spacingAndGlyphs" fill="#cccccc">}</text></g>
 </svg>
 </svg>

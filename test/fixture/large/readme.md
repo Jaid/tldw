@@ -38,7 +38,7 @@ const minimalFixture = true
 console.dir({minimalFixture, status: 'ready'}, {colors: true})
 ```
 
-![Terminal screenshot](docs/tldw/minimalExample.ansi.svg)
+<img src="docs/tldw/minimalExample.ansi.svg" alt="Terminal screenshot" width="800"/>
 
 ## features
 

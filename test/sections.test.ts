@@ -648,7 +648,7 @@ test('Usage owns result-only output and variable-result phrasing', async () => {
   expect(section.render()).toBe('## usage\n\nThe result will be something like:\n\n```js\n42\n```')
 })
 test('matching ANSI logs generate referenced terminal screenshots directly below scripts', async () => {
-  const project = await makeProject()
+  const project = await makeProject({tldw: {terminal: {prompt: true}}})
   const usageDirectory = path.join(project.args.configDirectory, 'usage')
   await fs.outputFile(path.join(project.args.configDirectory, 'example.ts'), 'console.log("example")')
   await fs.outputFile(path.join(project.args.configDirectory, 'example.ansi.log'), '\u{1B}[32mexample output\u{1B}[0m\nsecond line')
@@ -670,7 +670,10 @@ test('matching ANSI logs generate referenced terminal screenshots directly below
   expect(exampleOutput).toContain(`${exampleCode}\n\n![Terminal screenshot](docs/tldw/example.ansi.svg)`)
   const exampleSvg = await Bun.file(path.join(project.args.configDirectory, 'example.ansi.svg')).text()
   expect(exampleSvg).toContain('example&#xA0;output')
-  expect(exampleSvg).toContain('height="260"')
+  expect(exampleSvg).toContain('height="360"')
+  expect(exampleSvg).toContain('fill="#13a10e">&gt;&#xA0;</text>')
+  expect(exampleSvg).toContain('bun&#xA0;')
+  expect(exampleSvg).toContain('fill="#0037da">./example.ts</text>')
   const minimalOutput = minimalExample.render() ?? ''
   const minimalCode = '```ts\nconsole.log("minimal")\n```'
   expect(minimalOutput).toContain(`${minimalCode}\n\n![Terminal screenshot](docs/tldw/minimalExample.ansi.svg)`)
@@ -685,6 +688,7 @@ test('matching ANSI logs generate referenced terminal screenshots directly below
   expect(await fs.pathExists(path.join(usageDirectory, 'orphan.ansi.svg'))).toBeFalse()
   const nestedSvg = await Bun.file(path.join(usageDirectory, 'basic.ansi.svg')).text()
   expect(nestedSvg).toContain('basic&#xA0;output')
+  expect(nestedSvg).toContain('fill="#0037da">./usage/basic.ts</text>')
   await loadSections([usage])
   expect(usage.render()).toBe(usageOutput)
 })
@@ -692,7 +696,10 @@ for (const svgStrategy of ['bundleSvg', 'bundleImg'] as const) {
   test(`generated SVGs support ${svgStrategy}`, async () => {
     const project = await makeProject({
       banner: true,
-      tldw: {svgStrategy},
+      tldw: {
+        svgStrategy,
+        terminal: {width: 800},
+      },
     })
     await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ts'), 'console.log("minimal")')
     await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ansi.log'), 'minimal output')
@@ -704,15 +711,53 @@ for (const svgStrategy of ['bundleSvg', 'bundleImg'] as const) {
     if (svgStrategy === 'bundleSvg') {
       expect(output.match(/<svg /gu)?.length).toBeGreaterThanOrEqual(3)
       expect(output).toContain('data-terminal="true"')
+      expect(output).toContain('width="800" height="34.973" viewBox="0 0 3660 160"')
     } else {
       expect(output.match(/<img src="data:image\/svg\+xml;base64,/gu)).toHaveLength(2)
-      expect(output).toContain('alt="Terminal screenshot"')
-      expect(output).toContain('alt="Banner"')
+      expect(output).toContain('alt="Terminal screenshot" width="800"/>')
+      expect(output).toContain('alt="Banner"/>')
     }
     expect(await fs.pathExists(path.join(project.args.configDirectory, 'banner.svg'))).toBeFalse()
     expect(await fs.pathExists(path.join(project.args.configDirectory, 'minimalExample.ansi.svg'))).toBeFalse()
   })
 }
+test('terminal width limits displayed file images without changing SVG geometry', async () => {
+  const project = await makeProject({
+    tldw: {terminal: {width: 800}},
+  })
+  await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ts'), 'console.log("minimal")')
+  await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ansi.log'), 'minimal output')
+  const minimalExample = new MinimalExampleSection(await project.getContext())
+  await loadSections([minimalExample])
+  expect(minimalExample.render()).toContain('<img src="docs/tldw/minimalExample.ansi.svg" alt="Terminal screenshot" width="800"/>')
+  const svg = await Bun.file(path.join(project.args.configDirectory, 'minimalExample.ansi.svg')).text()
+  expect(svg).toContain('width="3660" height="160"')
+})
+test('terminal decoration renders Windows Terminal chrome with the package name', async () => {
+  const project = await makeProject({
+    tldw: {terminal: {decoration: 'windowsTerminal'}},
+  })
+  await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ts'), 'console.log("minimal")')
+  await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ansi.log'), 'minimal output')
+  const minimalExample = new MinimalExampleSection(await project.getContext())
+  await loadSections([minimalExample])
+  const svg = await Bun.file(path.join(project.args.configDirectory, 'minimalExample.ansi.svg')).text()
+  expect(svg).toContain('data-decoration="windowsTerminal"')
+  expect(svg).toContain('>test-package</text>')
+  expect(svg).toContain('height="360"')
+})
+test('terminal prompt accepts a literal string', async () => {
+  const project = await makeProject({
+    tldw: {terminal: {prompt: 'custom prompt'}},
+  })
+  await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ts'), 'console.log("minimal")')
+  await fs.outputFile(path.join(project.args.configDirectory, 'minimalExample.ansi.log'), 'minimal output')
+  const minimalExample = new MinimalExampleSection(await project.getContext())
+  await loadSections([minimalExample])
+  const svg = await Bun.file(path.join(project.args.configDirectory, 'minimalExample.ansi.svg')).text()
+  expect(svg).toContain('custom&#xA0;prompt')
+  expect(svg).not.toContain('#0037da')
+})
 test('orphan top-level ANSI logs do not generate SVG files', async () => {
   const project = await makeProject()
   await fs.outputFile(path.join(project.args.configDirectory, 'example.ansi.log'), 'orphan example')
