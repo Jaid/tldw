@@ -27,6 +27,7 @@ import {OptionsSection} from '../src/sections/OptionsSection.ts'
 import {PageSection} from '../src/sections/PageSection.ts'
 import {PropsSection} from '../src/sections/PropsSection.ts'
 import {ReadmeSection} from '../src/sections/ReadmeSection.ts'
+import {RequirementsSection} from '../src/sections/RequirementsSection.ts'
 import {ScreenshotsSection} from '../src/sections/ScreenshotsSection.ts'
 import {SetupSection} from '../src/sections/SetupSection.ts'
 import {ShieldsSection} from '../src/sections/ShieldsSection.ts'
@@ -342,6 +343,7 @@ test('section priorities preserve the document order when registration order is 
     '## minimal example',
     '## features',
     '## installation',
+    '## requirements',
     '## setup',
     '## warning',
     '## example',
@@ -363,6 +365,15 @@ test('section priorities preserve the document order when registration order is 
     '## license',
     '## third parties',
   ])
+})
+test('Requirements renders immediately above Setup', async () => {
+  const project = await makeProject()
+  const context = await project.getContext()
+  const installation = new InstallationSection(context)
+  const requirements = new RequirementsSection(context)
+  const setup = new SetupSection(context)
+  expect(requirements.getPriority()).toBeLessThan(installation.getPriority())
+  expect(requirements.getPriority()).toBeGreaterThan(setup.getPriority())
 })
 test('Setup renders immediately below Installation', async () => {
   const project = await makeProject()

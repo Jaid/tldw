@@ -20,6 +20,7 @@ import {NotesSection} from './NotesSection.ts'
 import {OptionsSection} from './OptionsSection.ts'
 import {PropsSection} from './PropsSection.ts'
 import {RelatedSection} from './RelatedSection.ts'
+import {RequirementsSection} from './RequirementsSection.ts'
 import {ScreenshotsSection} from './ScreenshotsSection.ts'
 import {SetupSection} from './SetupSection.ts'
 import {ThirdPartiesSection} from './ThirdPartiesSection.ts'
@@ -48,6 +49,7 @@ export const sectionClasses = [
   OptionsSection,
   PropsSection,
   RelatedSection,
+  RequirementsSection,
   ScreenshotsSection,
   SetupSection,
   ThirdPartiesSection,
@@ -102,6 +104,7 @@ export {OptionsSection} from './OptionsSection.ts'
 export {PageSection} from './PageSection.ts'
 export {PropsSection} from './PropsSection.ts'
 export {RelatedSection} from './RelatedSection.ts'
+export {RequirementsSection} from './RequirementsSection.ts'
 export {ResultSection} from './ResultSection.ts'
 export {ScreenshotsSection} from './ScreenshotsSection.ts'
 export {SetupSection} from './SetupSection.ts'

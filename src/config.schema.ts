@@ -133,6 +133,7 @@ export const sectionSchemas = {
     style: optionsStyleSchema.default('list'),
   })).prefault({}),
   related: basicSection,
+  requirements: basicSection,
   result: basicSection,
   screenshots: basicSection,
   setup: basicSection,
