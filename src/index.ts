@@ -11,13 +11,6 @@ import {applyMaxBlankLines, normalizeReadmeText} from './lib/helpers.ts'
 
 export const writeReadme = async (args: CliArgs): Promise<WriteReadmeResult> => {
   const context = await createReadmeContext(args)
-  if (!context) {
-    return {
-      status: 'skipped',
-      outputFile: args.outputFile,
-      reason: 'tldw is made for GitHub repositories, but package.json#repository is not set. Doing nothing.',
-    }
-  }
   const readmeText = applyMaxBlankLines(normalizeReadmeText(await generateReadme(context)), context.config.tldw.maxBlankLines)
   const previousReadme = await fs.pathExists(args.outputFile) ? await Bun.file(args.outputFile).text() : null
   const bytes = Buffer.byteLength(readmeText)

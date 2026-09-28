@@ -7,6 +7,12 @@ export type ShieldRenderContext = Pick<Context, 'config' | 'fundingLink' | 'lice
 const splitPath = (path: string) => {
   return path.split('/')
 }
+const requireGitHubSlug = (context: ShieldRenderContext, type: string) => {
+  if (!context.slug) {
+    throw new Error(`Built-in shield ${JSON.stringify(type)} requires package.json#repository to point to a GitHub repository.`)
+  }
+  return context.slug
+}
 
 export const renderBuiltinShield = (type: string, context: ShieldRenderContext) => {
   if (isExcludedShield(context.config.shields === false ? [] : context.config.shields.exclude, type)) {
@@ -119,46 +125,51 @@ export const renderBuiltinShield = (type: string, context: ShieldRenderContext) 
     })
   }
   if (type === 'commitsSince') {
+    const slug = requireGitHubSlug(context, type)
     return generateShield({
       path: 'badge/dynamic/json',
       query: {
         label: `commits since ${context.tag}`,
         query: '$.total_commits',
-        url: `https://api.github.com/repos/${context.slug}/compare/${context.tag}...HEAD`,
+        url: `https://api.github.com/repos/${slug}/compare/${context.tag}...HEAD`,
       },
       altText: `Commits since ${context.tag}`,
       logo: 'github',
-      link: `https://github.com/${context.slug}/compare/${context.tag}...HEAD`,
+      link: `https://github.com/${slug}/compare/${context.tag}...HEAD`,
     })
   }
   if (type === 'issues') {
+    const slug = requireGitHubSlug(context, type)
     return generateShield({
-      path: ['github', 'issues', ...splitPath(context.slug)],
+      path: ['github', 'issues', ...splitPath(slug)],
       altText: 'Issues',
       logo: 'github',
-      link: `https://github.com/${context.slug}/issues`,
+      link: `https://github.com/${slug}/issues`,
     })
   }
   if (type === 'license') {
+    const slug = requireGitHubSlug(context, type)
     return generateShield({
-      path: ['github', 'license', ...splitPath(context.slug)],
+      path: ['github', 'license', ...splitPath(slug)],
       altText: 'License',
       link: context.licenseUrl ?? undefined,
     })
   }
   if (type === 'lastCommit') {
+    const slug = requireGitHubSlug(context, type)
     return generateShield({
-      path: ['github', 'last-commit', ...splitPath(context.slug)],
+      path: ['github', 'last-commit', ...splitPath(slug)],
       altText: 'Last commit',
       logo: 'github',
-      link: `https://github.com/${context.slug}/commits`,
+      link: `https://github.com/${slug}/commits`,
     })
   }
   if (type === 'githubPackages') {
-    const packageName = `@${context.slug}`
+    const slug = requireGitHubSlug(context, type)
+    const packageName = `@${slug}`
     return generateShield({
       logo: 'github',
-      link: `https://github.com/${context.slug}/packages`,
+      link: `https://github.com/${slug}/packages`,
       altText: `${packageName} on GitHub Packages`,
       leftText: 'GitHub Packages',
       rightText: packageName,
@@ -170,7 +181,7 @@ export const renderBuiltinShield = (type: string, context: ShieldRenderContext) 
       path: ['npm', 'dependents', ...splitPath(context.pkg.name)],
       altText: 'Dependents',
       logo: 'npm',
-      link: `https://github.com/${context.slug}/network/dependents`,
+      link: context.slug ? `https://github.com/${context.slug}/network/dependents` : undefined,
     })
   }
   if (type === 'npmDownloads') {
@@ -194,11 +205,12 @@ export const renderBuiltinShield = (type: string, context: ShieldRenderContext) 
     if (context.config.shields === false || !context.config.shields.githubActions) {
       return ''
     }
+    const slug = requireGitHubSlug(context, type)
     return generateShield({
       altText: 'Build status',
-      link: `https://github.com/${context.slug}/actions`,
+      link: `https://github.com/${slug}/actions`,
       logo: 'github',
-      path: ['github', 'ci', ...splitPath(context.slug)],
+      path: ['github', 'ci', ...splitPath(slug)],
     })
   }
   if (type === 'sponsor') {

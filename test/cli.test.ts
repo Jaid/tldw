@@ -105,9 +105,6 @@ test('UsageSection collects its Markdown, code and usage directory content', asy
     licenseFile: path.join(projectDirectory, 'license.txt'),
     outputFile,
   })
-  if (!context) {
-    throw new Error('Fixture context was skipped.')
-  }
   const usageSection = new UsageSection(context)
   await loadSections([usageSection])
   expect(usageSection.collectContents()).toEqual({

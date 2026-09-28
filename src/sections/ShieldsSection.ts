@@ -16,7 +16,7 @@ export class ShieldsSection extends Section {
     }
     const lines = config.shields.items ?? [[
       'npmLatest',
-      ...hasContent(pkg.license) ? ['license'] : [],
+      ...hasContent(pkg.license) && this.context.slug ? ['license'] : [],
     ]]
     const content = lines.map(line => {
       const entries = Array.isArray(line) ? line : [line]

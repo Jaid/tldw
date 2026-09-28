@@ -10,7 +10,7 @@ import readPkg from './readPkg.ts'
 
 const bunProjectFiles = ['bun.lock', 'bun.toml', 'bunfig.toml'] as const
 
-export const createReadmeContext = async (inputArgs: CliArgs): Promise<Context | null> => {
+export const createReadmeContext = async (inputArgs: CliArgs): Promise<Context> => {
   const args: CliArgs = {
     configDirectory: path.resolve(inputArgs.configDirectory),
     licenseFile: path.resolve(inputArgs.licenseFile),
@@ -30,12 +30,9 @@ export const createReadmeContext = async (inputArgs: CliArgs): Promise<Context |
   ])
   const repositoryUrl = getRepositoryUrl(pkg.repository)
   const slug = repositoryUrl ? parseGitHubSlug(repositoryUrl) : null
-  if (!slug) {
-    return null
-  }
   const packageDirectory = typeof pkg.repository === 'object' ? pkg.repository.directory ?? '' : ''
   const relativeLicenseFile = path.join(packageDirectory, path.relative(projectDirectory, args.licenseFile))
-  const licenseUrl = licenseExists && relativeLicenseFile !== '..' && !relativeLicenseFile.startsWith('../') && !path.isAbsolute(relativeLicenseFile) ? `https://github.com/${slug}/raw/HEAD/${relativeLicenseFile.split('/').map(part => encodeURIComponent(part)).join('/')}` : null
+  const licenseUrl = slug && licenseExists && relativeLicenseFile !== '..' && !relativeLicenseFile.startsWith('../') && !path.isAbsolute(relativeLicenseFile) ? `https://github.com/${slug}/raw/HEAD/${relativeLicenseFile.split('/').map(part => encodeURIComponent(part)).join('/')}` : null
   return {
     args,
     config,

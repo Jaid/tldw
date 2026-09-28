@@ -58,9 +58,6 @@ const makeProject = async (config?: Config) => {
     read: () => readConfig(configDirectory, projectDirectory),
     context: async () => {
       const context = await createReadmeContext(args)
-      if (!context) {
-        throw new Error('Fixture context was skipped.')
-      }
       return context
     },
   }

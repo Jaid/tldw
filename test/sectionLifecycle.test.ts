@@ -39,9 +39,6 @@ const makeContext = async (config: Partial<Config> = {}): Promise<Context> => {
     ...config,
   }))
   const context = await createReadmeContext(args)
-  if (!context) {
-    throw new Error('Fixture context was skipped.')
-  }
   return context
 }
 afterAll(async () => {

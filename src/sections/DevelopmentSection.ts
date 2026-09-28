@@ -30,19 +30,20 @@ export class DevelopmentSection extends HeaderSection {
 
   getScripts(): Array<DevelopmentScript> {
     const {pkg, slug} = this.context
-    const repositoryDirectory = path.basename(slug)
-    const packageDirectory = typeof pkg.repository === 'object' ? pkg.repository.directory : undefined
-    const developmentDirectory = packageDirectory ? path.join(repositoryDirectory, packageDirectory) : repositoryDirectory
-    const developmentScripts: Array<DevelopmentScript> = [
-      {
+    const developmentScripts: Array<DevelopmentScript> = []
+    if (slug) {
+      const repositoryDirectory = path.basename(slug)
+      const packageDirectory = typeof pkg.repository === 'object' ? pkg.repository.directory : undefined
+      const developmentDirectory = packageDirectory ? path.join(repositoryDirectory, packageDirectory) : repositoryDirectory
+      developmentScripts.push({
         name: 'setting up',
         script: flattenString.lines(
           `git clone git@github.com:${slug}.git`,
           `cd ${developmentDirectory}`,
           'bun install',
         ),
-      },
-    ]
+      })
+    }
     if (pkg.scripts?.lint) {
       developmentScripts.push({
         name: 'linting',

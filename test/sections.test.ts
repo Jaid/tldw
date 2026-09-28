@@ -69,9 +69,6 @@ const makeProject = async (config: Partial<Config> = {}, pkg: Partial<PackageDat
     projectDirectory,
     getContext: async (): Promise<Context> => {
       const context = await createReadmeContext(args)
-      if (!context) {
-        throw new Error('Fixture context was skipped.')
-      }
       return context
     },
   }

@@ -95,10 +95,14 @@ export class InstallationSection extends HeaderSection {
       })
     }
     if (installation.githubPackage) {
+      const slug = context.slug
+      if (!slug) {
+        throw new Error('GitHub Packages installation requires package.json#repository to point to a GitHub repository.')
+      }
       commands.push({
         header: 'githubPackages',
         bonusText: githubPackagesBonusText,
-        command: `npm install ${getGithubPackagesInstallFlag(installation.type)}${appendVersionToPackageSpec(`@${context.slug}`, context.pkg.version, installation.version)}`,
+        command: `npm install ${getGithubPackagesInstallFlag(installation.type)}${appendVersionToPackageSpec(`@${slug}`, context.pkg.version, installation.version)}`,
       })
     }
     return commands

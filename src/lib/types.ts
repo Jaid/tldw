@@ -64,7 +64,7 @@ export interface Context {
   licenseUrl: string | null
   pkg: PackageData
   projectDirectory: string
-  slug: string
+  slug: string | null
   tag: string
   title: string
   tldwVersion: string
